@@ -4,5 +4,6 @@ enum DateFormat {
   dayMonthYear('DD/MM/YYYY');
 
   final String value;
+
   const DateFormat(this.value);
 }

@@ -1,7 +1,7 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class PreferencesModel extends BaseModel<PreferencesModel> {
+class PreferencesModel extends BaseModel {
   PreferencesModel({
     required int userId,
     required String brightness,

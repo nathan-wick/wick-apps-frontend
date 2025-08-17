@@ -4,7 +4,7 @@ import 'dashboard_configuration.dart';
 import 'preferences.dart';
 import 'session.dart';
 
-class UserModel extends BaseModel<UserModel> {
+class UserModel extends BaseModel {
   UserModel({
     required int id,
     required String email,

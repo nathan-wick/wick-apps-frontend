@@ -1,7 +1,7 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class SessionModel extends BaseModel<SessionModel> {
+class SessionModel extends BaseModel {
   SessionModel({
     required int id,
     required int userId,

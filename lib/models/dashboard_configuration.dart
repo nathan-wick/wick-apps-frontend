@@ -1,8 +1,7 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class DashboardConfigurationModel
-    extends BaseModel<DashboardConfigurationModel> {
+class DashboardConfigurationModel extends BaseModel {
   DashboardConfigurationModel({
     required int id,
     required int userId,

@@ -1,6 +1,6 @@
 import '../utilities/type_converter.dart';
 
-abstract class BaseModel<T> {
+abstract class BaseModel {
   /// The raw attribute values of this model (ideally passed to the constructor).
   final Map<String, dynamic> attributes;
 
