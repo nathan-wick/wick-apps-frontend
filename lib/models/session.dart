@@ -2,16 +2,26 @@ import '../utilities/type_converter.dart';
 import 'base.dart';
 
 class SessionModel extends BaseModel {
+  final int id;
+  final int userId;
+  final String code;
+  final int successfulAttempts;
+  final int failedAttempts;
+  final DateTime started;
+  final DateTime expires;
+  final String device;
+  final String location;
+
   SessionModel({
-    required int id,
-    required int userId,
-    required String code,
-    required int successfulAttempts,
-    required int failedAttempts,
-    required DateTime started,
-    required DateTime expires,
-    required String device,
-    required String location,
+    required this.id,
+    required this.userId,
+    required this.code,
+    required this.successfulAttempts,
+    required this.failedAttempts,
+    required this.started,
+    required this.expires,
+    required this.device,
+    required this.location,
   }) : super({
          'id': id,
          'userId': userId,

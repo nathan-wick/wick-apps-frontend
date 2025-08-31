@@ -2,11 +2,16 @@ import '../utilities/type_converter.dart';
 import 'base.dart';
 
 class PreferencesModel extends BaseModel {
+  final int userId;
+  final String brightness;
+  final String dateFormat;
+  final String primaryColor;
+
   PreferencesModel({
-    required int userId,
-    required String brightness,
-    required String dateFormat,
-    required String primaryColor,
+    required this.userId,
+    required this.brightness,
+    required this.dateFormat,
+    required this.primaryColor,
   }) : super({
          'userId': userId,
          'brightness': brightness,

@@ -5,16 +5,26 @@ import 'preferences.dart';
 import 'session.dart';
 
 class UserModel extends BaseModel {
+  final int id;
+  final String email;
+  final String? picture;
+  final String? firstName;
+  final String? lastName;
+  final DateTime? birthday;
+  final List<SessionModel>? sessions;
+  final PreferencesModel? preferences;
+  final List<DashboardConfigurationModel>? dashboardConfigurations;
+
   UserModel({
-    required int id,
-    required String email,
-    String? picture,
-    String? firstName,
-    String? lastName,
-    DateTime? birthday,
-    List<SessionModel>? sessions,
-    PreferencesModel? preferences,
-    List<DashboardConfigurationModel>? dashboardConfigurations,
+    required this.id,
+    required this.email,
+    this.picture,
+    this.firstName,
+    this.lastName,
+    this.birthday,
+    this.sessions,
+    this.preferences,
+    this.dashboardConfigurations,
   }) : super({
          'id': id,
          'email': email,

@@ -2,11 +2,16 @@ import '../utilities/type_converter.dart';
 import 'base.dart';
 
 class DashboardConfigurationModel extends BaseModel {
+  final int id;
+  final int userId;
+  final String dashboard;
+  final String configuration;
+
   DashboardConfigurationModel({
-    required int id,
-    required int userId,
-    required String dashboard,
-    required String configuration,
+    required this.id,
+    required this.userId,
+    required this.dashboard,
+    required this.configuration,
   }) : super({
          'id': id,
          'userId': userId,

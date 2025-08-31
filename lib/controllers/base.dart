@@ -1,21 +1,28 @@
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
 import '../enumerations/order_direction.dart';
 import '../enumerations/request_method.dart';
 import '../models/base.dart';
 import '../models/paginated_response.dart';
+import '../providers/session.dart';
 import '../utilities/request_handler.dart';
+import '../utilities/string_formatter.dart';
 
 abstract class BaseController<Model extends BaseModel> {
   // TODO Get the real domain
   final String domain = 'localhost:3000';
-  final String basePath =
-      Model.toString().replaceAll('Model', '').toLowerCase();
+  final String basePath = StringFormatter.toKebabCase(
+    Model.toString().replaceAll('Model', ''),
+  );
   final Model Function(Map<String, dynamic>) fromJson;
 
   BaseController(this.fromJson);
 
-  Future<Model> getByPrimaryKey(int primaryKey) async {
-    // TODO Pass in session token
-    final sessionToken = '';
+  Future<Model> getByPrimaryKey(BuildContext context, int primaryKey) async {
+    final String? sessionToken =
+        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+            ?.token;
     final Map<String, dynamic> response = await RequestHandler.sendRequest(
       RequestMethod.get,
       domain,
@@ -26,7 +33,8 @@ abstract class BaseController<Model extends BaseModel> {
     return fromJson(response);
   }
 
-  Future<PaginatedResponse<Model>> get([
+  Future<PaginatedResponse<Model>> get(
+    BuildContext context, [
     int pageNumber = 1,
     int pageSize = 50,
     String? orderBy,
@@ -34,8 +42,9 @@ abstract class BaseController<Model extends BaseModel> {
     String? where,
     List<String>? attributes,
   ]) async {
-    // TODO Pass in session token
-    final sessionToken = '';
+    final String? sessionToken =
+        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+            ?.token;
     final queryParameters = <String, String>{
       'pageNumber': pageNumber.toString(),
       'pageSize': pageSize.toString(),
@@ -58,9 +67,10 @@ abstract class BaseController<Model extends BaseModel> {
     return PaginatedResponse<Model>.fromJson(response, fromJson);
   }
 
-  Future<Model> create(Model instance) async {
-    // TODO Pass in session token
-    final sessionToken = '';
+  Future<Model> create(BuildContext context, Model instance) async {
+    final String? sessionToken =
+        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+            ?.token;
     final response = await RequestHandler.sendRequest(
       RequestMethod.post,
       domain,
@@ -72,9 +82,10 @@ abstract class BaseController<Model extends BaseModel> {
     return fromJson(response);
   }
 
-  Future<Model> edit(Model instance) async {
-    // TODO Pass in session token
-    final sessionToken = '';
+  Future<Model> edit(BuildContext context, Model instance) async {
+    final String? sessionToken =
+        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+            ?.token;
     final response = await RequestHandler.sendRequest(
       RequestMethod.put,
       domain,
@@ -85,9 +96,10 @@ abstract class BaseController<Model extends BaseModel> {
     return fromJson(response);
   }
 
-  Future<void> delete(int primaryKey) async {
-    // TODO Pass in session token
-    final sessionToken = '';
+  Future<void> delete(BuildContext context, int primaryKey) async {
+    final String? sessionToken =
+        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+            ?.token;
     await RequestHandler.sendRequest(
       RequestMethod.delete,
       domain,

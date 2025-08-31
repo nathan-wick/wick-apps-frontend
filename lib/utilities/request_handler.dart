@@ -14,7 +14,7 @@ class RequestHandler {
     RequestMethod method,
     String domain,
     String path, [
-    String sessionToken = '',
+    String? sessionToken,
     Object? body,
     Map<String, String>? queryParameters,
   ]) async {
@@ -26,7 +26,7 @@ class RequestHandler {
     final Uri url = Uri.parse(urlString);
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Session-Token': sessionToken,
+      'Session-Token': sessionToken ?? '',
     };
     final jsonBody = body is BaseModel ? body.toJson() : jsonEncode(body);
     Response response;
