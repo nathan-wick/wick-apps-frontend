@@ -18,7 +18,7 @@ class UserProvider extends BaseProvider<UserModel> {
         null;
     if (!signedIn) return null;
     // TODO Figure out how to include preferences, then update the preferences provider
-    final UserModel userFromService = await UserController()
+    final UserModel? userFromService = await UserController()
         .getByCurrentSession(context);
     setValue(userFromService);
     return userFromService;

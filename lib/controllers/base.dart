@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 import '../enumerations/order_direction.dart';
 import '../enumerations/request_method.dart';
 import '../models/base.dart';
 import '../models/paginated_response.dart';
-import '../providers/session.dart';
 import '../utilities/request_handler.dart';
 import '../utilities/string_formatter.dart';
 
@@ -19,21 +17,17 @@ abstract class BaseController<Model extends BaseModel> {
 
   BaseController(this.fromJson);
 
-  Future<Model> getByPrimaryKey(BuildContext context, int primaryKey) async {
-    final String? sessionToken =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
-            ?.token;
-    final Map<String, dynamic> response = await RequestHandler.sendRequest(
+  Future<Model?> getByPrimaryKey(BuildContext context, int primaryKey) async {
+    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
+      context,
       RequestMethod.get,
       domain,
       '$basePath/$primaryKey',
-      sessionToken,
     );
-
-    return fromJson(response);
+    return response == null ? null : fromJson(response);
   }
 
-  Future<PaginatedResponse<Model>> get(
+  Future<PaginatedResponse<Model>?> get(
     BuildContext context, [
     int pageNumber = 1,
     int pageSize = 50,
@@ -42,9 +36,6 @@ abstract class BaseController<Model extends BaseModel> {
     String? where,
     List<String>? attributes,
   ]) async {
-    final String? sessionToken =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
-            ?.token;
     final queryParameters = <String, String>{
       'pageNumber': pageNumber.toString(),
       'pageSize': pageSize.toString(),
@@ -55,56 +46,48 @@ abstract class BaseController<Model extends BaseModel> {
     if (attributes != null) {
       queryParameters['attributes'] = attributes.join(",");
     }
-    final response = await RequestHandler.sendRequest(
+    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
+      context,
       RequestMethod.get,
       domain,
       basePath,
-      sessionToken,
       null,
       queryParameters,
     );
-
-    return PaginatedResponse<Model>.fromJson(response, fromJson);
+    return response == null
+        ? null
+        : PaginatedResponse<Model>.fromJson(response, fromJson);
   }
 
-  Future<Model> create(BuildContext context, Model instance) async {
-    final String? sessionToken =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
-            ?.token;
+  Future<Model?> create(BuildContext context, Model instance) async {
     final response = await RequestHandler.sendRequest(
+      context,
       RequestMethod.post,
       domain,
       basePath,
-      sessionToken,
       instance,
     );
-
-    return fromJson(response);
+    return response == null ? null : fromJson(response);
   }
 
-  Future<Model> edit(BuildContext context, Model instance) async {
-    final String? sessionToken =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
-            ?.token;
-    final response = await RequestHandler.sendRequest(
+  Future<Model?> edit(BuildContext context, Model instance) async {
+    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
+      context,
       RequestMethod.put,
       domain,
       basePath,
-      sessionToken,
       instance,
     );
-    return fromJson(response);
+    return response == null ? null : fromJson(response);
   }
 
-  Future<void> delete(BuildContext context, int primaryKey) async {
-    final String? sessionToken =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
-            ?.token;
-    await RequestHandler.sendRequest(
+  Future<bool> delete(BuildContext context, int primaryKey) async {
+    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
+      context,
       RequestMethod.delete,
       domain,
       '$basePath/$primaryKey',
-      sessionToken,
     );
+    return response == null ? false : true;
   }
 }

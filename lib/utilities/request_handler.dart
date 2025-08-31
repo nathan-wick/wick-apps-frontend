@@ -2,23 +2,27 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
+import '../enumerations/notification_type.dart';
 import '../enumerations/request_method.dart';
 import '../enumerations/response_status.dart';
 import '../models/base.dart';
+import '../providers/session.dart';
+import 'notification_handler.dart';
 
 class RequestHandler {
   /// Sends a network request.
-  static Future<Map<String, dynamic>> sendRequest(
+  static Future<Map<String, dynamic>?> sendRequest(
+    BuildContext context,
     RequestMethod method,
     String domain,
     String path, [
-    String? sessionToken,
     Object? body,
     Map<String, String>? queryParameters,
   ]) async {
-    const String unexpectedErrorMessage = 'An unexpected error occurred.';
     final String urlString =
         queryParameters == null
             ? 'http://$domain/$path'
@@ -26,11 +30,16 @@ class RequestHandler {
     final Uri url = Uri.parse(urlString);
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Session-Token': sessionToken ?? '',
+      'Session-Token':
+          (await Provider.of<SessionProvider>(
+                context,
+                listen: false,
+              ).getValue())
+              ?.token ??
+          '',
     };
     final jsonBody = body is BaseModel ? body.toJson() : jsonEncode(body);
     Response response;
-
     try {
       switch (method) {
         case RequestMethod.post:
@@ -47,30 +56,57 @@ class RequestHandler {
           break;
       }
     } on SocketException {
-      throw 'Cannot connect to the internet. Please check your connection.';
+      handleErrorResponse(
+        context,
+        'Cannot connect to the internet. Please check your connection.',
+      );
+      return null;
     } on HttpException {
-      throw 'Cannot reach the app service right now. Please try again later.';
+      handleErrorResponse(
+        context,
+        'Cannot reach the app service right now. Please try again later.',
+      );
+      return null;
     } on TimeoutException {
-      throw 'The app service is taking too long to respond. Please try again later.';
+      handleErrorResponse(
+        context,
+        'The app service is taking too long to respond. Please try again later.',
+      );
+      return null;
     } on TlsException {
-      throw 'Cannot create a secure connection. Please check your device settings.';
-    } catch (e) {
-      throw unexpectedErrorMessage;
+      handleErrorResponse(
+        context,
+        'Cannot create a secure connection. Please check your device settings.',
+      );
+      return null;
+    } catch (error) {
+      handleErrorResponse(context);
+      return null;
     }
-
     final ResponseStatus status = ResponseStatus.fromCode(response.statusCode);
     Map<String, dynamic> responseBody;
-
     try {
       responseBody = jsonDecode(response.body);
     } catch (error) {
       responseBody = {};
     }
-
     if (status == ResponseStatus.okay) {
       return responseBody;
     } else {
-      throw responseBody['message'] ?? unexpectedErrorMessage;
+      handleErrorResponse(context, responseBody['message']);
+      return null;
     }
+  }
+
+  /// Handles an error response.
+  static void handleErrorResponse(
+    BuildContext context, [
+    String message = 'An unexpected error occurred.',
+  ]) {
+    NotificationHandler.displayNotification(
+      context,
+      NotificationType.error,
+      message,
+    );
   }
 }

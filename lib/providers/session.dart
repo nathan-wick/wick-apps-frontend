@@ -21,7 +21,7 @@ class SessionProvider extends BaseProvider<SessionProviderModel> {
     if (sessionToken == null) return;
     setValue(SessionProviderModel(token: sessionToken));
     // TODO Figure out how to include preferences, then update the preferences provider
-    final UserModel userFromService = await UserController()
+    final UserModel? userFromService = await UserController()
         .getByCurrentSession(context);
     await Provider.of<UserProvider>(
       context,
