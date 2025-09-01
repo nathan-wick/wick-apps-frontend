@@ -1,6 +1,6 @@
-import '../enumerations/brightness.dart';
-import '../enumerations/color.dart';
-import '../enumerations/date_format.dart';
+import '../enums/brightness.dart';
+import '../enums/color.dart';
+import '../enums/date_format.dart';
 import '../utilities/type_converter.dart';
 import 'base.dart';
 

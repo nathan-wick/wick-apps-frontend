@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../enumerations/notification_type.dart';
+import '../enums/notification_type.dart';
 import '../utilities/style_constants.dart';
 import 'color_engine.dart';
 

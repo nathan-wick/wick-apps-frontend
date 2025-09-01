@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import '../enumerations/order_direction.dart';
-import '../enumerations/request_method.dart';
+import '../enums/order_direction.dart';
+import '../enums/request_method.dart';
 import '../models/base.dart';
 import '../models/paginated_response.dart';
 import '../utilities/request_handler.dart';

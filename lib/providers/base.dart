@@ -18,14 +18,17 @@ abstract class BaseProvider<Model extends BaseModel> extends ChangeNotifier {
 
   /// Gets the value of the provider.
   Future<Model?> getValue() async {
-    _value ??= await LocalStorage<Model>().getValue(localStorageKey, fromJson);
+    _value ??= await LocalStorage<Model>().getModelValue(
+      localStorageKey,
+      fromJson,
+    );
     return _value;
   }
 
   /// Sets the value of the provider.
   Future<void> setValue(Model? value) async {
     _value = value;
-    LocalStorage<Model>().setValue(localStorageKey, value);
+    LocalStorage<Model>().setModelValue(localStorageKey, value);
     notifyListeners();
   }
 }

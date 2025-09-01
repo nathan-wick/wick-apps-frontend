@@ -6,36 +6,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-import '../enumerations/notification_type.dart';
-import '../enumerations/request_method.dart';
-import '../enumerations/response_status.dart';
+import '../enums/notification_type.dart';
+import '../enums/request_method.dart';
+import '../enums/response_status.dart';
 import '../models/base.dart';
 import '../providers/session.dart';
 import 'notification_handler.dart';
 
 class RequestHandler {
   /// Sends a network request.
-  static Future<Map<String, dynamic>?> sendRequest(
-    BuildContext context,
-    RequestMethod method,
-    String domain,
-    String path, [
-    Object? body,
-    Map<String, String>? queryParameters,
-  ]) async {
+  static Future<Map<String, dynamic>?> sendRequest(BuildContext context,
+      RequestMethod method,
+      String domain,
+      String path, [
+        Object? body,
+        Map<String, String>? queryParameters,
+      ]) async {
     final String urlString =
-        queryParameters == null
-            ? 'http://$domain/$path'
-            : 'http://$domain/$path?${Uri(queryParameters: queryParameters).query}';
+    queryParameters == null
+        ? 'http://$domain/$path'
+        : 'http://$domain/$path?${Uri(queryParameters: queryParameters).query}';
     final Uri url = Uri.parse(urlString);
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Session-Token':
-          (await Provider.of<SessionProvider>(
-                context,
-                listen: false,
-              ).getValue())
-              ?.token ??
+      (await Provider.of<SessionProvider>(
+        context,
+        listen: false,
+      ).getValue())
+          ?.token ??
           '',
     };
     final jsonBody = body is BaseModel ? body.toJson() : jsonEncode(body);
@@ -99,8 +98,7 @@ class RequestHandler {
   }
 
   /// Handles an error response.
-  static void handleErrorResponse(
-    BuildContext context, [
+  static void handleErrorResponse(BuildContext context, [
     String message = 'An unexpected error occurred.',
   ]) {
     NotificationHandler.displayNotification(

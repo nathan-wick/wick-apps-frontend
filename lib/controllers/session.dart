@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../enumerations/request_method.dart';
+import '../enums/request_method.dart';
 import '../models/session.dart';
 import '../utilities/request_handler.dart';
 import '../utilities/type_converter.dart';

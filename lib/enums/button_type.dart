@@ -1,0 +1,1 @@
+enum WickButtonType { solid, text }

@@ -23,8 +23,4 @@ class NavigationOptionModel extends BaseModel {
          'destination': destination,
          'onNavigate': onNavigate,
        });
-
-  factory NavigationOptionModel.fromJson(Map<String, dynamic> json) {
-    throw UnimplementedError();
-  }
 }

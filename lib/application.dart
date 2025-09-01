@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'enumerations/brightness.dart';
-import 'enumerations/color.dart';
+import 'enums/brightness.dart';
+import 'enums/color.dart';
 import 'models/navigation_option.dart';
 import 'models/preferences.dart';
 import 'pages/account.dart';
