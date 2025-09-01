@@ -12,12 +12,14 @@ import 'base.dart';
 
 class NavigationProvider extends BaseProvider<NavigationProviderModel> {
   String homeRoute;
-  String? lastRoute;
-  List<String> mainRoutes = [];
-  List<NavigationOptionModel> navigationOptions = [];
+  List<String> mainRoutes;
+  List<NavigationOptionModel> navigationOptions;
 
-  NavigationProvider({required this.homeRoute})
-    : super(NavigationProviderModel.fromJson);
+  NavigationProvider({
+    required this.homeRoute,
+    this.mainRoutes = const [],
+    this.navigationOptions = const [],
+  }) : super(NavigationProviderModel.fromJson);
 
   void navigate(BuildContext context, [String? route]) async {
     final bool signedIn =

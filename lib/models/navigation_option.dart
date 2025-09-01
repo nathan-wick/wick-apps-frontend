@@ -15,7 +15,7 @@ class NavigationOptionModel extends BaseModel {
     required this.route,
     required this.icon,
     required this.destination,
-    required this.onNavigate,
+    this.onNavigate,
   }) : super({
          'name': name,
          'route': route,

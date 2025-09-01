@@ -1,3 +1,7 @@
+import 'package:collection/collection.dart';
+
+import '../enumerations/brightness.dart';
+import '../enumerations/color.dart';
 import '../enumerations/date_format.dart';
 import '../models/base.dart';
 
@@ -8,7 +12,6 @@ class TypeConverter {
     if (value is DateTime) return value.toUtc().toIso8601String();
     if (value is List) return value.map((item) => toJson(item)).toList();
     if (value is BaseModel) return value.toJson();
-
     return value;
   }
 
@@ -20,7 +23,6 @@ class TypeConverter {
       final year = value.year.toString().padLeft(4, '0');
       final month = value.month.toString().padLeft(2, '0');
       final day = value.day.toString().padLeft(2, '0');
-
       // TODO: Pass in the user's preferred date format
       switch (DateFormat.yearMonthDay) {
         case DateFormat.yearMonthDay:
@@ -43,7 +45,6 @@ class TypeConverter {
         return '${strings.sublist(0, strings.length - 1).join(', ')}, and ${strings.last}';
       }
     }
-
     return value.toString();
   }
 
@@ -52,7 +53,6 @@ class TypeConverter {
     if (value == null) return null;
     if (value is int) return value;
     if (value is double) return value.toInt();
-
     return int.tryParse(value.toString());
   }
 
@@ -63,7 +63,37 @@ class TypeConverter {
     if (value is String) return DateTime.tryParse(value);
     if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
     if (value is double) return toDate(value.toInt());
+    return null;
+  }
 
+  /// Converts a dynamic value to a color.
+  static WickColor? toColor(dynamic value) {
+    if (value == null) return null;
+    if (value is String) {
+      return WickColor.values.firstWhereOrNull((color) => color.name == value);
+    }
+    return null;
+  }
+
+  /// Converts a dynamic value to a date format.
+  static DateFormat? toDateFormat(dynamic value) {
+    if (value == null) return null;
+    if (value is String) {
+      return DateFormat.values.firstWhereOrNull(
+        (dateFormat) => dateFormat.name == value,
+      );
+    }
+    return null;
+  }
+
+  /// Converts a dynamic value to a theme.
+  static WickBrightness? toBrightness(dynamic value) {
+    if (value == null) return null;
+    if (value is String) {
+      return WickBrightness.values.firstWhereOrNull(
+        (brightness) => brightness.name == value,
+      );
+    }
     return null;
   }
 }
