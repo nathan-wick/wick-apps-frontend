@@ -45,7 +45,7 @@ class NotificationHandler {
         content: Row(
           children: [
             Icon(icon, color: textColor),
-            SizedBox(width: StyleConstants.standardPaddingSize),
+            SizedBox(width: StyleConstants.paddingSize),
             Expanded(child: Text(message, style: TextStyle(color: textColor))),
           ],
         ),
