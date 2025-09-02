@@ -6,19 +6,23 @@ import '../models/user.dart';
 import '../providers/session.dart';
 import 'base.dart';
 
-class UserProvider extends BaseProvider<UserModel> {
-  UserProvider() : super(UserModel.fromJson);
+class WickProviderUser extends WickProviderBase<WickModelUser> {
+  WickProviderUser() : super(WickModelUser.fromJson);
 
-  Future<UserModel?> getSessionUser(BuildContext context) async {
-    final UserModel? userFromLocalStorage = await getValue();
-    if (userFromLocalStorage != null) return userFromLocalStorage;
+  Future<WickModelUser?> getSessionUser(BuildContext context) async {
+    final WickModelUser? userFromWickUtilityLocalStorage = await getValue();
+    if (userFromWickUtilityLocalStorage != null)
+      return userFromWickUtilityLocalStorage;
     final bool signedIn =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+        (await Provider.of<WickProviderSession>(
+              context,
+              listen: false,
+            ).getValue())
             ?.token !=
         null;
     if (!signedIn) return null;
     // TODO Figure out how to include preferences, then update the preferences provider
-    final UserModel? userFromService = await UserController()
+    final WickModelUser? userFromService = await WickControllerUser()
         .getByCurrentSession(context);
     setValue(userFromService);
     return userFromService;

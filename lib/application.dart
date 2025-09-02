@@ -17,62 +17,62 @@ import 'providers/session.dart';
 import 'providers/user.dart';
 import 'utilities/color_engine.dart';
 
-class Application extends StatefulWidget {
+class WickApplication extends StatefulWidget {
   final String name;
-  final List<NavigationOptionModel> navigationOptions;
+  final List<WickModelNavigationOption> navigationOptions;
   final String homeRoute;
   final List<String> mainRoutes;
-  final WickColor defaultPrimaryColor;
+  final WickEnumColor defaultPrimaryColor;
 
-  const Application({
+  const WickApplication({
     super.key,
     required this.name,
     required this.navigationOptions,
     required this.homeRoute,
     required this.mainRoutes,
-    this.defaultPrimaryColor = WickColor.blue,
+    this.defaultPrimaryColor = WickEnumColor.blue,
   });
 
   @override
-  State<Application> createState() => _ApplicationState();
+  State<WickApplication> createState() => _WickApplicationState();
 }
 
-class _ApplicationState extends State<Application> {
+class _WickApplicationState extends State<WickApplication> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SessionProvider()),
+        ChangeNotifierProvider(create: (context) => WickProviderSession()),
         ChangeNotifierProvider(
           create:
-              (context) => NavigationProvider(
+              (context) => WickProviderNavigation(
                 homeRoute: widget.homeRoute,
                 navigationOptions: widget.navigationOptions,
               ),
         ),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => PreferencesProvider()),
+        ChangeNotifierProvider(create: (context) => WickProviderUser()),
+        ChangeNotifierProvider(create: (context) => WickProviderPreferences()),
       ],
       child: Builder(
         builder: (context) {
           _initializeNavigation(context);
           return FutureBuilder(
-            future: Provider.of<PreferencesProvider>(context).getValue(),
+            future: Provider.of<WickProviderPreferences>(context).getValue(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingPage();
+                return const WickPageLoading();
               }
-              final PreferencesModel? preferences = snapshot.data;
+              final WickModelPreferences? preferences = snapshot.data;
               final Color primaryColor =
                   preferences?.primaryColor.value ??
                   widget.defaultPrimaryColor.value;
               final accessibleLightPrimaryColor =
-                  ColorEngine.calculateAccessibleColor(
+                  WickUtilityColorEngine.calculateAccessibleColor(
                     primaryColor,
                     Colors.white,
                   );
               final accessibleDarkPrimaryColor =
-                  ColorEngine.calculateAccessibleColor(
+                  WickUtilityColorEngine.calculateAccessibleColor(
                     primaryColor,
                     Colors.black,
                   );
@@ -100,9 +100,9 @@ class _ApplicationState extends State<Application> {
                 darkTheme: darkTheme,
                 themeMode:
                     preferences?.brightness.value ??
-                    WickBrightness.system.value,
+                    WickEnumBrightness.system.value,
                 // TODO Get and set the initial destination
-                home: const LoadingPage(),
+                home: const WickPageLoading(),
                 debugShowCheckedModeBanner: false,
               );
             },
@@ -113,53 +113,56 @@ class _ApplicationState extends State<Application> {
   }
 
   void _initializeNavigation(BuildContext context) {
-    final List<NavigationOptionModel> initialNavigationOptions =
-        List<NavigationOptionModel>.from(widget.navigationOptions);
+    final List<WickModelNavigationOption> initialNavigationOptions =
+        List<WickModelNavigationOption>.from(widget.navigationOptions);
     initialNavigationOptions.addAll([
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Welcome',
         route: 'welcome',
         icon: Icons.login,
-        destination: const WelcomePage(),
+        destination: const WickPageWelcome(),
       ),
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Account',
         route: 'account',
         icon: Icons.account_circle,
-        destination: const AccountPage(),
+        destination: const WickPageAccount(),
       ),
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Profile',
         route: 'profile',
         icon: Icons.person,
-        destination: const ProfilePage(),
+        destination: const WickPageProfile(),
       ),
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Preferences',
         route: 'preferences',
         icon: Icons.settings,
-        destination: const PreferencesPage(),
+        destination: const WickPagePreferences(),
       ),
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Security',
         route: 'security',
         icon: Icons.security,
-        destination: const SecurityPage(),
+        destination: const WickPageSecurity(),
       ),
-      NavigationOptionModel(
+      WickModelNavigationOption(
         name: 'Sign Out',
         route: 'sign-out',
         icon: Icons.logout,
-        destination: const WelcomePage(),
+        destination: const WickPageWelcome(),
         onNavigate: () {
-          Provider.of<SessionProvider>(context, listen: false).signOut(context);
+          Provider.of<WickProviderSession>(
+            context,
+            listen: false,
+          ).signOut(context);
         },
       ),
     ]);
     List<String> mainRoutes = List<String>.from(widget.mainRoutes);
     mainRoutes.add('account');
-    final NavigationProvider navigationProvider =
-        Provider.of<NavigationProvider>(context, listen: false);
+    final WickProviderNavigation navigationProvider =
+        Provider.of<WickProviderNavigation>(context, listen: false);
     navigationProvider.navigationOptions = initialNavigationOptions;
     navigationProvider.mainRoutes = mainRoutes;
   }

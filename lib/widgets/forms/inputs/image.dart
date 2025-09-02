@@ -13,7 +13,7 @@ import '../../button.dart';
 import '../../dialog.dart';
 
 class WickWidgetFormInputImage extends StatefulWidget {
-  final ImageModel input;
+  final WickModelFormInputImage input;
   final Function(String?) onChanged;
 
   const WickWidgetFormInputImage({
@@ -82,7 +82,7 @@ class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
         Row(
           children: [
             if (processingText == null &&
-                widget.input.shape == WickImageShape.circle)
+                widget.input.shape == WickEnumImageShape.circle)
               CircleAvatar(
                 radius: 35,
                 backgroundImage: image != null ? MemoryImage(image!) : null,
@@ -97,31 +97,35 @@ class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
                 height: 70,
                 child: Center(child: CircularProgressIndicator()),
               ),
-            const SizedBox(width: StyleConstants.contentGapSize),
+            const SizedBox(width: WickUtilityStyleConstants.contentGapSize),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.input.name),
-                const SizedBox(height: StyleConstants.contentGapSize),
+                const SizedBox(
+                  height: WickUtilityStyleConstants.contentGapSize,
+                ),
                 Row(
                   children: [
-                    WickButton(
+                    WickWidgetButton(
                       onPressed: () {
                         pickImage();
                       },
                       message: "Upload",
                     ),
                     if (image != null)
-                      const SizedBox(width: StyleConstants.contentGapSize),
+                      const SizedBox(
+                        width: WickUtilityStyleConstants.contentGapSize,
+                      ),
                     if (image != null)
-                      WickButton(
+                      WickWidgetButton(
                         onPressed: () {
                           setState(() {
                             image = null;
                             widget.onChanged(null);
                           });
                         },
-                        type: WickButtonType.text,
+                        type: WickEnumButtonType.text,
                         message: "Remove",
                       ),
                   ],
@@ -141,7 +145,7 @@ class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const WickDialog(
+        return const WickWidgetDialog(
           icon: Icons.error,
           title: "File Too Large",
           content: [
@@ -161,7 +165,7 @@ class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const WickDialog(
+        return const WickWidgetDialog(
           icon: Icons.compress,
           title: "Compressing File",
           content: [

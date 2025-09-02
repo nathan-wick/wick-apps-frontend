@@ -6,18 +6,21 @@ import '../utilities/request_handler.dart';
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class SessionController extends BaseController<SessionModel> {
-  SessionController() : super(SessionModel.fromJson);
+class WickControllerSession extends WickControllerBase<WickModelSession> {
+  WickControllerSession() : super(WickModelSession.fromJson);
 
   Future<int?> sendVerificationEmail(BuildContext context, String email) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.post,
-      domain,
-      '$basePath/send-verification-email',
-      {email: email},
-    );
-    return response == null ? null : TypeConverter.toInt(response['sessionId']);
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/send-verification-email',
+          {email: email},
+        );
+    return response == null
+        ? null
+        : WickUtilityTypeConverter.toInt(response['sessionId']);
   }
 
   Future<String?> signIn(
@@ -25,25 +28,27 @@ class SessionController extends BaseController<SessionModel> {
     int sessionId,
     String code,
   ) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.post,
-      domain,
-      '$basePath/sign-in',
-      {sessionId: sessionId, code: code},
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/sign-in',
+          {sessionId: sessionId, code: code},
+        );
     return response == null
         ? null
-        : TypeConverter.describe(response['sessionToken']);
+        : WickUtilityTypeConverter.describe(response['sessionToken']);
   }
 
   Future<bool> signOut(BuildContext context) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.post,
-      domain,
-      '$basePath/sign-out',
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/sign-out',
+        );
     return response == null ? false : true;
   }
 }

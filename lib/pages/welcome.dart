@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class WelcomePage extends BasePage {
-  const WelcomePage({super.key})
+class WickPageWelcome extends WickPageBase {
+  const WickPageWelcome({super.key})
     : super(
         name: 'Welcome',
         // TODO Create content

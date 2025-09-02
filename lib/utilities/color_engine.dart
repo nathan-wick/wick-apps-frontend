@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class ColorEngine {
+class WickUtilityColorEngine {
   static Color calculateAccessibleColor(
     Color variableColor,
     Color constantColor, {

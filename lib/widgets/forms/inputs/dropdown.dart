@@ -4,7 +4,7 @@ import '../../../models/forms/inputs/dropdown.dart';
 import '../../../utilities/style_constants.dart';
 
 class WickWidgetFormInputDropdown extends StatefulWidget {
-  final DropdownModel input;
+  final WickModelFormInputDropdown input;
   final Function(String?) onChanged;
 
   const WickWidgetFormInputDropdown({
@@ -33,14 +33,16 @@ class _WickWidgetFormInputDropdownState
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                        StyleConstants.boarderRadius,
+                        WickUtilityStyleConstants.boarderRadius,
                       ),
                     ),
                     child: Row(
                       children: [
                         if (option.icon != null) Icon(option.icon, size: 14),
                         if (option.icon != null)
-                          const SizedBox(width: StyleConstants.contentGapSize),
+                          const SizedBox(
+                            width: WickUtilityStyleConstants.contentGapSize,
+                          ),
                         Text(option.label),
                       ],
                     ),

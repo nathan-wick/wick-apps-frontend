@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/base.dart';
 
-class LocalStorage<Model extends BaseModel> {
+class WickUtilityLocalStorage<Model extends WickModelBase> {
   Future<Model?> getModelValue(
     String key,
     Model Function(Map<String, dynamic>) fromJson,

@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class SecurityPage extends BasePage {
-  const SecurityPage({super.key})
+class WickPageSecurity extends WickPageBase {
+  const WickPageSecurity({super.key})
     : super(
         name: 'Security',
         // TODO Create content

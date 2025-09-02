@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class StyleConstants {
+class WickUtilityStyleConstants {
   static const double paddingSize = 8;
   static const double contentGapSize = 16;
   static const double boarderRadius = 8;

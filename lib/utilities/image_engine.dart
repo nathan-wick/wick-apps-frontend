@@ -6,7 +6,7 @@ import '../enums/file_sizes.dart';
 class WickUtilityImageEngine {
   static Future<Uint8List> compress(
     Uint8List imageBytes, [
-    WickFileSize maxSize = WickFileSize.medium,
+    WickEnumFileSize maxSize = WickEnumFileSize.medium,
   ]) async {
     img.Image? image = img.decodeImage(imageBytes);
     if (image == null) {

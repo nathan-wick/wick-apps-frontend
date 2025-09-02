@@ -20,7 +20,7 @@ import 'inputs/image.dart';
 import 'inputs/text.dart';
 
 class WickWidgetForm extends StatefulWidget {
-  final FormModel form;
+  final WickModelForm form;
 
   // TODO Use types instead
   final Function(Map<String, String>) onSubmit;
@@ -66,9 +66,9 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
             key: formKey,
             child: SizedBox(
               width:
-                  double.infinity < StyleConstants.wideWidthSize
+                  double.infinity < WickUtilityStyleConstants.wideWidthSize
                       ? double.infinity
-                      : StyleConstants.wideWidthSize,
+                      : WickUtilityStyleConstants.wideWidthSize,
               child: Column(children: snapshot.data ?? []),
             ),
           );
@@ -82,13 +82,17 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
   Future<List<Widget>> _buildFormContent() async {
     List<Widget> content = [];
     bool firstInputAssigned = false;
-    for (WickFormInputBase input in widget.form.inputs) {
-      final String inputKey = StringFormatter.toSnakeCase(input.name);
-      final String localStorageKey =
-          "form_${StringFormatter.toSnakeCase(widget.form.name)}_input_$inputKey";
+    for (WickModelFormInputBase input in widget.form.inputs) {
+      final String inputKey = WickUtilityStringFormatter.toSnakeCase(
+        input.name,
+      );
+      final String WickUtilityLocalStorageKey =
+          "form_${WickUtilityStringFormatter.toSnakeCase(widget.form.name)}_input_$inputKey";
       final String? locallySavedValue =
           input.defaultValue == null && input.autoFill == true
-              ? await LocalStorage().getStringValue(localStorageKey)
+              ? await WickUtilityLocalStorage().getStringValue(
+                WickUtilityLocalStorageKey,
+              )
               : null;
       final String? defaultValue = input.defaultValue ?? locallySavedValue;
       if (defaultValue != null) {
@@ -101,14 +105,17 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
           formValues[inputKey] = value;
         }
         if (input.autoFill) {
-          LocalStorage().setStringValue(localStorageKey, value);
+          WickUtilityLocalStorage().setStringValue(
+            WickUtilityLocalStorageKey,
+            value,
+          );
         }
         if (widget.form.autoSubmit) {
           _submitForm();
         }
       }
 
-      if (input is TextModel) {
+      if (input is WickModelFormInputText) {
         content.add(
           WickWidgetFormInputText(
             input: input,
@@ -129,36 +136,38 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
             firstInputFocusNode.requestFocus();
           });
         }
-      } else if (input is DropdownModel) {
+      } else if (input is WickModelFormInputDropdown) {
         content.add(
           WickWidgetFormInputDropdown(input: input, onChanged: onChanged),
         );
-      } else if (input is ImageModel) {
+      } else if (input is WickModelFormInputImage) {
         content.add(
           WickWidgetFormInputImage(input: input, onChanged: onChanged),
         );
-      } else if (input is CheckboxModel) {
+      } else if (input is WickModelFormInputCheckbox) {
         content.add(
           WickWidgetFormInputCheckbox(input: input, onChanged: onChanged),
         );
       }
       firstInputAssigned = true;
-      content.add(const SizedBox(height: StyleConstants.contentGapSize));
+      content.add(
+        const SizedBox(height: WickUtilityStyleConstants.contentGapSize),
+      );
     }
     content.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           if (widget.onCancel != null)
-            WickButton(
+            WickWidgetButton(
               onPressed: widget.onCancel!,
               message: "Cancel",
-              type: WickButtonType.text,
+              type: WickEnumButtonType.text,
             ),
           if (widget.onCancel != null)
-            const SizedBox(width: StyleConstants.contentGapSize),
+            const SizedBox(width: WickUtilityStyleConstants.contentGapSize),
           if (!widget.form.autoSubmit)
-            WickButton(
+            WickWidgetButton(
               onPressed: _submitForm,
               message: widget.form.submitButtonText,
             ),

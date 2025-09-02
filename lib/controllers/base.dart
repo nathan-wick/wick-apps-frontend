@@ -7,32 +7,33 @@ import '../models/paginated_response.dart';
 import '../utilities/request_handler.dart';
 import '../utilities/string_formatter.dart';
 
-abstract class BaseController<Model extends BaseModel> {
+abstract class WickControllerBase<Model extends WickModelBase> {
   // TODO Get the real domain
   final String domain = 'localhost:3000';
-  final String basePath = StringFormatter.toKebabCase(
+  final String basePath = WickUtilityStringFormatter.toKebabCase(
     Model.toString().replaceAll('Model', ''),
   );
   final Model Function(Map<String, dynamic>) fromJson;
 
-  BaseController(this.fromJson);
+  WickControllerBase(this.fromJson);
 
   Future<Model?> getByPrimaryKey(BuildContext context, int primaryKey) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.get,
-      domain,
-      '$basePath/$primaryKey',
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.get,
+          domain,
+          '$basePath/$primaryKey',
+        );
     return response == null ? null : fromJson(response);
   }
 
-  Future<PaginatedResponse<Model>?> get(
+  Future<WickModelPaginatedResponse<Model>?> get(
     BuildContext context, [
     int pageNumber = 1,
     int pageSize = 50,
     String? orderBy,
-    OrderDirection orderDirection = OrderDirection.descending,
+    WickEnumOrderDirection orderDirection = WickEnumOrderDirection.descending,
     String? where,
     List<String>? attributes,
   ]) async {
@@ -46,23 +47,24 @@ abstract class BaseController<Model extends BaseModel> {
     if (attributes != null) {
       queryParameters['attributes'] = attributes.join(",");
     }
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.get,
-      domain,
-      basePath,
-      null,
-      queryParameters,
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.get,
+          domain,
+          basePath,
+          null,
+          queryParameters,
+        );
     return response == null
         ? null
-        : PaginatedResponse<Model>.fromJson(response, fromJson);
+        : WickModelPaginatedResponse<Model>.fromJson(response, fromJson);
   }
 
   Future<Model?> create(BuildContext context, Model instance) async {
-    final response = await RequestHandler.sendRequest(
+    final response = await WickUtilityRequestHandler.sendRequest(
       context,
-      RequestMethod.post,
+      WickEnumRequestMethod.post,
       domain,
       basePath,
       instance,
@@ -71,23 +73,25 @@ abstract class BaseController<Model extends BaseModel> {
   }
 
   Future<Model?> edit(BuildContext context, Model instance) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.put,
-      domain,
-      basePath,
-      instance,
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.put,
+          domain,
+          basePath,
+          instance,
+        );
     return response == null ? null : fromJson(response);
   }
 
   Future<bool> delete(BuildContext context, int primaryKey) async {
-    final Map<String, dynamic>? response = await RequestHandler.sendRequest(
-      context,
-      RequestMethod.delete,
-      domain,
-      '$basePath/$primaryKey',
-    );
+    final Map<String, dynamic>? response =
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.delete,
+          domain,
+          '$basePath/$primaryKey',
+        );
     return response == null ? false : true;
   }
 }

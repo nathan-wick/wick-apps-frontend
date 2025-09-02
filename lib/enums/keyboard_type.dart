@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-enum WickKeyboardType {
+enum WickEnumKeyboardType {
   text(TextInputType.text),
   name(TextInputType.name),
   number(TextInputType.number),
@@ -11,7 +11,7 @@ enum WickKeyboardType {
   website(TextInputType.url),
   multipleLines(TextInputType.multiline);
 
-  const WickKeyboardType(this.value);
+  const WickEnumKeyboardType(this.value);
 
   final TextInputType value;
 }

@@ -1,1 +1,1 @@
-enum WickButtonTheme { primary, danger }
+enum WickEnumButtonTheme { primary, danger }

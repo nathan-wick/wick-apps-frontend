@@ -4,18 +4,18 @@ import 'dashboard_configuration.dart';
 import 'preferences.dart';
 import 'session.dart';
 
-class UserModel extends BaseModel {
+class WickModelUser extends WickModelBase {
   final int id;
   final String email;
   final String? picture;
   final String? firstName;
   final String? lastName;
   final DateTime? birthday;
-  final List<SessionModel>? sessions;
-  final PreferencesModel? preferences;
-  final List<DashboardConfigurationModel>? dashboardConfigurations;
+  final List<WickModelSession>? sessions;
+  final WickModelPreferences? preferences;
+  final List<WickModelDashboardConfiguration>? dashboardConfigurations;
 
-  UserModel({
+  WickModelUser({
     required this.id,
     required this.email,
     this.picture,
@@ -37,39 +37,39 @@ class UserModel extends BaseModel {
          'dashboardConfigurations': dashboardConfigurations,
        });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    List<SessionModel>? sessions;
+  factory WickModelUser.fromJson(Map<String, dynamic> json) {
+    List<WickModelSession>? sessions;
     if (json['sessions'] != null && json['sessions'] is List) {
       sessions =
           json['sessions']
               .map(
                 (item) =>
-                    SessionModel.fromJson(Map<String, dynamic>.from(item)),
+                    WickModelSession.fromJson(Map<String, dynamic>.from(item)),
               )
               .toList();
     }
-    List<DashboardConfigurationModel>? dashboardConfigurations;
+    List<WickModelDashboardConfiguration>? dashboardConfigurations;
     if (json['dashboardConfigurations'] != null &&
         json['dashboardConfigurations'] is List) {
       dashboardConfigurations =
           json['dashboardConfigurations']
               .map(
-                (item) => DashboardConfigurationModel.fromJson(
+                (item) => WickModelDashboardConfiguration.fromJson(
                   Map<String, dynamic>.from(item),
                 ),
               )
               .toList();
     }
 
-    return UserModel(
-      id: TypeConverter.toInt(json['id']) ?? 0,
-      email: TypeConverter.describe(json['email']) ?? '',
-      picture: TypeConverter.describe(json['picture']),
-      firstName: TypeConverter.describe(json['firstName']),
-      lastName: TypeConverter.describe(json['lastName']),
-      birthday: TypeConverter.toDate(json['birthday']),
+    return WickModelUser(
+      id: WickUtilityTypeConverter.toInt(json['id']) ?? 0,
+      email: WickUtilityTypeConverter.describe(json['email']) ?? '',
+      picture: WickUtilityTypeConverter.describe(json['picture']),
+      firstName: WickUtilityTypeConverter.describe(json['firstName']),
+      lastName: WickUtilityTypeConverter.describe(json['lastName']),
+      birthday: WickUtilityTypeConverter.toDate(json['birthday']),
       sessions: sessions,
-      preferences: PreferencesModel.fromJson(json['preferences']),
+      preferences: WickModelPreferences.fromJson(json['preferences']),
       dashboardConfigurations: dashboardConfigurations,
     );
   }

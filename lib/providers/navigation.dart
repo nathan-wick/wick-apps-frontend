@@ -10,42 +10,43 @@ import '../pages/welcome.dart';
 import '../providers/session.dart';
 import 'base.dart';
 
-class NavigationProvider extends BaseProvider<NavigationProviderModel> {
+class WickProviderNavigation
+    extends WickProviderBase<WickModelWickProviderNavigation> {
   String homeRoute;
   List<String> mainRoutes;
-  List<NavigationOptionModel> navigationOptions;
+  List<WickModelNavigationOption> navigationOptions;
 
-  NavigationProvider({
+  WickProviderNavigation({
     required this.homeRoute,
     this.mainRoutes = const [],
     this.navigationOptions = const [],
-  }) : super(NavigationProviderModel.fromJson);
+  }) : super(WickModelWickProviderNavigation.fromJson);
 
   void navigate(BuildContext context, [String? route]) async {
     final bool signedIn =
-        (await Provider.of<SessionProvider>(context, listen: false).getValue())
+        (await Provider.of<WickProviderSession>(context, listen: false).getValue())
             ?.token !=
         null;
     if (signedIn) {
       route ??= homeRoute;
-      setValue(NavigationProviderModel(lastRoute: route));
-      final NavigationOptionModel? navigationOption = navigationOptions
+      setValue(WickModelWickProviderNavigation(lastRoute: route));
+      final WickModelNavigationOption? navigationOption = navigationOptions
           .firstWhereOrNull(
             (navigationOption) => navigationOption.route == route,
           );
       if (navigationOption == null) {
-        _navigate(context, const NotFoundPage());
+        _navigate(context, const WickPageNotFound());
       } else {
         navigationOption.onNavigate?.call();
         _navigate(context, navigationOption.destination);
       }
     } else {
       setValue(null);
-      _navigate(context, const WelcomePage());
+      _navigate(context, const WickPageWelcome());
     }
   }
 
-  void _navigate(BuildContext context, BasePage destination) {
+  void _navigate(BuildContext context, WickPageBase destination) {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => destination,

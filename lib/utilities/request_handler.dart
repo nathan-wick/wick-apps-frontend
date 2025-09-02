@@ -13,44 +13,45 @@ import '../models/base.dart';
 import '../providers/session.dart';
 import 'notification_handler.dart';
 
-class RequestHandler {
+class WickUtilityRequestHandler {
   /// Sends a network request.
-  static Future<Map<String, dynamic>?> sendRequest(BuildContext context,
-      RequestMethod method,
-      String domain,
-      String path, [
-        Object? body,
-        Map<String, String>? queryParameters,
-      ]) async {
+  static Future<Map<String, dynamic>?> sendRequest(
+    BuildContext context,
+    WickEnumRequestMethod method,
+    String domain,
+    String path, [
+    Object? body,
+    Map<String, String>? queryParameters,
+  ]) async {
     final String urlString =
-    queryParameters == null
-        ? 'http://$domain/$path'
-        : 'http://$domain/$path?${Uri(queryParameters: queryParameters).query}';
+        queryParameters == null
+            ? 'http://$domain/$path'
+            : 'http://$domain/$path?${Uri(queryParameters: queryParameters).query}';
     final Uri url = Uri.parse(urlString);
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Session-Token':
-      (await Provider.of<SessionProvider>(
-        context,
-        listen: false,
-      ).getValue())
-          ?.token ??
+          (await Provider.of<WickProviderSession>(
+                context,
+                listen: false,
+              ).getValue())
+              ?.token ??
           '',
     };
-    final jsonBody = body is BaseModel ? body.toJson() : jsonEncode(body);
+    final jsonBody = body is WickModelBase ? body.toJson() : jsonEncode(body);
     Response response;
     try {
       switch (method) {
-        case RequestMethod.post:
+        case WickEnumRequestMethod.post:
           response = await post(url, headers: headers, body: jsonBody);
           break;
-        case RequestMethod.put:
+        case WickEnumRequestMethod.put:
           response = await put(url, headers: headers, body: jsonBody);
           break;
-        case RequestMethod.get:
+        case WickEnumRequestMethod.get:
           response = await get(url, headers: headers);
           break;
-        case RequestMethod.delete:
+        case WickEnumRequestMethod.delete:
           response = await delete(url, headers: headers, body: jsonBody);
           break;
       }
@@ -82,14 +83,16 @@ class RequestHandler {
       handleErrorResponse(context);
       return null;
     }
-    final ResponseStatus status = ResponseStatus.fromCode(response.statusCode);
+    final WickEnumResponseStatus status = WickEnumResponseStatus.fromCode(
+      response.statusCode,
+    );
     Map<String, dynamic> responseBody;
     try {
       responseBody = jsonDecode(response.body);
     } catch (error) {
       responseBody = {};
     }
-    if (status == ResponseStatus.okay) {
+    if (status == WickEnumResponseStatus.okay) {
       return responseBody;
     } else {
       handleErrorResponse(context, responseBody['message']);
@@ -98,12 +101,13 @@ class RequestHandler {
   }
 
   /// Handles an error response.
-  static void handleErrorResponse(BuildContext context, [
+  static void handleErrorResponse(
+    BuildContext context, [
     String message = 'An unexpected error occurred.',
   ]) {
-    NotificationHandler.displayNotification(
+    WickUtilityNotificationHandler.displayNotification(
       context,
-      NotificationType.error,
+      WickEnumNotificationType.error,
       message,
     );
   }

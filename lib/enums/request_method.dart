@@ -1,1 +1,1 @@
-enum RequestMethod { post, put, get, delete }
+enum WickEnumRequestMethod { post, put, get, delete }

@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class NotFoundPage extends BasePage {
-  const NotFoundPage({super.key})
+class WickPageNotFound extends WickPageBase {
+  const WickPageNotFound({super.key})
     : super(
         name: 'Not Found',
         // TODO Create content

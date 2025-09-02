@@ -6,18 +6,18 @@ import '../enums/date_format.dart';
 import '../models/base.dart';
 import 'input_validator.dart';
 
-class TypeConverter {
+class WickUtilityTypeConverter {
   /// Converts a dynamic value to a JSON-safe value.
   static Object? toJson(dynamic value) {
     if (value == null) return null;
     if (value is DateTime) return value.toUtc().toIso8601String();
     if (value is List) return value.map((item) => toJson(item)).toList();
-    if (value is BaseModel) return value.toJson();
+    if (value is WickModelBase) return value.toJson();
     return value;
   }
 
   /// Converts a dynamic value to a string.
-  static String? describe(dynamic value, [DateFormat? dateFormat]) {
+  static String? describe(dynamic value, [WickEnumDateFormat? dateFormat]) {
     if (value == null) return null;
     if (value is String) return value;
     if (value is DateTime) {
@@ -26,11 +26,11 @@ class TypeConverter {
         final month = value.month.toString().padLeft(2, '0');
         final day = value.day.toString().padLeft(2, '0');
         switch (dateFormat) {
-          case DateFormat.yearMonthDay:
+          case WickEnumDateFormat.yearMonthDay:
             return '$year/$month/$day';
-          case DateFormat.dayMonthYear:
+          case WickEnumDateFormat.dayMonthYear:
             return '$day/$month/$year';
-          case DateFormat.monthDayYear:
+          case WickEnumDateFormat.monthDayYear:
             return '$month/$day/$year';
         }
       }
@@ -60,7 +60,7 @@ class TypeConverter {
   }
 
   /// Converts a dynamic value to a DateTime.
-  static DateTime? toDate(dynamic value, [DateFormat? dateFormat]) {
+  static DateTime? toDate(dynamic value, [WickEnumDateFormat? dateFormat]) {
     if (value == null) return null;
     if (value is DateTime) return value;
     if (value is String) {
@@ -73,17 +73,17 @@ class TypeConverter {
         int month;
         int day;
         switch (dateFormat) {
-          case DateFormat.yearMonthDay:
+          case WickEnumDateFormat.yearMonthDay:
             year = int.parse(valueParts[0]);
             month = int.parse(valueParts[1]);
             day = int.parse(valueParts[2]);
             break;
-          case DateFormat.dayMonthYear:
+          case WickEnumDateFormat.dayMonthYear:
             day = int.parse(valueParts[0]);
             month = int.parse(valueParts[1]);
             year = int.parse(valueParts[2]);
             break;
-          case DateFormat.monthDayYear:
+          case WickEnumDateFormat.monthDayYear:
             month = int.parse(valueParts[0]);
             day = int.parse(valueParts[1]);
             year = int.parse(valueParts[2]);
@@ -99,30 +99,32 @@ class TypeConverter {
   }
 
   /// Converts a dynamic value to a color.
-  static WickColor? toColor(dynamic value) {
+  static WickEnumColor? toColor(dynamic value) {
     if (value == null) return null;
     if (value is String) {
-      return WickColor.values.firstWhereOrNull((color) => color.name == value);
+      return WickEnumColor.values.firstWhereOrNull(
+        (color) => color.name == value,
+      );
     }
     return null;
   }
 
   /// Converts a dynamic value to a date format.
-  static DateFormat? toDateFormat(dynamic value) {
+  static WickEnumDateFormat? toWickEnumDateFormat(dynamic value) {
     if (value == null) return null;
     if (value is String) {
-      return DateFormat.values.firstWhereOrNull(
-        (dateFormat) => dateFormat.name == value,
+      return WickEnumDateFormat.values.firstWhereOrNull(
+        (WickEnumDateFormat) => WickEnumDateFormat.name == value,
       );
     }
     return null;
   }
 
   /// Converts a dynamic value to a theme.
-  static WickBrightness? toBrightness(dynamic value) {
+  static WickEnumBrightness? toBrightness(dynamic value) {
     if (value == null) return null;
     if (value is String) {
-      return WickBrightness.values.firstWhereOrNull(
+      return WickEnumBrightness.values.firstWhereOrNull(
         (brightness) => brightness.name == value,
       );
     }

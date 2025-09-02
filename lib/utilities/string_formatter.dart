@@ -1,4 +1,4 @@
-class StringFormatter {
+class WickUtilityStringFormatter {
   /// Formats a string value to kebab-case.
   /// For example, 'My FavoriteString' becomes 'my-favorite-string'.
   static String toKebabCase(String value) {

@@ -1,1 +1,1 @@
-enum WickTextValidation { required, email, name, date }
+enum WickEnumTextValidation { required, email, name, date }

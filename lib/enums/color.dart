@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum WickColor {
+enum WickEnumColor {
   red(Colors.red),
   orange(Colors.orange),
   yellow(Colors.yellow),
@@ -19,5 +19,5 @@ enum WickColor {
 
   final Color value;
 
-  const WickColor(this.value);
+  const WickEnumColor(this.value);
 }

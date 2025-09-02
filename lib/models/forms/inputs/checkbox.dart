@@ -1,9 +1,9 @@
 import 'base.dart';
 
-class CheckboxModel extends WickFormInputBase {
+class WickModelFormInputCheckbox extends WickModelFormInputBase {
   final bool displayName;
 
-  CheckboxModel({
+  WickModelFormInputCheckbox({
     required super.name,
     super.autoFill,
     super.defaultValue,

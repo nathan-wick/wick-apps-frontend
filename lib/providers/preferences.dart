@@ -1,6 +1,6 @@
 import '../models/preferences.dart';
 import 'base.dart';
 
-class PreferencesProvider extends BaseProvider<PreferencesModel> {
-  PreferencesProvider() : super(PreferencesModel.fromJson);
+class WickProviderPreferences extends WickProviderBase<WickModelPreferences> {
+  WickProviderPreferences() : super(WickModelPreferences.fromJson);
 }

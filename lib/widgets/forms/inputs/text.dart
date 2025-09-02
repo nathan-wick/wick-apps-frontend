@@ -12,7 +12,7 @@ import '../../../utilities/regular_expression.dart';
 import '../../../utilities/type_converter.dart';
 
 class WickWidgetFormInputText extends StatefulWidget {
-  final TextModel input;
+  final WickModelFormInputText input;
   final Function(String?) onChanged;
   final Function() onEnterPressed;
   final FocusNode? focusNode;
@@ -33,14 +33,14 @@ class WickWidgetFormInputText extends StatefulWidget {
 class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
   final TextEditingController _controller = TextEditingController();
   String _previousValue = '';
-  DateFormat _dateFormat = DateFormat.yearMonthDay;
+  WickEnumDateFormat _dateFormat = WickEnumDateFormat.yearMonthDay;
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.input.defaultValue ?? '';
     _previousValue = _controller.text;
-    _getDateFormat();
+    _getWickEnumDateFormat();
   }
 
   @override
@@ -53,16 +53,16 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
   Widget build(BuildContext context) {
     String? helpText = widget.input.helpText;
     if (helpText == null &&
-        widget.input.keyboardType == WickKeyboardType.date) {
+        widget.input.keyboardType == WickEnumKeyboardType.date) {
       helpText = "Date format is ${_dateFormat.value}.";
     }
     return TextFormField(
       controller: _controller,
       obscureText: widget.input.isSecret,
       keyboardType:
-          widget.input.keyboardType == WickKeyboardType.text &&
+          widget.input.keyboardType == WickEnumKeyboardType.text &&
                   widget.input.multipleLines
-              ? WickKeyboardType.multipleLines.value
+              ? WickEnumKeyboardType.multipleLines.value
               : widget.input.keyboardType.value,
       decoration: InputDecoration(
         labelText: widget.input.name,
@@ -70,7 +70,7 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
         isDense: true,
         helperMaxLines: 3,
         suffixIcon:
-            widget.input.keyboardType == WickKeyboardType.date
+            widget.input.keyboardType == WickEnumKeyboardType.date
                 ? IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () => _selectDate(context),
@@ -82,22 +82,24 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
       validator: (String? value) {
         if (widget.input.validations.isEmpty) return null;
         if (value == null || value.isEmpty) {
-          return widget.input.validations.contains(WickTextValidation.required)
+          return widget.input.validations.contains(
+                WickEnumTextValidation.required,
+              )
               ? "${widget.input.name} is required."
               : null;
         }
-        if (widget.input.validations.contains(WickTextValidation.email)) {
+        if (widget.input.validations.contains(WickEnumTextValidation.email)) {
           if (!WickUtilityRegularExpression.email.hasMatch(value)) {
             return "Please enter a valid email address.";
           }
         }
-        if (widget.input.validations.contains(WickTextValidation.name)) {
+        if (widget.input.validations.contains(WickEnumTextValidation.name)) {
           if (value.length > 50) return "Name must not exceed 50 characters.";
           if (!WickUtilityRegularExpression.letters.hasMatch(value)) {
             return "Name must be letters only.";
           }
         }
-        if (widget.input.validations.contains(WickTextValidation.date)) {
+        if (widget.input.validations.contains(WickEnumTextValidation.date)) {
           final String? dateValidationMessage = WickUtilityInputValidator.date(
             value,
             _dateFormat,
@@ -107,13 +109,13 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
         return null;
       },
       onChanged: (value) {
-        if (widget.input.keyboardType == WickKeyboardType.date) {
+        if (widget.input.keyboardType == WickEnumKeyboardType.date) {
           final completedFirstInput =
-              _dateFormat == DateFormat.yearMonthDay
+              _dateFormat == WickEnumDateFormat.yearMonthDay
                   ? value.length == 4 && _previousValue.length == 3
                   : value.length == 2 && _previousValue.length == 1;
           final completedSecondInput =
-              _dateFormat == DateFormat.yearMonthDay
+              _dateFormat == WickEnumDateFormat.yearMonthDay
                   ? value.length == 7 && _previousValue.length == 6
                   : value.length == 5 && _previousValue.length == 4;
           if (completedFirstInput || completedSecondInput) {
@@ -137,23 +139,26 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
     );
   }
 
-  Future<void> _getDateFormat() async {
-    final PreferencesModel? preferences =
-        await Provider.of<PreferencesProvider>(
+  Future<void> _getWickEnumDateFormat() async {
+    final WickModelPreferences? preferences =
+        await Provider.of<WickProviderPreferences>(
           context,
           listen: false,
         ).getValue();
     if (preferences?.dateFormat != null) {
-      final DateFormat? preferredDateFormat = preferences?.dateFormat;
+      final WickEnumDateFormat? preferredWickEnumDateFormat =
+          preferences?.dateFormat;
       setState(() {
-        _dateFormat = preferredDateFormat ?? DateFormat.yearMonthDay;
+        _dateFormat =
+            preferredWickEnumDateFormat ?? WickEnumDateFormat.yearMonthDay;
       });
     }
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime initialDate =
-        TypeConverter.toDate(_controller.text, _dateFormat) ?? DateTime.now();
+        WickUtilityTypeConverter.toDate(_controller.text, _dateFormat) ??
+        DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -163,7 +168,10 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
       confirmText: "Confirm",
     );
     if (picked != null) {
-      final String? formattedDate = TypeConverter.describe(picked, _dateFormat);
+      final String? formattedDate = WickUtilityTypeConverter.describe(
+        picked,
+        _dateFormat,
+      );
       setState(() {
         _controller.text = formattedDate ?? '';
       });

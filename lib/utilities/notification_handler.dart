@@ -4,10 +4,10 @@ import '../enums/notification_type.dart';
 import '../utilities/style_constants.dart';
 import 'color_engine.dart';
 
-class NotificationHandler {
+class WickUtilityNotificationHandler {
   static void displayNotification(
     BuildContext context,
-    NotificationType type,
+    WickEnumNotificationType type,
     String message,
   ) {
     final textColor = Theme.of(context).scaffoldBackgroundColor;
@@ -15,24 +15,24 @@ class NotificationHandler {
     IconData icon;
     Duration duration;
     switch (type) {
-      case NotificationType.neutral:
-        backgroundColor = ColorEngine.calculateAccessibleColor(
+      case WickEnumNotificationType.neutral:
+        backgroundColor = WickUtilityColorEngine.calculateAccessibleColor(
           Colors.grey,
           textColor,
         );
         icon = Icons.info_outline;
         duration = const Duration(seconds: 4);
         break;
-      case NotificationType.success:
-        backgroundColor = ColorEngine.calculateAccessibleColor(
+      case WickEnumNotificationType.success:
+        backgroundColor = WickUtilityColorEngine.calculateAccessibleColor(
           Colors.green,
           textColor,
         );
         icon = Icons.check_circle_outline;
         duration = const Duration(seconds: 2);
         break;
-      case NotificationType.error:
-        backgroundColor = ColorEngine.calculateAccessibleColor(
+      case WickEnumNotificationType.error:
+        backgroundColor = WickUtilityColorEngine.calculateAccessibleColor(
           Colors.red,
           textColor,
         );
@@ -45,7 +45,7 @@ class NotificationHandler {
         content: Row(
           children: [
             Icon(icon, color: textColor),
-            SizedBox(width: StyleConstants.paddingSize),
+            SizedBox(width: WickUtilityStyleConstants.paddingSize),
             Expanded(child: Text(message, style: TextStyle(color: textColor))),
           ],
         ),

@@ -1,4 +1,4 @@
-enum ResponseStatus {
+enum WickEnumResponseStatus {
   switchingProtocols(101),
   processing(102),
   earlyHints(103),
@@ -61,12 +61,12 @@ enum ResponseStatus {
   notExtended(510),
   networkAuthenticationRequired(511);
 
-  const ResponseStatus(this.code);
+  const WickEnumResponseStatus(this.code);
 
   final int code;
 
-  static ResponseStatus fromCode(int code) {
-    return ResponseStatus.values.firstWhere(
+  static WickEnumResponseStatus fromCode(int code) {
+    return WickEnumResponseStatus.values.firstWhere(
       (status) => status.code == code,
       orElse: () => throw 'Unknown HTTP status code: $code',
     );

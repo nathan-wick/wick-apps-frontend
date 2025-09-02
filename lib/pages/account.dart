@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class AccountPage extends BasePage {
-  const AccountPage({super.key})
+class WickPageAccount extends WickPageBase {
+  const WickPageAccount({super.key})
     : super(
         name: 'Account',
         // TODO Create content

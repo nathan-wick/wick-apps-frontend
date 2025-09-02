@@ -3,7 +3,7 @@ import 'package:wick_apps/utilities/regular_expression.dart';
 import '../enums/date_format.dart';
 
 class WickUtilityInputValidator {
-  static String? date(String value, DateFormat dateFormat) {
+  static String? date(String value, WickEnumDateFormat dateFormat) {
     if (!WickUtilityRegularExpression.date.hasMatch(value)) {
       return "Date must be in ${dateFormat.value} format.";
     }
@@ -12,17 +12,17 @@ class WickUtilityInputValidator {
     int month;
     int day;
     switch (dateFormat) {
-      case DateFormat.yearMonthDay:
+      case WickEnumDateFormat.yearMonthDay:
         year = int.parse(valueParts[0]);
         month = int.parse(valueParts[1]);
         day = int.parse(valueParts[2]);
         break;
-      case DateFormat.dayMonthYear:
+      case WickEnumDateFormat.dayMonthYear:
         day = int.parse(valueParts[0]);
         month = int.parse(valueParts[1]);
         year = int.parse(valueParts[2]);
         break;
-      case DateFormat.monthDayYear:
+      case WickEnumDateFormat.monthDayYear:
         month = int.parse(valueParts[0]);
         day = int.parse(valueParts[1]);
         year = int.parse(valueParts[2]);

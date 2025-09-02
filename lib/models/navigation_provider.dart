@@ -1,15 +1,15 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class NavigationProviderModel extends BaseModel {
+class WickModelWickProviderNavigation extends WickModelBase {
   final String lastRoute;
 
-  NavigationProviderModel({required this.lastRoute})
+  WickModelWickProviderNavigation({required this.lastRoute})
     : super({'lastRoute': lastRoute});
 
-  factory NavigationProviderModel.fromJson(Map<String, dynamic> json) {
-    return NavigationProviderModel(
-      lastRoute: TypeConverter.describe(json['lastRoute']) ?? '',
+  factory WickModelWickProviderNavigation.fromJson(Map<String, dynamic> json) {
+    return WickModelWickProviderNavigation(
+      lastRoute: WickUtilityTypeConverter.describe(json['lastRoute']) ?? '',
     );
   }
 }

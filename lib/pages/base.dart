@@ -6,7 +6,7 @@ import '../utilities/style_constants.dart';
 import '../widgets/icon_button.dart';
 import '../widgets/navigation_bar.dart';
 
-class BasePage extends StatefulWidget {
+class WickPageBase extends StatefulWidget {
   final String name;
   final Alignment alignment;
   final List<Widget> content;
@@ -15,7 +15,7 @@ class BasePage extends StatefulWidget {
   final IconData? icon;
   final Widget? drawer;
 
-  const BasePage({
+  const WickPageBase({
     super.key,
     required this.name,
     required this.content,
@@ -27,19 +27,19 @@ class BasePage extends StatefulWidget {
   });
 
   @override
-  BasePageState createState() => BasePageState();
+  WickPageBaseState createState() => WickPageBaseState();
 }
 
-class BasePageState extends State<BasePage> {
+class WickPageBaseState extends State<WickPageBase> {
   @override
   Widget build(BuildContext context) {
-    final NavigationProvider navigationProvider =
-        Provider.of<NavigationProvider>(context, listen: false);
+    final WickProviderNavigation navigationProvider =
+        Provider.of<WickProviderNavigation>(context, listen: false);
     if (widget.drawer != null) {
       widget.actionButtons.add(
         Builder(
           builder: (context) {
-            return WickIconButton(
+            return WickWidgetIconButton(
               name: 'Menu',
               icon: Icons.table_rows,
               onPressed: () {
@@ -52,11 +52,17 @@ class BasePageState extends State<BasePage> {
     }
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(StyleConstants.barHeight),
+        preferredSize: const Size.fromHeight(
+          WickUtilityStyleConstants.barHeight,
+        ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(StyleConstants.boarderRadius),
-            bottomRight: Radius.circular(StyleConstants.boarderRadius),
+            bottomLeft: Radius.circular(
+              WickUtilityStyleConstants.boarderRadius,
+            ),
+            bottomRight: Radius.circular(
+              WickUtilityStyleConstants.boarderRadius,
+            ),
           ),
           child: AppBar(
             automaticallyImplyLeading: false,
@@ -79,11 +85,11 @@ class BasePageState extends State<BasePage> {
               height: double.infinity,
               alignment: widget.alignment,
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(StyleConstants.paddingSize),
+                padding: EdgeInsets.all(WickUtilityStyleConstants.paddingSize),
                 child: Column(
                   children: [
                     ...widget.content,
-                    const SizedBox(height: StyleConstants.barHeight),
+                    const SizedBox(height: WickUtilityStyleConstants.barHeight),
                   ],
                 ),
               ),
@@ -93,7 +99,9 @@ class BasePageState extends State<BasePage> {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: WickNavigationBar(routes: navigationProvider.mainRoutes),
+                child: WickWidgetNavigationBar(
+                  routes: navigationProvider.mainRoutes,
+                ),
               ),
           ],
         ),

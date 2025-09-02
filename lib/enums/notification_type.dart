@@ -1,1 +1,1 @@
-enum NotificationType { neutral, success, error }
+enum WickEnumNotificationType { neutral, success, error }

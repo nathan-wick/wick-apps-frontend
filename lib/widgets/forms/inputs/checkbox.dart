@@ -5,7 +5,7 @@ import '../../../utilities/style_constants.dart';
 import '../../../utilities/type_converter.dart';
 
 class WickWidgetFormInputCheckbox extends StatefulWidget {
-  final CheckboxModel input;
+  final WickModelFormInputCheckbox input;
   final Function(String?) onChanged;
 
   const WickWidgetFormInputCheckbox({
@@ -23,7 +23,8 @@ class _WickWidgetFormInputCheckboxState
     extends State<WickWidgetFormInputCheckbox> {
   @override
   Widget build(BuildContext context) {
-    bool value = TypeConverter.toBool(widget.input.defaultValue) ?? false;
+    bool value =
+        WickUtilityTypeConverter.toBool(widget.input.defaultValue) ?? false;
     final Widget checkbox = Checkbox(
       checkColor: Theme.of(context).scaffoldBackgroundColor,
       fillColor: WidgetStateProperty.resolveWith((states) {
@@ -38,7 +39,7 @@ class _WickWidgetFormInputCheckboxState
           setState(() {
             value = newValue;
           });
-          widget.onChanged(TypeConverter.describe(newValue));
+          widget.onChanged(WickUtilityTypeConverter.describe(newValue));
         }
       },
     );
@@ -47,7 +48,7 @@ class _WickWidgetFormInputCheckboxState
         ? Row(
           children: [
             checkbox,
-            const SizedBox(width: StyleConstants.paddingSize),
+            const SizedBox(width: WickUtilityStyleConstants.paddingSize),
             Text(widget.input.name),
           ],
         )

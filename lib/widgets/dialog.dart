@@ -4,7 +4,7 @@ import '../enums/button_type.dart';
 import '../utilities/style_constants.dart';
 import 'button.dart';
 
-class WickDialog extends StatelessWidget {
+class WickWidgetDialog extends StatelessWidget {
   final IconData icon;
   final String title;
   final List<Widget> content;
@@ -13,7 +13,7 @@ class WickDialog extends StatelessWidget {
   final bool displayCancel;
   final Function()? onOkay;
 
-  const WickDialog({
+  const WickWidgetDialog({
     super.key,
     required this.icon,
     required this.title,
@@ -28,7 +28,9 @@ class WickDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(StyleConstants.boarderRadius),
+        borderRadius: BorderRadius.circular(
+          WickUtilityStyleConstants.boarderRadius,
+        ),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -36,14 +38,14 @@ class WickDialog extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: constraints.maxWidth,
               minWidth:
-                  constraints.maxWidth < StyleConstants.wideWidthSize
+                  constraints.maxWidth < WickUtilityStyleConstants.wideWidthSize
                       ? constraints.maxWidth
-                      : StyleConstants.wideWidthSize,
+                      : WickUtilityStyleConstants.wideWidthSize,
             ),
             child: IntrinsicWidth(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(
-                  StyleConstants.boarderRadius,
+                  WickUtilityStyleConstants.boarderRadius,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -52,17 +54,21 @@ class WickDialog extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                          StyleConstants.boarderRadius,
+                          WickUtilityStyleConstants.boarderRadius,
                         ),
                         color: Theme.of(
                           context,
                         ).primaryColor.withValues(alpha: 0.1),
                       ),
-                      padding: EdgeInsets.all(StyleConstants.paddingSize),
+                      padding: EdgeInsets.all(
+                        WickUtilityStyleConstants.paddingSize,
+                      ),
                       child: Row(
                         children: [
                           Icon(icon, color: Theme.of(context).primaryColor),
-                          const SizedBox(width: StyleConstants.contentGapSize),
+                          const SizedBox(
+                            width: WickUtilityStyleConstants.contentGapSize,
+                          ),
                           Expanded(
                             child: Text(
                               title,
@@ -75,29 +81,35 @@ class WickDialog extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(StyleConstants.paddingSize),
+                      padding: EdgeInsets.all(
+                        WickUtilityStyleConstants.paddingSize,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           ...content,
-                          const SizedBox(height: StyleConstants.contentGapSize),
+                          const SizedBox(
+                            height: WickUtilityStyleConstants.contentGapSize,
+                          ),
                           if (displayActions)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 if (displayCancel)
-                                  WickButton(
+                                  WickWidgetButton(
                                     onPressed: () {
                                       Navigator.of(context).pop(false);
                                     },
                                     message: "Cancel",
-                                    type: WickButtonType.text,
+                                    type: WickEnumButtonType.text,
                                   ),
                                 if (displayCancel)
                                   const SizedBox(
-                                    width: StyleConstants.contentGapSize,
+                                    width:
+                                        WickUtilityStyleConstants
+                                            .contentGapSize,
                                   ),
-                                WickButton(
+                                WickWidgetButton(
                                   onPressed: () {
                                     if (onOkay != null) {
                                       onOkay!();

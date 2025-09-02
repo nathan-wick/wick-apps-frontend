@@ -1,1 +1,1 @@
-enum WickImageShape { square, circle }
+enum WickEnumImageShape { square, circle }

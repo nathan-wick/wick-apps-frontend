@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class PreferencesPage extends BasePage {
-  const PreferencesPage({super.key})
+class WickPagePreferences extends WickPageBase {
+  const WickPagePreferences({super.key})
     : super(
         name: 'Preferences',
         // TODO Create content

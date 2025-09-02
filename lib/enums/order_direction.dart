@@ -1,8 +1,8 @@
-enum OrderDirection {
+enum WickEnumOrderDirection {
   ascending('ASC'),
   descending('DESC');
 
   final String value;
 
-  const OrderDirection(this.value);
+  const WickEnumOrderDirection(this.value);
 }

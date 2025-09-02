@@ -4,13 +4,13 @@ import '../enums/date_format.dart';
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class PreferencesModel extends BaseModel {
+class WickModelPreferences extends WickModelBase {
   final int userId;
-  final WickBrightness brightness;
-  final DateFormat dateFormat;
-  final WickColor primaryColor;
+  final WickEnumBrightness brightness;
+  final WickEnumDateFormat dateFormat;
+  final WickEnumColor primaryColor;
 
-  PreferencesModel({
+  WickModelPreferences({
     required this.userId,
     required this.brightness,
     required this.dateFormat,
@@ -18,21 +18,24 @@ class PreferencesModel extends BaseModel {
   }) : super({
          'userId': userId,
          'brightness': brightness,
-         'dateFormat': dateFormat,
+         'WickEnumDateFormat': WickEnumDateFormat,
          'primaryColor': primaryColor,
        });
 
-  factory PreferencesModel.fromJson(Map<String, dynamic> json) {
-    return PreferencesModel(
-      userId: TypeConverter.toInt(json['userId']) ?? 0,
+  factory WickModelPreferences.fromJson(Map<String, dynamic> json) {
+    return WickModelPreferences(
+      userId: WickUtilityTypeConverter.toInt(json['userId']) ?? 0,
       brightness:
-          TypeConverter.toBrightness(json['brightness']) ??
-          WickBrightness.system,
+          WickUtilityTypeConverter.toBrightness(json['brightness']) ??
+          WickEnumBrightness.system,
       dateFormat:
-          TypeConverter.toDateFormat(json['dateFormat']) ??
-          DateFormat.yearMonthDay,
+          WickUtilityTypeConverter.toWickEnumDateFormat(
+            json['WickEnumDateFormat'],
+          ) ??
+          WickEnumDateFormat.yearMonthDay,
       primaryColor:
-          TypeConverter.toColor(json['primaryColor']) ?? WickColor.blue,
+          WickUtilityTypeConverter.toColor(json['primaryColor']) ??
+          WickEnumColor.blue,
     );
   }
 }

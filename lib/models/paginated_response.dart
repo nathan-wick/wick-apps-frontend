@@ -1,24 +1,28 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class PaginatedResponse<Model extends BaseModel> extends BaseModel {
+class WickModelPaginatedResponse<Model extends WickModelBase>
+    extends WickModelBase {
   final List<Model> instances;
   final int totalInstances;
 
-  PaginatedResponse({required this.instances, required this.totalInstances})
-    : super({'instances': instances, 'totalInstances': totalInstances});
+  WickModelPaginatedResponse({
+    required this.instances,
+    required this.totalInstances,
+  }) : super({'instances': instances, 'totalInstances': totalInstances});
 
-  factory PaginatedResponse.fromJson(
+  factory WickModelPaginatedResponse.fromJson(
     Map<String, dynamic> json,
     Model Function(Map<String, dynamic>) fromJson,
   ) {
-    return PaginatedResponse(
+    return WickModelPaginatedResponse(
       instances:
-          // TODO Add a method to TypeConverter for toList
+          // TODO Add a method to WickUtilityTypeConverter for toList
           json['instances']
               .map((instance) => fromJson(instance as Map<String, dynamic>))
               .toList(),
-      totalInstances: TypeConverter.toInt(json['totalInstances']) ?? 0,
+      totalInstances:
+          WickUtilityTypeConverter.toInt(json['totalInstances']) ?? 0,
     );
   }
 }

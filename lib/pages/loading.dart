@@ -1,7 +1,7 @@
 import 'base.dart';
 
-class LoadingPage extends BasePage {
-  const LoadingPage({super.key})
+class WickPageLoading extends WickPageBase {
+  const WickPageLoading({super.key})
     : super(
         name: 'Loading...',
         // TODO Create content

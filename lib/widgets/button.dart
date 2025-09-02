@@ -4,21 +4,21 @@ import '../enums/button_theme.dart';
 import '../enums/button_type.dart';
 import '../utilities/style_constants.dart';
 
-class WickButton extends StatelessWidget {
+class WickWidgetButton extends StatelessWidget {
   final Function() onPressed;
   final String message;
   final IconData? icon;
-  final WickButtonType type;
-  final WickButtonTheme theme;
+  final WickEnumButtonType type;
+  final WickEnumButtonTheme theme;
   final bool isWide;
 
-  const WickButton({
+  const WickWidgetButton({
     super.key,
     required this.onPressed,
     required this.message,
     this.icon,
-    this.type = WickButtonType.solid,
-    this.theme = WickButtonTheme.primary,
+    this.type = WickEnumButtonType.solid,
+    this.theme = WickEnumButtonTheme.primary,
     this.isWide = false,
   });
 
@@ -28,17 +28,18 @@ class WickButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (icon != null) Icon(icon, size: 14),
-        if (icon != null) const SizedBox(width: StyleConstants.contentGapSize),
+        if (icon != null)
+          const SizedBox(width: WickUtilityStyleConstants.contentGapSize),
         Text(message),
       ],
     );
 
     Color backgroundColor;
     switch (theme) {
-      case WickButtonTheme.primary:
+      case WickEnumButtonTheme.primary:
         backgroundColor = Theme.of(context).primaryColor;
         break;
-      case WickButtonTheme.danger:
+      case WickEnumButtonTheme.danger:
         backgroundColor = Colors.red;
         break;
     }
@@ -46,12 +47,12 @@ class WickButton extends StatelessWidget {
     return SizedBox(
       width:
           isWide
-              ? double.infinity < StyleConstants.wideWidthSize
+              ? double.infinity < WickUtilityStyleConstants.wideWidthSize
                   ? double.infinity
-                  : StyleConstants.wideWidthSize
+                  : WickUtilityStyleConstants.wideWidthSize
               : null,
       child:
-          type == WickButtonType.solid
+          type == WickEnumButtonType.solid
               ? FilledButton(
                 onPressed: onPressed,
                 style: ButtonStyle(
@@ -61,7 +62,7 @@ class WickButton extends StatelessWidget {
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
-                        StyleConstants.boarderRadius,
+                        WickUtilityStyleConstants.boarderRadius,
                       ),
                     ),
                   ),
@@ -74,7 +75,7 @@ class WickButton extends StatelessWidget {
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
-                        StyleConstants.boarderRadius,
+                        WickUtilityStyleConstants.boarderRadius,
                       ),
                     ),
                   ),
