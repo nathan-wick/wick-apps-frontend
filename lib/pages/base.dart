@@ -6,20 +6,20 @@ import '../utilities/style_constants.dart';
 import '../widgets/icon_button.dart';
 import '../widgets/navigation_bar.dart';
 
-class WickPageBase extends StatefulWidget {
-  final String name;
+class WickPageBase extends StatelessWidget {
+  final String title;
   final Alignment alignment;
   final List<Widget> content;
-  final List<Widget> actionButtons;
+  final List<Widget> additionalActionButtons;
   final bool displayMainNavigation;
   final IconData? icon;
   final Widget? drawer;
 
   const WickPageBase({
     super.key,
-    required this.name,
+    required this.title,
     required this.content,
-    this.actionButtons = const [],
+    this.additionalActionButtons = const [],
     this.alignment = Alignment.topCenter,
     this.displayMainNavigation = true,
     this.icon,
@@ -27,29 +27,21 @@ class WickPageBase extends StatefulWidget {
   });
 
   @override
-  WickPageBaseState createState() => WickPageBaseState();
-}
-
-class WickPageBaseState extends State<WickPageBase> {
-  @override
   Widget build(BuildContext context) {
     final WickProviderNavigation navigationProvider =
         Provider.of<WickProviderNavigation>(context, listen: false);
-    if (widget.drawer != null) {
-      widget.actionButtons.add(
+    final List<Widget> finalActionButtons = [
+      ...additionalActionButtons,
+      if (drawer != null)
         Builder(
-          builder: (context) {
-            return WickWidgetIconButton(
-              name: 'Menu',
-              icon: Icons.table_rows,
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            );
-          },
+          builder:
+              (context) => WickWidgetIconButton(
+                name: 'Menu',
+                icon: Icons.table_rows,
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              ),
         ),
-      );
-    }
+    ];
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -68,12 +60,12 @@ class WickPageBaseState extends State<WickPageBase> {
             automaticallyImplyLeading: false,
             backgroundColor: Theme.of(context).primaryColor,
             title: Text(
-              widget.name,
+              title,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
-            actions: widget.actionButtons,
+            actions: finalActionButtons,
           ),
         ),
       ),
@@ -83,18 +75,18 @@ class WickPageBaseState extends State<WickPageBase> {
             Container(
               width: double.infinity,
               height: double.infinity,
-              alignment: widget.alignment,
+              alignment: alignment,
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(WickUtilityStyleConstants.paddingSize),
                 child: Column(
                   children: [
-                    ...widget.content,
+                    ...content,
                     const SizedBox(height: WickUtilityStyleConstants.barHeight),
                   ],
                 ),
               ),
             ),
-            if (widget.displayMainNavigation)
+            if (displayMainNavigation)
               Positioned(
                 left: 0,
                 right: 0,
@@ -106,7 +98,7 @@ class WickPageBaseState extends State<WickPageBase> {
           ],
         ),
       ),
-      endDrawer: widget.drawer,
+      endDrawer: drawer,
     );
   }
 }

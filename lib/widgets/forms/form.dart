@@ -86,29 +86,24 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
       final String inputKey = WickUtilityStringFormatter.toSnakeCase(
         input.name,
       );
-      final String WickUtilityLocalStorageKey =
+      final String localStorageKey =
           "form_${WickUtilityStringFormatter.toSnakeCase(widget.form.name)}_input_$inputKey";
       final String? locallySavedValue =
           input.defaultValue == null && input.autoFill == true
-              ? await WickUtilityLocalStorage().getStringValue(
-                WickUtilityLocalStorageKey,
-              )
+              ? await WickUtilityLocalStorage().getStringValue(localStorageKey)
               : null;
       final String? defaultValue = input.defaultValue ?? locallySavedValue;
       if (defaultValue != null) {
-        formValues[inputKey] = defaultValue;
+        formValues[input.name] = defaultValue;
       }
       onChanged(String? value) {
-        if (value == null) {
-          formValues.remove(inputKey);
+        if (value == null || value.isEmpty) {
+          formValues.remove(input.name);
         } else {
-          formValues[inputKey] = value;
+          formValues[input.name] = value;
         }
         if (input.autoFill) {
-          WickUtilityLocalStorage().setStringValue(
-            WickUtilityLocalStorageKey,
-            value,
-          );
+          WickUtilityLocalStorage().setStringValue(localStorageKey, value);
         }
         if (widget.form.autoSubmit) {
           _submitForm();

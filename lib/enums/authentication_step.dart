@@ -1,0 +1,1 @@
+enum WickEnumAuthenticationStep { enterEmail, verifyEmail }
