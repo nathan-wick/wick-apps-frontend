@@ -21,4 +21,16 @@ class WickUtilityStringFormatter {
         )
         .replaceAll(RegExp(r'\s+'), spaceReplacement);
   }
+
+  /// Capitalizes the first letter of each word in a string.
+  /// For example, 'my favorite string' becomes 'My Favorite String'.
+  static String titleCase(String value) {
+    return value
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+  }
 }

@@ -1,10 +1,19 @@
+import 'package:flutter/cupertino.dart';
+
+import '../widgets/loading_indicator.dart';
 import 'base.dart';
 
-class WickPageLoading extends WickPageBase {
-  const WickPageLoading({super.key})
-    : super(
-        name: 'Loading...',
-        // TODO Create content
-        content: const [],
-      );
+class WickPageLoading extends StatelessWidget {
+  const WickPageLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return WickPageBase(
+      title: 'Loading',
+      content: const [
+        WickWidgetLoadingIndicator(),
+        // TODO Add useful information if it's taking a while to load
+      ],
+    );
+  }
 }

@@ -1,7 +1,8 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class WickModelDashboardConfiguration extends WickModelBase {
+class WickModelDashboardConfiguration
+    extends WickModelBase<WickModelDashboardConfiguration> {
   final int id;
   final int userId;
   final String dashboard;
@@ -28,4 +29,9 @@ class WickModelDashboardConfiguration extends WickModelBase {
           WickUtilityTypeConverter.describe(json['configuration']) ?? '',
     );
   }
+
+  @override
+  WickModelDashboardConfiguration newInstance(
+    Map<String, dynamic> newAttributes,
+  ) => WickModelDashboardConfiguration.fromJson(newAttributes);
 }

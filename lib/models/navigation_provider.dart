@@ -1,7 +1,8 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class WickModelWickProviderNavigation extends WickModelBase {
+class WickModelWickProviderNavigation
+    extends WickModelBase<WickModelWickProviderNavigation> {
   final String lastRoute;
 
   WickModelWickProviderNavigation({required this.lastRoute})
@@ -12,4 +13,9 @@ class WickModelWickProviderNavigation extends WickModelBase {
       lastRoute: WickUtilityTypeConverter.describe(json['lastRoute']) ?? '',
     );
   }
+
+  @override
+  WickModelWickProviderNavigation newInstance(
+    Map<String, dynamic> newAttributes,
+  ) => WickModelWickProviderNavigation.fromJson(newAttributes);
 }

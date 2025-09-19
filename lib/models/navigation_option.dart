@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
-import '../pages/base.dart';
 import 'base.dart';
 
-class WickModelNavigationOption extends WickModelBase {
+class WickModelNavigationOption
+    extends WickModelBase<WickModelNavigationOption> {
   final String name;
   final String route;
   final IconData icon;
-  final WickPageBase destination;
+  final Widget destination;
   final Function()? onNavigate;
 
   WickModelNavigationOption({

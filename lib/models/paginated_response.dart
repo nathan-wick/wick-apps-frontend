@@ -1,8 +1,8 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class WickModelPaginatedResponse<Model extends WickModelBase>
-    extends WickModelBase {
+class WickModelPaginatedResponse<Model extends WickModelBase<Model>>
+    extends WickModelBase<WickModelPaginatedResponse> {
   final List<Model> instances;
   final int totalInstances;
 

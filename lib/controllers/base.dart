@@ -7,7 +7,7 @@ import '../models/paginated_response.dart';
 import '../utilities/request_handler.dart';
 import '../utilities/string_formatter.dart';
 
-abstract class WickControllerBase<Model extends WickModelBase> {
+abstract class WickControllerBase<Model extends WickModelBase<Model>> {
   // TODO Get the real domain
   final String domain = 'localhost:3000';
   final String basePath = WickUtilityStringFormatter.toKebabCase(
@@ -29,14 +29,14 @@ abstract class WickControllerBase<Model extends WickModelBase> {
   }
 
   Future<WickModelPaginatedResponse<Model>?> get(
-    BuildContext context, [
+    BuildContext context, {
     int pageNumber = 1,
     int pageSize = 50,
     String? orderBy,
     WickEnumOrderDirection orderDirection = WickEnumOrderDirection.descending,
     String? where,
     List<String>? attributes,
-  ]) async {
+  }) async {
     final queryParameters = <String, String>{
       'pageNumber': pageNumber.toString(),
       'pageSize': pageSize.toString(),

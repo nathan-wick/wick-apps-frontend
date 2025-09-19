@@ -4,7 +4,7 @@ import '../enums/date_format.dart';
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class WickModelPreferences extends WickModelBase {
+class WickModelPreferences extends WickModelBase<WickModelPreferences> {
   final int userId;
   final WickEnumBrightness brightness;
   final WickEnumDateFormat dateFormat;
@@ -38,4 +38,8 @@ class WickModelPreferences extends WickModelBase {
           WickEnumColor.blue,
     );
   }
+
+  @override
+  WickModelPreferences newInstance(Map<String, dynamic> newAttributes) =>
+      WickModelPreferences.fromJson(newAttributes);
 }

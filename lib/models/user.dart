@@ -4,7 +4,7 @@ import 'dashboard_configuration.dart';
 import 'preferences.dart';
 import 'session.dart';
 
-class WickModelUser extends WickModelBase {
+class WickModelUser extends WickModelBase<WickModelUser> {
   final int id;
   final String email;
   final String? picture;
@@ -73,4 +73,8 @@ class WickModelUser extends WickModelBase {
       dashboardConfigurations: dashboardConfigurations,
     );
   }
+
+  @override
+  WickModelUser newInstance(Map<String, dynamic> newAttributes) =>
+      WickModelUser.fromJson(newAttributes);
 }

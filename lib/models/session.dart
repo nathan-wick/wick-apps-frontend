@@ -1,7 +1,7 @@
 import '../utilities/type_converter.dart';
 import 'base.dart';
 
-class WickModelSession extends WickModelBase {
+class WickModelSession extends WickModelBase<WickModelSession> {
   final int id;
   final int userId;
   final String code;
@@ -53,4 +53,8 @@ class WickModelSession extends WickModelBase {
       location: WickUtilityTypeConverter.describe(json['location']) ?? '',
     );
   }
+
+  @override
+  WickModelSession newInstance(Map<String, dynamic> newAttributes) =>
+      WickModelSession.fromJson(newAttributes);
 }

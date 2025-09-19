@@ -1,6 +1,7 @@
+import '../enums/date_format.dart';
 import '../utilities/type_converter.dart';
 
-abstract class WickModelBase {
+abstract class WickModelBase<T> {
   /// The raw attribute values of this model (ideally passed to the constructor).
   final Map<String, dynamic> attributes;
 
@@ -18,10 +19,24 @@ abstract class WickModelBase {
     );
   }
 
+  /// Subclasses must implement this to build themselves from new attributes.
+  T newInstance(Map<String, dynamic> newAttributes) =>
+      throw UnimplementedError('newInstance must be implemented');
+
   /// Converts the model to a map of strings.
-  Map<String, String?> toStringMap() {
+  Map<String, String?> toStringMap([WickEnumDateFormat? dateFormat]) {
     return attributes.map(
-      (key, value) => MapEntry(key, WickUtilityTypeConverter.describe(value)),
+      (key, value) =>
+          MapEntry(key, WickUtilityTypeConverter.describe(value, dateFormat)),
     );
+  }
+
+  /// Returns a copy of this model with the given updated attributes.
+  T copyWith(Map<String, dynamic> updatedAttributes) {
+    final Map<String, dynamic> newAttributes = {
+      ...attributes,
+      ...updatedAttributes,
+    };
+    return newInstance(newAttributes);
   }
 }

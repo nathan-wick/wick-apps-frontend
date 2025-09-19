@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../models/navigation_option.dart';
 import '../models/navigation_provider.dart';
-import '../pages/base.dart';
 import '../pages/not_found.dart';
 import '../pages/welcome.dart';
 import '../providers/session.dart';
@@ -24,7 +23,10 @@ class WickProviderNavigation
 
   void navigate(BuildContext context, [String? route]) async {
     final bool signedIn =
-        (await Provider.of<WickProviderSession>(context, listen: false).getValue())
+        (await Provider.of<WickProviderSession>(
+              context,
+              listen: false,
+            ).getValue())
             ?.token !=
         null;
     if (signedIn) {
@@ -46,7 +48,7 @@ class WickProviderNavigation
     }
   }
 
-  void _navigate(BuildContext context, WickPageBase destination) {
+  void _navigate(BuildContext context, Widget destination) {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => destination,
