@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/base.dart';
-import '../models/forms/inputs/checkbox.dart';
+import '../models/form_inputs/checkbox.dart';
 import '../models/preferences.dart';
 import '../providers/preferences.dart';
 import '../utilities/string_formatter.dart';
@@ -98,7 +98,7 @@ class WickWidgetTable extends StatelessWidget {
               input: WickModelFormInputCheckbox(
                 name: '$rowIndex:$columnIndex',
                 displayName: false,
-                defaultValue: WickUtilityTypeConverter.toBool(value).toString(),
+                defaultValue: WickUtilityTypeConverter.toBool(value),
               ),
               onChanged: (String? newValue) {
                 final updatedAttributes = Map<String, dynamic>.from(

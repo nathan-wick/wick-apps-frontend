@@ -3,13 +3,13 @@ import 'dropdown_option.dart';
 
 class WickModelFormInputDropdown extends WickModelFormInputBase {
   final List<WickModelFormInputDropdownOption> options;
-  final String? helpText;
+  final String? defaultValue;
 
   WickModelFormInputDropdown({
     required super.name,
     super.autoFill,
-    super.defaultValue,
+    this.defaultValue,
+    super.helpText,
     required this.options,
-    this.helpText,
   });
 }

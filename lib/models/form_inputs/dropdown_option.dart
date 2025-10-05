@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../base.dart';
+import '../base.dart';
 
 class WickModelFormInputDropdownOption
     extends WickModelBase<WickModelFormInputDropdownOption> {

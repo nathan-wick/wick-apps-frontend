@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/forms/inputs/checkbox.dart';
+import '../../../models/form_inputs/checkbox.dart';
 import '../../../utilities/style_constants.dart';
 import '../../../utilities/type_converter.dart';
 
@@ -23,8 +23,7 @@ class _WickWidgetFormInputCheckboxState
     extends State<WickWidgetFormInputCheckbox> {
   @override
   Widget build(BuildContext context) {
-    bool value =
-        WickUtilityTypeConverter.toBool(widget.input.defaultValue) ?? false;
+    bool value = widget.input.defaultValue ?? false;
     final Widget checkbox = Checkbox(
       checkColor: Theme.of(context).scaffoldBackgroundColor,
       fillColor: WidgetStateProperty.resolveWith((states) {

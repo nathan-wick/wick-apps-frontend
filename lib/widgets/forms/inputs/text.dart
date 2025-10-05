@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../enums/date_format.dart';
 import '../../../enums/keyboard_type.dart';
 import '../../../enums/text_validation.dart';
-import '../../../models/forms/inputs/text.dart';
+import '../../../models/form_inputs/text.dart';
 import '../../../models/preferences.dart';
 import '../../../providers/preferences.dart';
 import '../../../utilities/input_validator.dart';

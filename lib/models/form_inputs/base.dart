@@ -1,11 +1,11 @@
 abstract class WickModelFormInputBase {
   final String name;
   final bool autoFill;
-  final String? defaultValue;
+  final String? helpText;
 
   WickModelFormInputBase({
     required this.name,
     this.autoFill = true,
-    this.defaultValue,
+    this.helpText,
   });
 }

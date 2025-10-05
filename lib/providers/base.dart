@@ -14,25 +14,25 @@ abstract class WickProviderBase<Model extends WickModelBase>
   final Model Function(Map<String, dynamic>) fromJson;
 
   /// The value of the provider.
-  Model? _value;
+  Model? value;
 
   WickProviderBase(this.fromJson);
 
   /// Gets the value of the provider.
   Future<Model?> getValue() async {
-    _value ??= await WickUtilityLocalStorage<Model>().getModelValue(
+    value ??= await WickUtilityLocalStorage<Model>().getModelValue(
       WickUtilityLocalStorageKey,
       fromJson,
     );
-    return _value;
+    return value;
   }
 
   /// Sets the value of the provider.
-  Future<void> setValue(Model? value) async {
-    _value = value;
+  Future<void> setValue(Model? newValue) async {
+    value = newValue;
     WickUtilityLocalStorage<Model>().setModelValue(
       WickUtilityLocalStorageKey,
-      value,
+      newValue,
     );
     notifyListeners();
   }

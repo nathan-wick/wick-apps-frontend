@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../controllers/dashboard_configuration.dart';
 import '../models/base.dart';
 import '../models/dashboard_configuration.dart';
-import '../models/dashboard_tile.dart';
-import '../models/dashboard_tile_option.dart';
+import '../models/tile.dart';
+import '../models/tile_option.dart';
 import '../utilities/style_constants.dart';
+import '../widgets/card.dart';
 import '../widgets/dialog.dart';
 import '../widgets/icon_button.dart';
 import '../widgets/table.dart';
@@ -14,7 +15,7 @@ import 'loading.dart';
 
 class WickPageDashboardBase extends StatefulWidget {
   final String name;
-  final List<WickModelDashboardTile> tiles;
+  final List<WickModelTile> tiles;
   final IconData? icon;
 
   // TODO Only use wick drawer. Do the same for page base.
@@ -103,11 +104,11 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
     );
   }
 
-  List<WickModelDashboardTileOption> _getOptions(String configuration) {
+  List<WickModelTileOption> _getOptions(String configuration) {
     if (configuration.isEmpty) {
       return widget.tiles
           .map(
-            (tile) => WickModelDashboardTileOption(
+            (tile) => WickModelTileOption(
               active: tile.activeByDefault,
               name: tile.name,
             ),
@@ -117,7 +118,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
 
     return widget.tiles
         .map(
-          (tile) => WickModelDashboardTileOption(
+          (tile) => WickModelTileOption(
             active: configuration.split(',').contains(tile.name),
             name: tile.name,
           ),
@@ -126,7 +127,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
   }
 
   List<Widget> _getColumns(String? configuration) {
-    final List<WickModelDashboardTile> activeTiles =
+    final List<WickModelTile> activeTiles =
         configuration == null
             ? widget.tiles.where((tile) => tile.activeByDefault).toList()
             : widget.tiles
@@ -146,10 +147,13 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
     columnWidth =
         columnWidth -
         ((WickUtilityStyleConstants.paddingSize * 2) / numberOfColumns);
-    List<List<Widget>> columnTiles = List.generate(numberOfColumns, (_) => []);
+    List<List<WickModelTile>> columnTiles = List.generate(
+      numberOfColumns,
+      (_) => [],
+    );
     for (int index = 0; index < activeTiles.length; index++) {
       int columnIndex = index % numberOfColumns;
-      columnTiles[columnIndex].add(activeTiles[index].tile);
+      columnTiles[columnIndex].add(activeTiles[index]);
     }
     return columnTiles
         .map(
@@ -163,7 +167,11 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
                           padding: EdgeInsets.all(
                             WickUtilityStyleConstants.paddingSize / 2,
                           ),
-                          child: tile,
+                          child: WickWidgetCard(
+                            icon: tile.icon,
+                            title: tile.name,
+                            content: tile.content,
+                          ),
                         ),
                       )
                       .toList(),
@@ -176,7 +184,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
   void _onConfigurationChanged(
     List<WickModelBase<dynamic>> updatedTileOptions,
   ) {
-    if (updatedTileOptions is List<WickModelDashboardTileOption>) {
+    if (updatedTileOptions is List<WickModelTileOption>) {
       String configuration = updatedTileOptions
           .where((updatedTileOption) => updatedTileOption.active == true)
           .map((updatedTileOption) => updatedTileOption.name)

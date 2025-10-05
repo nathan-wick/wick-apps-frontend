@@ -1,10 +1,25 @@
-import 'base.dart';
+import 'package:flutter/material.dart';
 
-class WickPageProfile extends WickPageBase {
-  const WickPageProfile({super.key})
-    : super(
-        name: 'Profile',
-        // TODO Create content
-        content: const [],
-      );
+import '../models/tile.dart';
+import '../widgets/tile_contents/profile.dart';
+import 'dashboard_base.dart';
+
+class WickPageProfile extends StatelessWidget {
+  const WickPageProfile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return WickPageDashboardBase(
+      name: 'Profile',
+      icon: Icons.person,
+      tiles: [
+        WickModelTile(
+          name: 'Profile',
+          icon: Icons.person,
+          content: [WickWidgetTileContentProfile()],
+          activeByDefault: false,
+        ),
+      ],
+    );
+  }
 }

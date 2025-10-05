@@ -4,9 +4,9 @@ import '../controllers/session.dart';
 import '../enums/authentication_step.dart';
 import '../enums/keyboard_type.dart';
 import '../enums/text_validation.dart';
-import '../models/forms/form.dart';
-import '../models/forms/inputs/text.dart';
-import 'forms/form.dart';
+import '../models/form_inputs/text.dart';
+import '../utilities/type_converter.dart';
+import 'forms/base.dart';
 import 'loading_indicator.dart';
 
 class WickWidgetAuthentication extends StatefulWidget {
@@ -40,47 +40,46 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
   }
 
   Widget _buildSignInWithEmailForm() {
-    return WickWidgetForm(
-      form: WickModelForm(
-        name: 'Sign In With Email',
-        inputs: [
-          WickModelFormInputText(
-            validations: [
-              WickEnumTextValidation.required,
-              WickEnumTextValidation.email,
-            ],
-            keyboardType: WickEnumKeyboardType.email,
-            name: _emailInputName,
-          ),
-        ],
-        submitButtonText: 'Continue',
-      ),
+    return WickWidgetFormBase(
+      name: 'Sign In With Email',
+      inputs: [
+        WickModelFormInputText(
+          validations: [
+            WickEnumTextValidation.required,
+            WickEnumTextValidation.email,
+          ],
+          keyboardType: WickEnumKeyboardType.email,
+          name: _emailInputName,
+        ),
+      ],
+      submitButtonText: 'Continue',
       onSubmit: _handleSignInWithEmailSubmit,
     );
   }
 
   Widget _buildVerifyEmailForm() {
-    return WickWidgetForm(
-      form: WickModelForm(
-        name: 'Verify Email',
-        inputs: [
-          WickModelFormInputText(
-            validations: [WickEnumTextValidation.required],
-            keyboardType: WickEnumKeyboardType.number,
-            name: _codeInputName,
-            helpText: 'Enter the code sent to $_email',
-          ),
-        ],
-        submitButtonText: 'Continue',
-      ),
+    return WickWidgetFormBase(
+      name: 'Verify Email',
+      inputs: [
+        WickModelFormInputText(
+          validations: [WickEnumTextValidation.required],
+          keyboardType: WickEnumKeyboardType.number,
+          name: _codeInputName,
+          helpText: 'Enter the code sent to $_email',
+        ),
+      ],
+      submitButtonText: 'Continue',
       onSubmit: _handleVerifySubmit,
       onCancel: _reset,
     );
   }
 
   Future<void> _handleSignInWithEmailSubmit(
-      Map<String, String> formValues,) async {
-    final email = formValues[_emailInputName];
+    Map<String, dynamic> formValues,
+  ) async {
+    final String? email = WickUtilityTypeConverter.describe(
+      formValues[_emailInputName],
+    );
     if (email == null) return;
     _setLoading(true);
     final sessionId = await WickControllerSession().sendVerificationEmail(
@@ -93,15 +92,17 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
         _sessionId = sessionId;
         _isLoading = false;
         _currentStep =
-        sessionId != null
-            ? WickEnumAuthenticationStep.verifyEmail
-            : WickEnumAuthenticationStep.enterEmail;
+            sessionId != null
+                ? WickEnumAuthenticationStep.verifyEmail
+                : WickEnumAuthenticationStep.enterEmail;
       });
     }
   }
 
-  Future<void> _handleVerifySubmit(Map<String, String> formValues) async {
-    final code = formValues[_codeInputName];
+  Future<void> _handleVerifySubmit(Map<String, dynamic> formValues) async {
+    final String? code = WickUtilityTypeConverter.describe(
+      formValues[_codeInputName],
+    );
     if (code == null || _sessionId == null) return;
     _setLoading(true);
     final sessionToken = await WickControllerSession().signIn(

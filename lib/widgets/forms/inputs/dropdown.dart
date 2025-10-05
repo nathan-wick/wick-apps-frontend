@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/forms/inputs/dropdown.dart';
+import '../../../models/form_inputs/dropdown.dart';
 import '../../../utilities/style_constants.dart';
 
 class WickWidgetFormInputDropdown extends StatefulWidget {

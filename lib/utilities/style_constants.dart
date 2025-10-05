@@ -6,4 +6,5 @@ class WickUtilityStyleConstants {
   static const double boarderRadius = 8;
   static const double barHeight = kToolbarHeight;
   static const double wideWidthSize = 400;
+  static const double largeAvatarSize = 70;
 }

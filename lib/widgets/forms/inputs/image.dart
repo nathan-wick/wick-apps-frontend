@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../enums/button_type.dart';
 import '../../../enums/image_shapes.dart';
-import '../../../models/forms/inputs/image.dart';
+import '../../../models/form_inputs/image.dart';
 import '../../../utilities/image_engine.dart';
 import '../../../utilities/style_constants.dart';
 import '../../button.dart';
@@ -30,10 +30,7 @@ class WickWidgetFormInputImage extends StatefulWidget {
 class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
   @override
   Widget build(BuildContext context) {
-    Uint8List? image =
-        widget.input.defaultValue != null
-            ? base64Decode(widget.input.defaultValue!)
-            : null;
+    Uint8List? image = widget.input.defaultValue;
     String? processingText;
     Future<void> pickImage() async {
       final ImagePicker imagePicker = ImagePicker();

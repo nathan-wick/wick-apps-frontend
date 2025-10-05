@@ -21,12 +21,10 @@ class WickProviderSession
     if (sessionToken == null) return;
     setValue(WickModelWickProviderSession(token: sessionToken));
     // TODO Figure out how to include preferences, then update the preferences provider
-    final WickModelUser? userFromService = await WickControllerUser()
-        .getByCurrentSession(context);
-    await Provider.of<WickProviderUser>(
+    final WickModelUser? user = await WickControllerUser().getByCurrentSession(
       context,
-      listen: false,
-    ).setValue(userFromService);
+    );
+    await Provider.of<WickProviderUser>(context, listen: false).setValue(user);
   }
 
   Future<void> signOut(BuildContext context) async {

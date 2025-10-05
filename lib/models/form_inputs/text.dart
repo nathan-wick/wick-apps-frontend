@@ -7,16 +7,16 @@ class WickModelFormInputText extends WickModelFormInputBase {
   final WickEnumKeyboardType keyboardType;
   final bool isSecret;
   final bool multipleLines;
-  final String? helpText;
+  final String? defaultValue;
 
   WickModelFormInputText({
     required super.name,
     super.autoFill,
-    super.defaultValue,
+    this.defaultValue,
+    super.helpText,
     this.validations = const [],
     this.keyboardType = WickEnumKeyboardType.text,
     this.isSecret = false,
     this.multipleLines = false,
-    this.helpText,
   });
 }

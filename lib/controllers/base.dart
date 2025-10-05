@@ -17,7 +17,8 @@ abstract class WickControllerBase<Model extends WickModelBase<Model>> {
 
   WickControllerBase(this.fromJson);
 
-  Future<Model?> getByPrimaryKey(BuildContext context, int primaryKey) async {
+  Future<Model?> getByPrimaryKey(BuildContext context, int? primaryKey) async {
+    if (primaryKey == null || primaryKey <= 0) return null;
     final Map<String, dynamic>? response =
         await WickUtilityRequestHandler.sendRequest(
           context,
@@ -33,7 +34,7 @@ abstract class WickControllerBase<Model extends WickModelBase<Model>> {
     int pageNumber = 1,
     int pageSize = 50,
     String? orderBy,
-    WickEnumOrderDirection orderDirection = WickEnumOrderDirection.descending,
+    WickEnumOrderDirection orderDirection = WickEnumOrderDirection.ascending,
     String? where,
     List<String>? attributes,
   }) async {

@@ -26,15 +26,19 @@ class WickModelPreferences extends WickModelBase<WickModelPreferences> {
     return WickModelPreferences(
       userId: WickUtilityTypeConverter.toInt(json['userId']) ?? 0,
       brightness:
-          WickUtilityTypeConverter.toBrightness(json['brightness']) ??
+          WickUtilityTypeConverter.toEnum<WickEnumBrightness>(
+            json['brightness'],
+          ) ??
           WickEnumBrightness.system,
       dateFormat:
-          WickUtilityTypeConverter.toWickEnumDateFormat(
+          WickUtilityTypeConverter.toEnum<WickEnumDateFormat>(
             json['WickEnumDateFormat'],
           ) ??
           WickEnumDateFormat.yearMonthDay,
       primaryColor:
-          WickUtilityTypeConverter.toColor(json['primaryColor']) ??
+          WickUtilityTypeConverter.toEnum<WickEnumColor>(
+            json['primaryColor'],
+          ) ??
           WickEnumColor.blue,
     );
   }

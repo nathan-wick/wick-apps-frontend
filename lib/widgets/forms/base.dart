@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../enums/button_type.dart';
-import '../../models/forms/form.dart';
-import '../../models/forms/inputs/base.dart';
-import '../../models/forms/inputs/checkbox.dart';
-import '../../models/forms/inputs/dropdown.dart';
-import '../../models/forms/inputs/image.dart';
-import '../../models/forms/inputs/text.dart';
+import '../../models/form_inputs/base.dart';
+import '../../models/form_inputs/checkbox.dart';
+import '../../models/form_inputs/dropdown.dart';
+import '../../models/form_inputs/image.dart';
+import '../../models/form_inputs/text.dart';
 import '../../utilities/local_storage.dart';
 import '../../utilities/string_formatter.dart';
 import '../../utilities/style_constants.dart';
+import '../../utilities/type_converter.dart';
 import '../button.dart';
 import '../loading_indicator.dart';
 import 'inputs/checkbox.dart';
@@ -19,27 +19,35 @@ import 'inputs/dropdown.dart';
 import 'inputs/image.dart';
 import 'inputs/text.dart';
 
-class WickWidgetForm extends StatefulWidget {
-  final WickModelForm form;
-
-  // TODO Use types instead
-  final Function(Map<String, String>) onSubmit;
+class WickWidgetFormBase extends StatefulWidget {
+  final String name;
+  final List<WickModelFormInputBase> inputs;
+  final String submitButtonText;
+  final bool autoSubmit;
+  final bool autoFocus;
+  final Duration debounce;
+  final Function(Map<String, dynamic>) onSubmit;
   final Function()? onCancel;
 
-  const WickWidgetForm({
+  const WickWidgetFormBase({
     super.key,
-    required this.form,
+    required this.name,
+    required this.inputs,
     required this.onSubmit,
+    this.submitButtonText = "Submit",
+    this.autoSubmit = false,
+    this.autoFocus = true,
+    this.debounce = const Duration(seconds: 1),
     this.onCancel,
   });
 
   @override
-  State<WickWidgetForm> createState() => _WickWidgetFormState();
+  State<WickWidgetFormBase> createState() => _WickWidgetFormBaseState();
 }
 
-class _WickWidgetFormState extends State<WickWidgetForm> {
+class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final Map<String, String> formValues = {};
+  final Map<String, dynamic> formValues = {};
   Timer? _debounceTimer;
   late FocusNode firstInputFocusNode;
 
@@ -82,20 +90,12 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
   Future<List<Widget>> _buildFormContent() async {
     List<Widget> content = [];
     bool firstInputAssigned = false;
-    for (WickModelFormInputBase input in widget.form.inputs) {
+    for (WickModelFormInputBase input in widget.inputs) {
       final String inputKey = WickUtilityStringFormatter.toSnakeCase(
         input.name,
       );
       final String localStorageKey =
-          "form_${WickUtilityStringFormatter.toSnakeCase(widget.form.name)}_input_$inputKey";
-      final String? locallySavedValue =
-          input.defaultValue == null && input.autoFill == true
-              ? await WickUtilityLocalStorage().getStringValue(localStorageKey)
-              : null;
-      final String? defaultValue = input.defaultValue ?? locallySavedValue;
-      if (defaultValue != null) {
-        formValues[input.name] = defaultValue;
-      }
+          "form_${WickUtilityStringFormatter.toSnakeCase(widget.name)}_input_$inputKey";
       onChanged(String? value) {
         if (value == null || value.isEmpty) {
           formValues.remove(input.name);
@@ -105,23 +105,24 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
         if (input.autoFill) {
           WickUtilityLocalStorage().setStringValue(localStorageKey, value);
         }
-        if (widget.form.autoSubmit) {
+        if (widget.autoSubmit) {
           _submitForm();
         }
       }
 
       if (input is WickModelFormInputText) {
+        _setDefaultValue(localStorageKey, input, input.defaultValue);
         content.add(
           WickWidgetFormInputText(
             input: input,
             onChanged: onChanged,
             onEnterPressed: () {
-              if (input == widget.form.inputs.last) {
+              if (input == widget.inputs.last) {
                 _submitForm();
               }
             },
             focusNode:
-                widget.form.autoFocus && !firstInputAssigned
+                widget.autoFocus && !firstInputAssigned
                     ? firstInputFocusNode
                     : null,
           ),
@@ -132,14 +133,17 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
           });
         }
       } else if (input is WickModelFormInputDropdown) {
+        _setDefaultValue(localStorageKey, input, input.defaultValue);
         content.add(
           WickWidgetFormInputDropdown(input: input, onChanged: onChanged),
         );
       } else if (input is WickModelFormInputImage) {
+        _setDefaultValue(localStorageKey, input, input.defaultValue);
         content.add(
           WickWidgetFormInputImage(input: input, onChanged: onChanged),
         );
       } else if (input is WickModelFormInputCheckbox) {
+        _setDefaultValue(localStorageKey, input, input.defaultValue);
         content.add(
           WickWidgetFormInputCheckbox(input: input, onChanged: onChanged),
         );
@@ -161,10 +165,10 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
             ),
           if (widget.onCancel != null)
             const SizedBox(width: WickUtilityStyleConstants.contentGapSize),
-          if (!widget.form.autoSubmit)
+          if (!widget.autoSubmit)
             WickWidgetButton(
               onPressed: _submitForm,
-              message: widget.form.submitButtonText,
+              message: widget.submitButtonText,
             ),
         ],
       ),
@@ -172,10 +176,26 @@ class _WickWidgetFormState extends State<WickWidgetForm> {
     return content;
   }
 
+  Future<void> _setDefaultValue<T>(
+    String localStorageKey,
+    WickModelFormInputBase input,
+    T? defaultValue,
+  ) async {
+    final T? locallySavedValue = WickUtilityTypeConverter.fromString<T>(
+      defaultValue == null && input.autoFill == true
+          ? await WickUtilityLocalStorage().getStringValue(localStorageKey)
+          : null,
+    );
+    final T? value = defaultValue ?? locallySavedValue;
+    if (defaultValue != null) {
+      formValues[input.name] = value;
+    }
+  }
+
   void _submitForm() {
-    if (widget.form.autoSubmit) {
+    if (widget.autoSubmit) {
       if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-      _debounceTimer = Timer(widget.form.debounce, () {
+      _debounceTimer = Timer(widget.debounce, () {
         if (formKey.currentState!.validate()) {
           widget.onSubmit(formValues);
         }

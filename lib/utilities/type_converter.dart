@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
 
-import '../enums/brightness.dart';
-import '../enums/color.dart';
 import '../enums/date_format.dart';
 import '../models/base.dart';
+import 'enum_registry.generated.dart';
 import 'input_validator.dart';
 
 class WickUtilityTypeConverter {
@@ -51,12 +50,38 @@ class WickUtilityTypeConverter {
     return value.toString();
   }
 
+  /// Converts a string to a typed value.
+  static T? fromString<T>(String? value, [WickEnumDateFormat? dateFormat]) {
+    dynamic result;
+    if (T == int) {
+      result = toInt(value);
+    } else if (T == double) {
+      result = toDouble(value);
+    } else if (T == bool) {
+      result = toBool(value);
+    } else if (T == DateTime) {
+      result = toDate(value, dateFormat);
+    } else if (T == Enum) {
+      result = toEnum(value);
+    } else {
+      result = value;
+    }
+    if (result == null) return null;
+    return result as T;
+  }
+
   /// Converts a dynamic value to an integer.
   static int? toInt(dynamic value) {
     if (value == null) return null;
     if (value is int) return value;
     if (value is double) return value.toInt();
-    return int.tryParse(value.toString());
+    return int.tryParse(describe(value) ?? '');
+  }
+
+  /// Converts a dynamic value to a double.
+  static double? toDouble(dynamic value) {
+    if (value == null) return null;
+    return double.tryParse(describe(value) ?? '');
   }
 
   /// Converts a dynamic value to a DateTime.
@@ -98,35 +123,17 @@ class WickUtilityTypeConverter {
     return null;
   }
 
-  /// Converts a dynamic value to a color.
-  static WickEnumColor? toColor(dynamic value) {
+  /// Generic method to convert a value to an enum.
+  static T? toEnum<T extends Enum>(dynamic value) {
     if (value == null) return null;
+    if (value is T) return value;
+    final enumValues = WickEnumRegistry.getValues(T);
+    if (enumValues == null) return null;
     if (value is String) {
-      return WickEnumColor.values.firstWhereOrNull(
-        (color) => color.name == value,
-      );
-    }
-    return null;
-  }
-
-  /// Converts a dynamic value to a date format.
-  static WickEnumDateFormat? toWickEnumDateFormat(dynamic value) {
-    if (value == null) return null;
-    if (value is String) {
-      return WickEnumDateFormat.values.firstWhereOrNull(
-        (WickEnumDateFormat) => WickEnumDateFormat.name == value,
-      );
-    }
-    return null;
-  }
-
-  /// Converts a dynamic value to a theme.
-  static WickEnumBrightness? toBrightness(dynamic value) {
-    if (value == null) return null;
-    if (value is String) {
-      return WickEnumBrightness.values.firstWhereOrNull(
-        (brightness) => brightness.name == value,
-      );
+      return enumValues.firstWhereOrNull(
+            (enumValue) => enumValue.name.toLowerCase() == value.toLowerCase(),
+          )
+          as T?;
     }
     return null;
   }
