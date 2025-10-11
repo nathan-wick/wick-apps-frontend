@@ -46,7 +46,7 @@ class WickUtilityColorEngine {
 
   static double calculateLuminance(Color color) {
     List<num> rgb =
-        [color.r / 255.0, color.g / 255.0, color.b / 255.0].map((component) {
+        [color.r, color.g, color.b].map((component) {
           if (component <= 0.03928) {
             return component / 12.92;
           }

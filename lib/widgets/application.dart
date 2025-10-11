@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wick_apps/widgets/loading_indicator.dart';
 
-import 'enums/brightness.dart';
-import 'enums/color.dart';
-import 'models/navigation_option.dart';
-import 'models/preferences.dart';
-import 'pages/account.dart';
-import 'pages/loading.dart';
-import 'pages/preferences.dart';
-import 'pages/profile.dart';
-import 'pages/security.dart';
-import 'pages/welcome.dart';
-import 'providers/navigation.dart';
-import 'providers/preferences.dart';
-import 'providers/session.dart';
-import 'providers/user.dart';
-import 'utilities/color_engine.dart';
+import '../enums/brightness.dart';
+import '../enums/color.dart';
+import '../models/navigation_option.dart';
+import '../models/preferences.dart';
+import '../pages/account.dart';
+import '../pages/initial.dart';
+import '../pages/preferences.dart';
+import '../pages/profile.dart';
+import '../pages/security.dart';
+import '../pages/welcome.dart';
+import '../providers/navigation.dart';
+import '../providers/preferences.dart';
+import '../providers/session.dart';
+import '../providers/user.dart';
+import '../utilities/color_engine.dart';
 
-class WickApplication extends StatefulWidget {
+class WickWidgetApplication extends StatefulWidget {
   final String name;
   final List<WickModelNavigationOption> navigationOptions;
   final String homeRoute;
   final List<String> mainRoutes;
   final WickEnumColor defaultPrimaryColor;
 
-  const WickApplication({
+  const WickWidgetApplication({
     super.key,
     required this.name,
     required this.navigationOptions,
@@ -34,10 +35,10 @@ class WickApplication extends StatefulWidget {
   });
 
   @override
-  State<WickApplication> createState() => _WickApplicationState();
+  State<WickWidgetApplication> createState() => _WickWidgetApplicationState();
 }
 
-class _WickApplicationState extends State<WickApplication> {
+class _WickWidgetApplicationState extends State<WickWidgetApplication> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -57,10 +58,12 @@ class _WickApplicationState extends State<WickApplication> {
         builder: (context) {
           _initializeNavigation(context);
           return FutureBuilder(
-            future: Provider.of<WickProviderPreferences>(context).getValue(),
+            future: Provider.of<WickProviderPreferences>(
+              context,
+            ).getValue(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const WickPageLoading();
+                return const WickWidgetLoadingIndicator();
               }
               final WickModelPreferences? preferences = snapshot.data;
               final Color primaryColor =
@@ -101,8 +104,10 @@ class _WickApplicationState extends State<WickApplication> {
                 themeMode:
                     preferences?.brightness.value ??
                     WickEnumBrightness.system.value,
-                // TODO Get and set the initial destination
-                home: const WickPageLoading(),
+                home: WickPageInitial(
+                  homeRoute: widget.homeRoute,
+                  isAuthenticated: preferences != null,
+                ),
                 debugShowCheckedModeBanner: false,
               );
             },

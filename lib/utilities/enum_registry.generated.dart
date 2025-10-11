@@ -9,6 +9,7 @@ import 'package:wick_apps/enums/request_method.dart';
 import 'package:wick_apps/enums/notification_type.dart';
 import 'package:wick_apps/enums/file_sizes.dart';
 import 'package:wick_apps/enums/order_direction.dart';
+import 'package:wick_apps/enums/log_type.dart';
 import 'package:wick_apps/enums/keyboard_type.dart';
 import 'package:wick_apps/enums/response_status.dart';
 import 'package:wick_apps/enums/authentication_step.dart';
@@ -26,6 +27,7 @@ class WickEnumRegistry {
     WickEnumNotificationType: WickEnumNotificationType.values,
     WickEnumFileSize: WickEnumFileSize.values,
     WickEnumOrderDirection: WickEnumOrderDirection.values,
+    WickEnumLogType: WickEnumLogType.values,
     WickEnumKeyboardType: WickEnumKeyboardType.values,
     WickEnumResponseStatus: WickEnumResponseStatus.values,
     WickEnumAuthenticationStep: WickEnumAuthenticationStep.values,

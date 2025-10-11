@@ -11,7 +11,7 @@ abstract class WickControllerBase<Model extends WickModelBase<Model>> {
   // TODO Get the real domain
   final String domain = 'localhost:3000';
   final String basePath = WickUtilityStringFormatter.toKebabCase(
-    Model.toString().replaceAll('Model', ''),
+    Model.toString().replaceAll('Wick', '').replaceAll('Model', ''),
   );
   final Model Function(Map<String, dynamic>) fromJson;
 

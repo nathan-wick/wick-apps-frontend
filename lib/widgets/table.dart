@@ -84,7 +84,7 @@ class WickWidgetTable extends StatelessWidget {
       rows.add(header);
     }
     WickModelPreferences? preferences =
-        await Provider.of<WickProviderPreferences>(context).getValue();
+        await Provider.of<WickProviderPreferences>(context).getValue(context);
     for (int rowIndex = 0; rowIndex < data.length; rowIndex++) {
       final List<String?> values =
           data[rowIndex].toStringMap(preferences?.dateFormat).values.toList();

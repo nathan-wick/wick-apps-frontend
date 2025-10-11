@@ -50,6 +50,8 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
           ],
           keyboardType: WickEnumKeyboardType.email,
           name: _emailInputName,
+          helpText:
+              'Enter your email to sign in. We’ll send a quick verification email and nothing else.',
         ),
       ],
       submitButtonText: 'Continue',

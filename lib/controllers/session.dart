@@ -13,17 +13,17 @@ class WickControllerSession extends WickControllerBase<WickModelSession> {
 
   Future<int?> sendVerificationEmail(BuildContext context, String email) async {
     final Map<String, dynamic>? response =
-    await WickUtilityRequestHandler.sendRequest(
-      context,
-      WickEnumRequestMethod.post,
-      domain,
-      '$basePath/send-verification-email',
-      {email: email},
-    );
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/send-verification-email',
+          {'email': email},
+        );
     final int? sessionId =
-    response == null
-        ? null
-        : WickUtilityTypeConverter.toInt(response['sessionId']);
+        response == null
+            ? null
+            : WickUtilityTypeConverter.toInt(response['sessionId']);
     if (sessionId != null) {
       WickUtilityNotificationHandler.displayNotification(
         context,
@@ -34,21 +34,23 @@ class WickControllerSession extends WickControllerBase<WickModelSession> {
     return sessionId;
   }
 
-  Future<String?> signIn(BuildContext context,
-      int sessionId,
-      String code,) async {
+  Future<String?> signIn(
+    BuildContext context,
+    int sessionId,
+    String code,
+  ) async {
     final Map<String, dynamic>? response =
-    await WickUtilityRequestHandler.sendRequest(
-      context,
-      WickEnumRequestMethod.post,
-      domain,
-      '$basePath/sign-in',
-      {sessionId: sessionId, code: code},
-    );
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/sign-in',
+          {'sessionId': sessionId, 'code': code},
+        );
     final String? sessionToken =
-    response == null
-        ? null
-        : WickUtilityTypeConverter.describe(response['sessionToken']);
+        response == null
+            ? null
+            : WickUtilityTypeConverter.describe(response['sessionToken']);
     if (sessionToken != null) {
       WickUtilityNotificationHandler.displayNotification(
         context,
@@ -61,12 +63,12 @@ class WickControllerSession extends WickControllerBase<WickModelSession> {
 
   Future<bool> signOut(BuildContext context) async {
     final Map<String, dynamic>? response =
-    await WickUtilityRequestHandler.sendRequest(
-      context,
-      WickEnumRequestMethod.post,
-      domain,
-      '$basePath/sign-out',
-    );
+        await WickUtilityRequestHandler.sendRequest(
+          context,
+          WickEnumRequestMethod.post,
+          domain,
+          '$basePath/sign-out',
+        );
     // TODO This may not be accurate. Need to check the response.
     final bool signedOut = response == null ? false : true;
     if (signedOut) {

@@ -41,7 +41,4 @@ void main() {
   final outputFile = File(outputFileLocation);
   outputFile.createSync(recursive: true);
   outputFile.writeAsStringSync(output.toString());
-  print(
-    '✅  Registered ${enumsFound.values.expand((e) => e).length} enums at $outputFileLocation',
-  );
 }

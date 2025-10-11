@@ -19,17 +19,23 @@ class WickProviderSession
       code,
     );
     if (sessionToken == null) return;
-    setValue(WickModelWickProviderSession(token: sessionToken));
+    setValue(context, WickModelWickProviderSession(token: sessionToken));
     // TODO Figure out how to include preferences, then update the preferences provider
     final WickModelUser? user = await WickControllerUser().getByCurrentSession(
       context,
     );
-    await Provider.of<WickProviderUser>(context, listen: false).setValue(user);
+    await Provider.of<WickProviderUser>(
+      context,
+      listen: false,
+    ).setValue(context, user);
   }
 
   Future<void> signOut(BuildContext context) async {
     await WickControllerSession().signOut(context);
-    setValue(null);
-    await Provider.of<WickProviderUser>(context, listen: false).setValue(null);
+    setValue(context, null);
+    await Provider.of<WickProviderUser>(
+      context,
+      listen: false,
+    ).setValue(context, null);
   }
 }

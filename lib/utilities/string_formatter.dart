@@ -24,7 +24,8 @@ class WickUtilityStringFormatter {
 
   /// Capitalizes the first letter of each word in a string.
   /// For example, 'my favorite string' becomes 'My Favorite String'.
-  static String titleCase(String value) {
+  static String titleCase(String value, [bool addSpace = true]) {
+    if (addSpace) value = replaceSpaces(value, ' ');
     return value
         .split(' ')
         .map((word) {

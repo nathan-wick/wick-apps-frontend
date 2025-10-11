@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:wick_apps/utilities/logger.dart';
 
+import '../enums/log_type.dart';
 import '../enums/notification_type.dart';
 import '../enums/request_method.dart';
 import '../enums/response_status.dart';
@@ -32,15 +34,20 @@ class WickUtilityRequestHandler {
       'Content-Type': 'application/json',
       'Session-Token':
           (await Provider.of<WickProviderSession>(
-                context,
-                listen: false,
-              ).getValue())
-              ?.token ??
+            context,
+            listen: false,
+          ).getValue(context))?.token ??
           '',
     };
     final jsonBody = body is WickModelBase ? body.toJson() : jsonEncode(body);
     Response response;
     try {
+      WickUtilityLogger.log(context, WickEnumLogType.outgoingRequest, {
+        'method': method.name,
+        'url': urlString,
+        'headers': headers,
+        'body': jsonBody,
+      });
       switch (method) {
         case WickEnumRequestMethod.post:
           response = await post(url, headers: headers, body: jsonBody);
@@ -93,6 +100,11 @@ class WickUtilityRequestHandler {
       responseBody = {};
     }
     if (status == WickEnumResponseStatus.okay) {
+      WickUtilityLogger.log(
+        context,
+        WickEnumLogType.incomingResponse,
+        responseBody,
+      );
       return responseBody;
     } else {
       handleErrorResponse(context, responseBody['message']);
@@ -105,6 +117,7 @@ class WickUtilityRequestHandler {
     BuildContext context, [
     String message = 'An unexpected error occurred.',
   ]) {
+    WickUtilityLogger.log(context, WickEnumLogType.incomingResponse, message);
     WickUtilityNotificationHandler.displayNotification(
       context,
       WickEnumNotificationType.error,

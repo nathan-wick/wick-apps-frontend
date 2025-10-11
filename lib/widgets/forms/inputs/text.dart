@@ -144,7 +144,7 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
         await Provider.of<WickProviderPreferences>(
           context,
           listen: false,
-        ).getValue();
+        ).getValue(context);
     if (preferences?.dateFormat != null) {
       final WickEnumDateFormat? preferredWickEnumDateFormat =
           preferences?.dateFormat;

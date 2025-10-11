@@ -10,21 +10,22 @@ class WickProviderUser extends WickProviderBase<WickModelUser> {
   WickProviderUser() : super(WickModelUser.fromJson);
 
   Future<WickModelUser?> getSessionUser(BuildContext context) async {
-    final WickModelUser? userFromWickUtilityLocalStorage = await getValue();
+    final WickModelUser? userFromWickUtilityLocalStorage = await getValue(
+      context,
+    );
     if (userFromWickUtilityLocalStorage != null)
       return userFromWickUtilityLocalStorage;
     final bool signedIn =
         (await Provider.of<WickProviderSession>(
-              context,
-              listen: false,
-            ).getValue())
-            ?.token !=
+          context,
+          listen: false,
+        ).getValue(context))?.token !=
         null;
     if (!signedIn) return null;
     // TODO Figure out how to include preferences, then update the preferences provider
     final WickModelUser? userFromService = await WickControllerUser()
         .getByCurrentSession(context);
-    setValue(userFromService);
+    setValue(context, userFromService);
     return userFromService;
   }
 }

@@ -2,11 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../enums/log_type.dart';
 import '../models/navigation_option.dart';
 import '../models/navigation_provider.dart';
 import '../pages/not_found.dart';
 import '../pages/welcome.dart';
 import '../providers/session.dart';
+import '../utilities/logger.dart';
 import 'base.dart';
 
 class WickProviderNavigation
@@ -24,31 +26,51 @@ class WickProviderNavigation
   void navigate(BuildContext context, [String? route]) async {
     final bool signedIn =
         (await Provider.of<WickProviderSession>(
-              context,
-              listen: false,
-            ).getValue())
-            ?.token !=
+          context,
+          listen: false,
+        ).getValue(context))?.token !=
         null;
     if (signedIn) {
       route ??= homeRoute;
-      setValue(WickModelWickProviderNavigation(lastRoute: route));
-      final WickModelNavigationOption? navigationOption = navigationOptions
+      setValue(context, WickModelWickProviderNavigation(lastRoute: route));
+      final Widget destination = await getDestination(context, route);
+      navigationOptions
           .firstWhereOrNull(
             (navigationOption) => navigationOption.route == route,
-          );
-      if (navigationOption == null) {
-        _navigate(context, const WickPageNotFound());
-      } else {
-        navigationOption.onNavigate?.call();
-        _navigate(context, navigationOption.destination);
-      }
+          )
+          ?.onNavigate
+          ?.call();
+      _navigate(context, destination);
     } else {
-      setValue(null);
+      setValue(context, null);
       _navigate(context, const WickPageWelcome());
     }
   }
 
+  Future<Widget> getDestination(BuildContext context, String? route) async {
+    WickModelNavigationOption? option;
+    try {
+      option = navigationOptions.firstWhere(
+        (navigationOption) => navigationOption.route == route,
+      );
+    } catch (_) {
+      option = null;
+    }
+    final Widget destination = option?.destination ?? const WickPageNotFound();
+    WickUtilityLogger.log(context, WickEnumLogType.navigation, {
+      'method': 'getDestination',
+      'route': route,
+      'destination': destination,
+    });
+    return destination;
+  }
+
   void _navigate(BuildContext context, Widget destination) {
+    WickUtilityLogger.log(context, WickEnumLogType.navigation, {
+      'method': 'navigate',
+      'route': value?.lastRoute,
+      'destination': destination,
+    });
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => destination,

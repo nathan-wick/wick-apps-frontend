@@ -14,7 +14,7 @@ class WickWidgetNavigationBar extends StatelessWidget {
     final WickProviderNavigation navigationProvider =
         Provider.of<WickProviderNavigation>(context, listen: false);
     return FutureBuilder(
-      future: navigationProvider.getValue(),
+      future: navigationProvider.getValue(context),
       builder: (context, snapshot) {
         final String? currentRoute = snapshot.data?.lastRoute;
         final Widget navigationBar = Container(
