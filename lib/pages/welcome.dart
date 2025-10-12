@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/card.dart';
 import '../widgets/authentication.dart';
+import '../widgets/card.dart';
 import 'base.dart';
 
 class WickPageWelcome extends StatelessWidget {
@@ -18,6 +18,8 @@ class WickPageWelcome extends StatelessWidget {
           icon: Icons.account_circle,
         ),
       ],
+      alignment: Alignment.center,
+      displayMainNavigation: false,
     );
   }
 }

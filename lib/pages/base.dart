@@ -91,9 +91,7 @@ class WickPageBase extends StatelessWidget {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: WickWidgetNavigationBar(
-                  routes: navigationProvider.mainRoutes,
-                ),
+                child: WickWidgetNavigationBar(),
               ),
           ],
         ),

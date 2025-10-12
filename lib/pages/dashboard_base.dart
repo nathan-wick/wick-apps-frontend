@@ -35,7 +35,7 @@ class WickPageDashboardBase extends StatefulWidget {
 
 class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
   Future<WickModelDashboardConfiguration?>? _configurationFuture;
-  String? _changedConfiguration;
+  String? _activeConfiguration;
 
   @override
   void initState() {
@@ -49,11 +49,9 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
     return FutureBuilder<WickModelDashboardConfiguration?>(
       future: _configurationFuture,
       builder: (context, snapshot) {
-        final String? configuration = snapshot.data?.configuration;
-        _changedConfiguration = configuration;
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            configuration == null) {
-          return const WickPageLoading();
+        _activeConfiguration = snapshot.data?.configuration;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const WickPageLoading(action: 'Configuring dashboard');
         }
         return WickPageBase(
           title: widget.name,
@@ -63,7 +61,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _getColumns(configuration),
+              children: _getColumns(_activeConfiguration),
             ),
           ],
           additionalActionButtons: [
@@ -79,7 +77,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
                       title: "Configure Dashboard",
                       content: [
                         WickWidgetTable(
-                          data: _getOptions(configuration),
+                          data: _getOptions(_activeConfiguration),
                           displayHeader: false,
                           canReorderRows: true,
                           editableColumnKeys: const ["active"],
@@ -104,8 +102,8 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
     );
   }
 
-  List<WickModelTileOption> _getOptions(String configuration) {
-    if (configuration.isEmpty) {
+  List<WickModelTileOption> _getOptions(String? configuration) {
+    if (configuration == null || configuration.isEmpty) {
       return widget.tiles
           .map(
             (tile) => WickModelTileOption(
@@ -190,7 +188,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
           .map((updatedTileOption) => updatedTileOption.name)
           .join(',');
       setState(() {
-        _changedConfiguration = configuration;
+        _activeConfiguration = configuration;
       });
     }
   }
@@ -199,7 +197,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
     BuildContext context,
     WickModelDashboardConfiguration? currentConfiguration,
   ) {
-    if (_changedConfiguration == null || currentConfiguration == null) {
+    if (_activeConfiguration == null || currentConfiguration == null) {
       return;
     }
     final WickModelDashboardConfiguration changedConfiguration =
@@ -207,7 +205,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
           id: currentConfiguration.id,
           userId: currentConfiguration.userId,
           dashboard: currentConfiguration.dashboard,
-          configuration: _changedConfiguration!,
+          configuration: _activeConfiguration!,
         );
     WickControllerDashboardConfiguration().edit(context, changedConfiguration);
     setState(() {

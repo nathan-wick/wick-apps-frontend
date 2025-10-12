@@ -17,7 +17,6 @@ void main() {
       name: 'Example Application',
       navigationOptions: [],
       homeRoute: 'account',
-      mainRoutes: [],
     ),
   );
 }

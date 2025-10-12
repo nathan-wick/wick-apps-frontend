@@ -11,6 +11,7 @@ class WickUtilityTypeConverter {
     if (value == null) return null;
     if (value is DateTime) return value.toUtc().toIso8601String();
     if (value is List) return value.map((item) => toJson(item)).toList();
+    if (value is Enum) return value.name;
     if (value is WickModelBase) return value.toJson();
     return value;
   }

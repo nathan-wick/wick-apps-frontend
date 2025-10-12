@@ -47,10 +47,9 @@ class WickControllerSession extends WickControllerBase<WickModelSession> {
           '$basePath/sign-in',
           {'sessionId': sessionId, 'code': code},
         );
-    final String? sessionToken =
-        response == null
-            ? null
-            : WickUtilityTypeConverter.describe(response['sessionToken']);
+    final String? sessionToken = WickUtilityTypeConverter.describe(
+      response?['sessionToken'],
+    );
     if (sessionToken != null) {
       WickUtilityNotificationHandler.displayNotification(
         context,

@@ -18,7 +18,7 @@ class WickModelPreferences extends WickModelBase<WickModelPreferences> {
   }) : super({
          'userId': userId,
          'brightness': brightness,
-         'WickEnumDateFormat': WickEnumDateFormat,
+         'dateFormat': dateFormat,
          'primaryColor': primaryColor,
        });
 
@@ -32,7 +32,7 @@ class WickModelPreferences extends WickModelBase<WickModelPreferences> {
           WickEnumBrightness.system,
       dateFormat:
           WickUtilityTypeConverter.toEnum<WickEnumDateFormat>(
-            json['WickEnumDateFormat'],
+            json['dateFormat'],
           ) ??
           WickEnumDateFormat.yearMonthDay,
       primaryColor:

@@ -14,19 +14,19 @@ class WickControllerDashboardConfiguration
   /// Given the dashboard's name, gets the configuration for the current user.
   Future<WickModelDashboardConfiguration?> getConfigurationForCurrentUser(
     BuildContext context,
-    String dashboardName,
+    String dashboard,
   ) async {
     final int? userId =
         (await Provider.of<WickProviderUser>(
           context,
           listen: false,
-        ).getSessionUser(context))?.id;
+        ).getValue(context))?.id;
     if (userId == null) return null;
     final WickModelPaginatedResponse<WickModelDashboardConfiguration>?
     response = await get(
       context,
       pageSize: 1,
-      where: "userId = $userId AND name = '$dashboardName",
+      where: "userId = $userId AND dashboard = '$dashboard",
     );
     return response == null
         ? null

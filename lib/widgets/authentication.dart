@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../controllers/session.dart';
 import '../enums/authentication_step.dart';
 import '../enums/keyboard_type.dart';
 import '../enums/text_validation.dart';
 import '../models/form_inputs/text.dart';
+import '../providers/navigation.dart';
+import '../providers/session.dart';
 import '../utilities/type_converter.dart';
 import 'forms/base.dart';
 import 'loading_indicator.dart';
@@ -21,6 +24,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
   WickEnumAuthenticationStep _currentStep =
       WickEnumAuthenticationStep.enterEmail;
   bool _isLoading = false;
+  String? _loadingAction;
   String? _email;
   int? _sessionId;
 
@@ -30,7 +34,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const WickWidgetLoadingIndicator();
+      return WickWidgetLoadingIndicator(action: _loadingAction);
     }
 
     return switch (_currentStep) {
@@ -83,7 +87,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
       formValues[_emailInputName],
     );
     if (email == null) return;
-    _setLoading(true);
+    _setLoading(true, 'Sending verification email');
     final sessionId = await WickControllerSession().sendVerificationEmail(
       context,
       email,
@@ -106,29 +110,29 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
       formValues[_codeInputName],
     );
     if (code == null || _sessionId == null) return;
-    _setLoading(true);
-    final sessionToken = await WickControllerSession().signIn(
+    _setLoading(true, 'Verifying');
+    final bool signedIn = await Provider.of<WickProviderSession>(
       context,
-      _sessionId!,
-      code,
-    );
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        if (sessionToken == null) {
-          _currentStep = WickEnumAuthenticationStep.verifyEmail;
-        }
-        // Once signed in, the application will redirect the user.
-      });
+      listen: false,
+    ).signIn(context, _sessionId!, code);
+    if (mounted && signedIn) {
+      (Provider.of<WickProviderNavigation>(
+        context,
+        listen: false,
+      )).navigate(context);
     }
+    _setLoading(false);
   }
 
-  void _setLoading(bool loading) {
-    if (mounted) {
-      setState(() {
-        _isLoading = loading;
-      });
-    }
+  void _setLoading(bool loading, [String? action]) {
+    setState(() {
+      _isLoading = loading;
+      if (loading) {
+        _loadingAction = action;
+      } else {
+        _loadingAction = null;
+      }
+    });
   }
 
   void _reset() {

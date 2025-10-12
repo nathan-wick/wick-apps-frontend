@@ -5,9 +5,7 @@ import '../providers/navigation.dart';
 import '../utilities/style_constants.dart';
 
 class WickWidgetNavigationBar extends StatelessWidget {
-  final List<String> routes;
-
-  const WickWidgetNavigationBar({super.key, required this.routes});
+  const WickWidgetNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,41 +42,46 @@ class WickWidgetNavigationBar extends StatelessWidget {
                     : MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children:
-                navigationProvider.navigationOptions.map((navigationOption) {
-                  final bool isSelected =
-                      navigationOption.route == currentRoute;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: WickUtilityStyleConstants.paddingSize,
-                    ),
-                    decoration: BoxDecoration(
-                      color:
-                          isSelected
-                              ? Theme.of(context).scaffoldBackgroundColor
-                              : Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(
-                        WickUtilityStyleConstants.boarderRadius,
-                      ),
-                    ),
-                    child: IconButton(
-                      tooltip: navigationOption.name,
-                      icon: Icon(
-                        navigationOption.icon,
-                        color:
-                            isSelected
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).scaffoldBackgroundColor,
-                      ),
-                      onPressed:
-                          isSelected
-                              ? null
-                              : () => navigationProvider.navigate(
-                                context,
-                                navigationOption.route,
-                              ),
-                    ),
-                  );
-                }).toList(),
+                navigationProvider.navigationOptions
+                    .where((navigationOption) {
+                      return navigationOption.isMain;
+                    })
+                    .map((navigationOption) {
+                      final bool isSelected =
+                          navigationOption.route == currentRoute;
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: WickUtilityStyleConstants.paddingSize,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              isSelected
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(
+                            WickUtilityStyleConstants.boarderRadius,
+                          ),
+                        ),
+                        child: IconButton(
+                          tooltip: navigationOption.name,
+                          icon: Icon(
+                            navigationOption.icon,
+                            color:
+                                isSelected
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                          onPressed:
+                              isSelected
+                                  ? null
+                                  : () => navigationProvider.navigate(
+                                    context,
+                                    navigationOption.route,
+                                  ),
+                        ),
+                      );
+                    })
+                    .toList(),
           ),
         );
         return Container(

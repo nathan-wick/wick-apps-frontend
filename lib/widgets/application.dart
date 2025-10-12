@@ -22,7 +22,6 @@ class WickWidgetApplication extends StatefulWidget {
   final String name;
   final List<WickModelNavigationOption> navigationOptions;
   final String homeRoute;
-  final List<String> mainRoutes;
   final WickEnumColor defaultPrimaryColor;
 
   const WickWidgetApplication({
@@ -30,7 +29,6 @@ class WickWidgetApplication extends StatefulWidget {
     required this.name,
     required this.navigationOptions,
     required this.homeRoute,
-    required this.mainRoutes,
     this.defaultPrimaryColor = WickEnumColor.blue,
   });
 
@@ -132,6 +130,7 @@ class _WickWidgetApplicationState extends State<WickWidgetApplication> {
         route: 'account',
         icon: Icons.account_circle,
         destination: const WickPageAccount(),
+        isMain: true,
       ),
       WickModelNavigationOption(
         name: 'Profile',
@@ -164,11 +163,8 @@ class _WickWidgetApplicationState extends State<WickWidgetApplication> {
         },
       ),
     ]);
-    List<String> mainRoutes = List<String>.from(widget.mainRoutes);
-    mainRoutes.add('account');
     final WickProviderNavigation navigationProvider =
         Provider.of<WickProviderNavigation>(context, listen: false);
     navigationProvider.navigationOptions = initialNavigationOptions;
-    navigationProvider.mainRoutes = mainRoutes;
   }
 }

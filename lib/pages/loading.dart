@@ -4,14 +4,16 @@ import '../widgets/loading_indicator.dart';
 import 'base.dart';
 
 class WickPageLoading extends StatelessWidget {
-  const WickPageLoading({super.key});
+  final String? action;
+
+  const WickPageLoading({super.key, this.action});
 
   @override
   Widget build(BuildContext context) {
     return WickPageBase(
       title: 'Loading',
-      content: const [
-        WickWidgetLoadingIndicator(),
+      content: [
+        WickWidgetLoadingIndicator(action: action),
         // TODO Add useful information if it's taking a while to load
       ],
     );
