@@ -8,9 +8,6 @@ import 'base.dart';
 
 class WickControllerDashboardConfiguration
     extends WickControllerBase<WickModelDashboardConfiguration> {
-  WickControllerDashboardConfiguration()
-    : super(WickModelDashboardConfiguration.fromJson);
-
   /// Given the dashboard's name, gets the configuration for the current user.
   Future<WickModelDashboardConfiguration?> getConfigurationForCurrentUser(
     BuildContext context,

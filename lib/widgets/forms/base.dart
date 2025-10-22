@@ -181,7 +181,7 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
     WickModelFormInputBase input,
     T? defaultValue,
   ) async {
-    final T? locallySavedValue = WickUtilityTypeConverter.fromString<T>(
+    final T? locallySavedValue = WickUtilityTypeConverter.toType(
       defaultValue == null && input.autoFill == true
           ? await WickUtilityLocalStorage().getStringValue(localStorageKey)
           : null,

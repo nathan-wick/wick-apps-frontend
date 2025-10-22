@@ -15,7 +15,7 @@ class WickUtilityLogger {
     final String logTypeDisplayName = WickUtilityStringFormatter.titleCase(
       logType.name,
     );
-    final String? contentString = WickUtilityTypeConverter.describe(content);
+    final String contentString = WickUtilityTypeConverter.toType(content);
     if (kDebugMode) {
       debugPrint('$logTypeDisplayName: $contentString');
     }

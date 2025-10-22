@@ -1,0 +1,3 @@
+class WickModelAnnotationPrimaryKey {
+  const WickModelAnnotationPrimaryKey();
+}

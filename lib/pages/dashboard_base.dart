@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/dashboard_configuration.dart';
-import '../models/base.dart';
 import '../models/dashboard_configuration.dart';
 import '../models/tile.dart';
 import '../models/tile_option.dart';
@@ -179,9 +178,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
         .toList();
   }
 
-  void _onConfigurationChanged(
-    List<WickModelBase<dynamic>> updatedTileOptions,
-  ) {
+  void _onConfigurationChanged(List<Object> updatedTileOptions) {
     if (updatedTileOptions is List<WickModelTileOption>) {
       String configuration = updatedTileOptions
           .where((updatedTileOption) => updatedTileOption.active == true)

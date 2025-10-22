@@ -7,8 +7,6 @@ import '../providers/session.dart';
 import 'base.dart';
 
 class WickProviderUser extends WickProviderBase<WickModelUser> {
-  WickProviderUser() : super(WickModelUser.fromJson);
-
   Future<WickModelUser?> getSessionUser(BuildContext context) async {
     final WickModelUser? userFromLocalStorage = await getValue(context);
     if (userFromLocalStorage != null) {

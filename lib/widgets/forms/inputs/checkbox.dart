@@ -38,7 +38,7 @@ class _WickWidgetFormInputCheckboxState
           setState(() {
             value = newValue;
           });
-          widget.onChanged(WickUtilityTypeConverter.describe(newValue));
+          widget.onChanged(WickUtilityTypeConverter.toType(newValue));
         }
       },
     );

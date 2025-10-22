@@ -9,8 +9,6 @@ import 'base.dart';
 
 class WickProviderSession
     extends WickProviderBase<WickModelWickProviderSession> {
-  WickProviderSession() : super(WickModelWickProviderSession.fromJson);
-
   Future<bool> signIn(BuildContext context, int sessionId, String code) async {
     String? sessionToken = await WickControllerSession().signIn(
       context,

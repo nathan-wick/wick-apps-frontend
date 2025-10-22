@@ -1,17 +1,14 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wick_apps/utilities/type_converter.dart';
 
-import '../models/base.dart';
-
-class WickUtilityLocalStorage<Model extends WickModelBase> {
-  Future<Model?> getModelValue(
-    String key,
-    Model Function(Map<String, dynamic>) fromJson,
-  ) async {
+class WickUtilityLocalStorage<T> {
+  Future<T?> getModelValue(String key) async {
     final String? jsonValue = await getStringValue(key);
+    if (jsonValue == null) return null;
     try {
-      return jsonValue == null ? null : fromJson(jsonDecode(jsonValue));
+      return WickUtilityTypeConverter.fromJson(jsonDecode(jsonValue));
     } catch (error) {
       return null;
     }
@@ -22,8 +19,8 @@ class WickUtilityLocalStorage<Model extends WickModelBase> {
     return preferences.getString(key);
   }
 
-  Future<void> setModelValue(String key, Model? value) async {
-    final String? jsonValue = value == null ? null : jsonEncode(value.toJson());
+  Future<void> setModelValue(String key, T? value) async {
+    final String jsonValue = jsonEncode(WickUtilityTypeConverter.toJson(value));
     await setStringValue(key, jsonValue);
   }
 

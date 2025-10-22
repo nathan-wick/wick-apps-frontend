@@ -1,23 +1,22 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:wick_apps/utilities/logger.dart';
+import 'package:wick_apps/utilities/type_converter.dart';
 
 import '../enums/log_type.dart';
 import '../enums/notification_type.dart';
 import '../enums/request_method.dart';
 import '../enums/response_status.dart';
-import '../models/base.dart';
 import '../providers/session.dart';
 import 'notification_handler.dart';
 
 class WickUtilityRequestHandler {
   /// Sends a network request.
-  static Future<Map<String, dynamic>?> sendRequest(
+  static Future<T?> sendRequest<T>(
     BuildContext context,
     WickEnumRequestMethod method,
     String domain,
@@ -39,7 +38,7 @@ class WickUtilityRequestHandler {
           ).getValue(context))?.token ??
           '',
     };
-    final jsonBody = body is WickModelBase ? body.toJson() : jsonEncode(body);
+    final jsonBody = WickUtilityTypeConverter.toJson(body);
     Response response;
     try {
       WickUtilityLogger.log(context, WickEnumLogType.outgoingRequest, {
@@ -93,21 +92,16 @@ class WickUtilityRequestHandler {
     final WickEnumResponseStatus status = WickEnumResponseStatus.fromCode(
       response.statusCode,
     );
-    Map<String, dynamic> responseBody;
-    try {
-      responseBody = jsonDecode(response.body);
-    } catch (error) {
-      responseBody = {};
-    }
     if (status == WickEnumResponseStatus.okay) {
       WickUtilityLogger.log(
         context,
         WickEnumLogType.incomingResponse,
-        responseBody,
+        response.body,
       );
-      return responseBody;
+      return WickUtilityTypeConverter.fromJson<T>(response.body);
     } else {
-      handleErrorResponse(context, responseBody['message']);
+      // TODO Create a error model with a message field, then use that here
+      handleErrorResponse(context, response.body);
       return null;
     }
   }

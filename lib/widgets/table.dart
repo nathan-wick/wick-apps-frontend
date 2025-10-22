@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wick_apps/utilities/model_helper.dart';
 
-import '../models/base.dart';
 import '../models/form_inputs/checkbox.dart';
 import '../models/preferences.dart';
 import '../providers/preferences.dart';
@@ -11,12 +11,12 @@ import '../utilities/type_converter.dart';
 import '../widgets/loading_indicator.dart';
 import 'forms/inputs/checkbox.dart';
 
-class WickWidgetTable extends StatelessWidget {
-  final List<WickModelBase> data;
+class WickWidgetTable<T> extends StatelessWidget {
+  final List<T> data;
   final bool displayHeader;
   final bool canReorderRows;
   final List<String> editableColumnKeys;
-  final Function(List<WickModelBase>)? onChanged;
+  final Function(List<T>)? onChanged;
 
   const WickWidgetTable({
     super.key,
@@ -51,11 +51,9 @@ class WickWidgetTable extends StatelessWidget {
   }
 
   Future<List<TableRow>> _getRows(BuildContext context) async {
-    final List<String> columnNames = data.first.attributes.keys.toList();
-    final List<int> editableColumnIndexes =
-        editableColumnKeys
-            .map((editableColumnKey) => columnNames.indexOf(editableColumnKey))
-            .toList();
+    final List<String> columnNames = WickUtilityModelHelper.getAttributesNames(
+      T,
+    );
     List<TableRow> rows = [];
     if (displayHeader) {
       final TableRow header = TableRow(
@@ -86,26 +84,28 @@ class WickWidgetTable extends StatelessWidget {
     WickModelPreferences? preferences =
         await Provider.of<WickProviderPreferences>(context).getValue(context);
     for (int rowIndex = 0; rowIndex < data.length; rowIndex++) {
-      final List<String?> values =
-          data[rowIndex].toStringMap(preferences?.dateFormat).values.toList();
+      final Map<String, dynamic> values =
+          WickUtilityModelHelper.getAttributeValues(data[rowIndex]);
       List<Widget> columns = [];
-      for (int columnIndex = 0; columnIndex < values.length; columnIndex++) {
-        final value = values[columnIndex];
-        if (editableColumnIndexes.contains(columnIndex)) {
+      values.forEach((key, value) {
+        if (editableColumnKeys.contains(key)) {
           // TODO In the future, we should support other editable types. For now, we only support booleans.
           columns.add(
             WickWidgetFormInputCheckbox(
               input: WickModelFormInputCheckbox(
-                name: '$rowIndex:$columnIndex',
+                name: '$rowIndex:$key',
                 displayName: false,
-                defaultValue: WickUtilityTypeConverter.toBool(value),
+                defaultValue: WickUtilityTypeConverter.toType(value),
               ),
               onChanged: (String? newValue) {
-                final updatedAttributes = Map<String, dynamic>.from(
-                  data[rowIndex].attributes,
+                final Map<String, dynamic> updatedValues = {
+                  ...values,
+                  key: WickUtilityTypeConverter.toType(newValue),
+                };
+                final T updatedModel = WickUtilityTypeConverter.toType(
+                  updatedValues,
                 );
-                updatedAttributes[columnNames[columnIndex]] = newValue;
-                data[rowIndex] = data[rowIndex].copyWith(updatedAttributes);
+                data[rowIndex] = updatedModel;
                 if (onChanged != null) onChanged!(data);
               },
             ),
@@ -117,11 +117,17 @@ class WickWidgetTable extends StatelessWidget {
                 vertical: WickUtilityStyleConstants.paddingSize,
                 horizontal: WickUtilityStyleConstants.paddingSize / 4,
               ),
-              child: Text(value ?? '', textAlign: TextAlign.center),
+              child: Text(
+                WickUtilityTypeConverter.toType<String>(
+                  value,
+                  dateFormat: preferences?.dateFormat,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         }
-      }
+      });
       rows.add(
         TableRow(
           decoration: BoxDecoration(

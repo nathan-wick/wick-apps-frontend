@@ -16,7 +16,7 @@ class WickProviderNavigation
   WickProviderNavigation({
     required this.homeRoute,
     this.navigationOptions = const [],
-  }) : super(WickModelWickProviderNavigation.fromJson);
+  });
 
   void navigate(BuildContext context, [String? route]) async {
     route ??= homeRoute;

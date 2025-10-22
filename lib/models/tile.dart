@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import 'base.dart';
-
-class WickModelTile extends WickModelBase<WickModelTile> {
+class WickModelTile {
   final String name;
   final IconData icon;
   final List<Widget> content;
@@ -13,10 +11,5 @@ class WickModelTile extends WickModelBase<WickModelTile> {
     required this.icon,
     required this.content,
     this.activeByDefault = true,
-  }) : super({
-         'name': name,
-         'icon': icon,
-         'content': content,
-         'activeByDefault': activeByDefault,
-       });
+  });
 }

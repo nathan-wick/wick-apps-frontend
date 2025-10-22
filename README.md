@@ -4,8 +4,7 @@
 
 ### Update Entry Widget
 
-Update your `main.dart` file to use a `WickWidgetApplication` widget as the entry point of your
-application:
+Update your application's entry widget to be a `WickWidgetApplication`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ void main() {
     ),
   );
 }
-
 ```
 
 ## Development Documentation
@@ -39,7 +37,7 @@ dart run :generate
 
 ### Test Changes Locally
 
-In your Flutter app’s `pubspec.yaml`, reference the package using a local path:
+In your Flutter application’s `pubspec.yaml`, reference the package using a local path:
 
 ```yaml
 dependencies:

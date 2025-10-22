@@ -6,16 +6,12 @@ import '../utilities/request_handler.dart';
 import 'base.dart';
 
 class WickControllerUser extends WickControllerBase<WickModelUser> {
-  WickControllerUser() : super(WickModelUser.fromJson);
-
   Future<WickModelUser?> getByCurrentSession(BuildContext context) async {
-    final Map<String, dynamic>? response =
-        await WickUtilityRequestHandler.sendRequest(
-          context,
-          WickEnumRequestMethod.get,
-          domain,
-          '$basePath/get-by-current-session',
-        );
-    return response == null ? null : fromJson(response);
+    return await WickUtilityRequestHandler.sendRequest(
+      context,
+      WickEnumRequestMethod.get,
+      domain,
+      '$basePath/get-by-current-session',
+    );
   }
 }

@@ -1,35 +1,31 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wick_apps/utilities/type_converter.dart';
 
 import '../enums/order_direction.dart';
 import '../enums/request_method.dart';
-import '../models/base.dart';
 import '../models/paginated_response.dart';
 import '../utilities/request_handler.dart';
 import '../utilities/string_formatter.dart';
 
-abstract class WickControllerBase<Model extends WickModelBase<Model>> {
+abstract class WickControllerBase<T> {
   // TODO Get the real domain
   final String domain = 'localhost:3000';
   final String basePath = WickUtilityStringFormatter.toKebabCase(
-    Model.toString().replaceAll('Wick', '').replaceAll('Model', ''),
+    T.toString().replaceAll('Wick', '').replaceAll('Model', ''),
   );
-  final Model Function(Map<String, dynamic>) fromJson;
 
-  WickControllerBase(this.fromJson);
-
-  Future<Model?> getByPrimaryKey(BuildContext context, int? primaryKey) async {
+  Future<T?> getByPrimaryKey(BuildContext context, int? primaryKey) async {
     if (primaryKey == null || primaryKey <= 0) return null;
-    final Map<String, dynamic>? response =
-        await WickUtilityRequestHandler.sendRequest(
-          context,
-          WickEnumRequestMethod.get,
-          domain,
-          '$basePath/$primaryKey',
-        );
-    return response == null ? null : fromJson(response);
+    final String? response = await WickUtilityRequestHandler.sendRequest(
+      context,
+      WickEnumRequestMethod.get,
+      domain,
+      '$basePath/$primaryKey',
+    );
+    return WickUtilityTypeConverter.fromJson(response);
   }
 
-  Future<WickModelPaginatedResponse<Model>?> get(
+  Future<WickModelPaginatedResponse<T>?> get(
     BuildContext context, {
     int pageNumber = 1,
     int pageSize = 50,
@@ -48,21 +44,18 @@ abstract class WickControllerBase<Model extends WickModelBase<Model>> {
     if (attributes != null) {
       queryParameters['attributes'] = attributes.join(",");
     }
-    final Map<String, dynamic>? response =
-        await WickUtilityRequestHandler.sendRequest(
-          context,
-          WickEnumRequestMethod.get,
-          domain,
-          basePath,
-          null,
-          queryParameters,
-        );
-    return response == null
-        ? null
-        : WickModelPaginatedResponse<Model>.fromJson(response, fromJson);
+    final String? response = await WickUtilityRequestHandler.sendRequest(
+      context,
+      WickEnumRequestMethod.get,
+      domain,
+      basePath,
+      null,
+      queryParameters,
+    );
+    return WickUtilityTypeConverter.fromJson(response);
   }
 
-  Future<Model?> create(BuildContext context, Model instance) async {
+  Future<T?> create(BuildContext context, T instance) async {
     final response = await WickUtilityRequestHandler.sendRequest(
       context,
       WickEnumRequestMethod.post,
@@ -70,29 +63,27 @@ abstract class WickControllerBase<Model extends WickModelBase<Model>> {
       basePath,
       instance,
     );
-    return response == null ? null : fromJson(response);
+    return WickUtilityTypeConverter.fromJson(response);
   }
 
-  Future<Model?> edit(BuildContext context, Model instance) async {
-    final Map<String, dynamic>? response =
-        await WickUtilityRequestHandler.sendRequest(
-          context,
-          WickEnumRequestMethod.put,
-          domain,
-          basePath,
-          instance,
-        );
-    return response == null ? null : fromJson(response);
+  Future<T?> edit(BuildContext context, T instance) async {
+    final String? response = await WickUtilityRequestHandler.sendRequest(
+      context,
+      WickEnumRequestMethod.put,
+      domain,
+      basePath,
+      instance,
+    );
+    return WickUtilityTypeConverter.fromJson(response);
   }
 
   Future<bool> delete(BuildContext context, int primaryKey) async {
-    final Map<String, dynamic>? response =
-        await WickUtilityRequestHandler.sendRequest(
-          context,
-          WickEnumRequestMethod.delete,
-          domain,
-          '$basePath/$primaryKey',
-        );
+    final String? response = await WickUtilityRequestHandler.sendRequest(
+      context,
+      WickEnumRequestMethod.delete,
+      domain,
+      '$basePath/$primaryKey',
+    );
     return response == null ? false : true;
   }
 }

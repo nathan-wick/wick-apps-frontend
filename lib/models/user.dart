@@ -1,7 +1,7 @@
-import '../utilities/type_converter.dart';
-import 'base.dart';
+import 'annotations/primary_key.dart';
 
-class WickModelUser extends WickModelBase<WickModelUser> {
+class WickModelUser {
+  @WickModelAnnotationPrimaryKey()
   final int id;
   final String email;
   final String? picture;
@@ -16,27 +16,5 @@ class WickModelUser extends WickModelBase<WickModelUser> {
     this.firstName,
     this.lastName,
     this.birthday,
-  }) : super({
-         'id': id,
-         'email': email,
-         'picture': picture,
-         'firstName': firstName,
-         'lastName': lastName,
-         'birthday': birthday,
-       });
-
-  factory WickModelUser.fromJson(Map<String, dynamic> json) {
-    return WickModelUser(
-      id: WickUtilityTypeConverter.toInt(json['id']) ?? 0,
-      email: WickUtilityTypeConverter.describe(json['email']) ?? '',
-      picture: WickUtilityTypeConverter.describe(json['picture']),
-      firstName: WickUtilityTypeConverter.describe(json['firstName']),
-      lastName: WickUtilityTypeConverter.describe(json['lastName']),
-      birthday: WickUtilityTypeConverter.toDate(json['birthday']),
-    );
-  }
-
-  @override
-  WickModelUser newInstance(Map<String, dynamic> newAttributes) =>
-      WickModelUser.fromJson(newAttributes);
+  });
 }

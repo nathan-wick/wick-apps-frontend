@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../base.dart';
-
-class WickModelFormInputDropdownOption
-    extends WickModelBase<WickModelFormInputDropdownOption> {
+class WickModelFormInputDropdownOption {
   final String? value;
   final String label;
   final IconData? icon;
@@ -12,5 +9,5 @@ class WickModelFormInputDropdownOption
     required this.value,
     required this.label,
     this.icon,
-  }) : super({"value": value, "label": label, "icon": icon});
+  });
 }

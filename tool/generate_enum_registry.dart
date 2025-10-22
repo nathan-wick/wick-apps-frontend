@@ -24,7 +24,7 @@ void main() {
     output.writeln("import 'package:wick_apps/$path';");
   }
   output.writeln();
-  output.writeln('class WickEnumRegistry {');
+  output.writeln('class WickUtilityEnumRegistry {');
   output.writeln('  static final Map<Type, List<Enum>> registry = {');
   enumsFound.forEach((path, enumNames) {
     for (final enumName in enumNames) {
@@ -32,10 +32,6 @@ void main() {
     }
   });
   output.writeln('  };');
-  output.writeln();
-  output.writeln('  static List<Enum>? getValues(Type enumType) {');
-  output.writeln('    return registry[enumType];');
-  output.writeln('  }');
   output.writeln('}');
   const outputFileLocation = 'lib/utilities/enum_registry.generated.dart';
   final outputFile = File(outputFileLocation);

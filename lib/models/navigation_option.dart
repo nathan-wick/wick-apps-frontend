@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import 'base.dart';
-
-class WickModelNavigationOption
-    extends WickModelBase<WickModelNavigationOption> {
+class WickModelNavigationOption {
   final String name;
   final String route;
   final IconData icon;
@@ -18,12 +15,5 @@ class WickModelNavigationOption
     required this.destination,
     this.isMain = false,
     this.onNavigate,
-  }) : super({
-         'name': name,
-         'route': route,
-         'icon': icon,
-         'destination': destination,
-         'isMain': isMain,
-         'onNavigate': onNavigate,
-       });
+  });
 }

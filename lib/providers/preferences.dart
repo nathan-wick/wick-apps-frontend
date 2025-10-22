@@ -8,8 +8,6 @@ import '../models/user.dart';
 import 'base.dart';
 
 class WickProviderPreferences extends WickProviderBase<WickModelPreferences> {
-  WickProviderPreferences() : super(WickModelPreferences.fromJson);
-
   Future<WickModelPreferences?> getUserPreferences(BuildContext context) async {
     final WickModelPreferences? preferencesFromLocalStorage = await getValue(
       context,

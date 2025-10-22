@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:wick_apps/models/model_information.dart';
 import 'package:wick_apps/utilities/script_helper.dart';
+import 'package:wick_apps/utilities/string_formatter.dart';
 
 void main() {
   final libraryDirectory = Directory('lib');
@@ -111,6 +112,44 @@ void main() {
       }
     }
   });
+  final enumsDirectory = Directory('lib/enums/model_attributes');
+  if (enumsDirectory.existsSync()) {
+    enumsDirectory.listSync().forEach((item) {
+      if (item is File && item.path.endsWith('.generated.dart')) {
+        item.deleteSync();
+      }
+    });
+  }
+  enumsDirectory.createSync(recursive: true);
+  modelsFound.forEach((className, info) {
+    String cleanClassName = className
+        .replaceAll('Wick', '')
+        .replaceAll('Model', '');
+    final enumName = 'WickEnumModelAttribute$cleanClassName';
+    final enumFileName = WickUtilityStringFormatter.toSnakeCase(cleanClassName);
+    final enumFilePath =
+        'lib/enums/model_attributes/$enumFileName.generated.dart';
+    final enumOutput = WickUtilityScriptHelper.addGeneratedFileWarningComment(
+      StringBuffer(),
+    );
+    enumOutput.writeln();
+    enumOutput.writeln('/// Attributes and their types for $className.');
+    enumOutput.writeln('enum $enumName {');
+    final attributeKeys = info.attributes.keys.toList();
+    for (int i = 0; i < attributeKeys.length; i++) {
+      final attributeName = attributeKeys[i];
+      enumOutput.write('  $attributeName');
+      if (i < attributeKeys.length - 1) {
+        enumOutput.writeln(',');
+      } else {
+        enumOutput.writeln(';');
+      }
+    }
+    enumOutput.writeln('}');
+    final enumFile = File(enumFilePath);
+    enumFile.createSync(recursive: true);
+    enumFile.writeAsStringSync(enumOutput.toString());
+  });
   final output = WickUtilityScriptHelper.addGeneratedFileWarningComment(
     StringBuffer(),
   );
@@ -126,19 +165,24 @@ void main() {
   for (final import in allImports) {
     output.writeln("import 'package:wick_apps/$import';");
   }
+  for (final className in modelsFound.keys) {
+    String cleanClassName = className
+        .replaceAll('Wick', '')
+        .replaceAll('Model', '');
+    final enumFileName = WickUtilityStringFormatter.toSnakeCase(cleanClassName);
+    output.writeln(
+      "import 'package:wick_apps/enums/model_attributes/$enumFileName.generated.dart';",
+    );
+  }
   output.writeln();
   output.writeln('class WickUtilityModelRegistry {');
-  output.writeln(
-    '  static final Map<Type, List<WickModelAttributeInformation>> attributes = {',
-  );
+  output.writeln('  static final Map<Type, Type> attributes = {');
   modelsFound.forEach((className, info) {
-    output.writeln('    $className: [');
-    info.attributes.forEach((name, type) {
-      output.writeln(
-        "      WickModelAttributeInformation(name: '$name', type: '$type'),",
-      );
-    });
-    output.writeln('    ],');
+    String cleanClassName = className
+        .replaceAll('Wick', '')
+        .replaceAll('Model', '');
+    final enumName = 'WickEnumModelAttribute$cleanClassName';
+    output.writeln('    $className: $enumName,');
   });
   output.writeln('  };');
   output.writeln();
@@ -183,6 +227,43 @@ void main() {
       }
     }
     output.writeln('    ),');
+  });
+  output.writeln('  };');
+  output.writeln();
+  output.writeln(
+    '  static final Map<Type, Map<String, Function(dynamic)>> attributeGetters = {',
+  );
+  modelsFound.forEach((className, information) {
+    if (abstractClasses.contains(className)) {
+      return;
+    }
+    final allAttributes = <String, String>{};
+    String? currentClass = className;
+    final visited = <String>{};
+    while (currentClass != null && !visited.contains(currentClass)) {
+      visited.add(currentClass);
+      final currentModel = modelsFound[currentClass];
+      if (currentModel != null) {
+        currentModel.attributes.forEach((key, value) {
+          allAttributes.putIfAbsent(key, () => value);
+        });
+      }
+      currentClass = modelInheritance[currentClass];
+    }
+    output.writeln('    $className: {');
+    final entries = allAttributes.entries.toList();
+    for (int i = 0; i < entries.length; i++) {
+      final entry = entries[i];
+      output.write(
+        '      \'${entry.key}\': (model) => (model as $className).${entry.key}',
+      );
+      if (i < entries.length - 1) {
+        output.writeln(',');
+      } else {
+        output.writeln();
+      }
+    }
+    output.writeln('    },');
   });
   output.writeln('  };');
   output.writeln('}');

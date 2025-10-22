@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
 import '../enums/log_type.dart';
-import '../models/base.dart';
 import '../utilities/local_storage.dart';
 import '../utilities/logger.dart';
 import '../utilities/string_formatter.dart';
 
-abstract class WickProviderBase<Model extends WickModelBase>
-    extends ChangeNotifier {
+abstract class WickProviderBase<T> extends ChangeNotifier {
   /// The name of the model.
   final String modelName = WickUtilityStringFormatter.titleCase(
-    Model.toString()
+    T
+        .toString()
         .replaceAll('Wick', '')
         .replaceAll('Model', '')
         .replaceAll('Provider', ''),
@@ -18,20 +17,14 @@ abstract class WickProviderBase<Model extends WickModelBase>
 
   /// The key used to locate the value in local storage.
   final String localStorageKey =
-      "provider_${WickUtilityStringFormatter.toSnakeCase(Model.toString().replaceAll('Wick', '').replaceAll('Model', '').replaceAll('Provider', ''))}";
-  final Model Function(Map<String, dynamic>) fromJson;
+      "provider_${WickUtilityStringFormatter.toSnakeCase(T.toString().replaceAll('Wick', '').replaceAll('Model', '').replaceAll('Provider', ''))}";
 
   /// The value of the provider.
-  Model? value;
-
-  WickProviderBase(this.fromJson);
+  T? value;
 
   /// Gets the value of the provider.
-  Future<Model?> getValue(BuildContext context) async {
-    value ??= await WickUtilityLocalStorage<Model>().getModelValue(
-      localStorageKey,
-      fromJson,
-    );
+  Future<T?> getValue(BuildContext context) async {
+    value ??= await WickUtilityLocalStorage<T>().getModelValue(localStorageKey);
     WickUtilityLogger.log(context, WickEnumLogType.provider, {
       'provider': modelName,
       'method': 'getValue',
@@ -42,9 +35,9 @@ abstract class WickProviderBase<Model extends WickModelBase>
   }
 
   /// Sets the value of the provider.
-  Future<void> setValue(BuildContext context, Model? newValue) async {
+  Future<void> setValue(BuildContext context, T? newValue) async {
     value = newValue;
-    WickUtilityLocalStorage<Model>().setModelValue(localStorageKey, newValue);
+    WickUtilityLocalStorage<T>().setModelValue(localStorageKey, newValue);
     WickUtilityLogger.log(context, WickEnumLogType.provider, {
       'provider': modelName,
       'method': 'setValue',
