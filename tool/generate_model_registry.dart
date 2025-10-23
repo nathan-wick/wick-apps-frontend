@@ -218,7 +218,8 @@ void main() {
     for (int i = 0; i < entries.length; i++) {
       final entry = entries[i];
       output.write(
-        '      ${entry.key}: WickUtilityTypeConverter.toType<${entry.value}>(attributes[\'${entry.key}\'])',
+        '      ${entry.key}: WickUtilityTypeConverter.convert<${entry
+            .value}>(attributes[\'${entry.key}\'])',
       );
       if (i < entries.length - 1) {
         output.writeln(',');

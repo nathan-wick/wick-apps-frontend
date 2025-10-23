@@ -92,7 +92,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
         // TODO Add an image input
         continue;
       }
-      final String fieldValueString = WickUtilityTypeConverter.toType(
+      final String fieldValueString = WickUtilityTypeConverter.convert(
         fieldValue,
       );
       if (fieldValue is String) {
@@ -151,7 +151,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
   }
 
   void _onSubmit(Map<String, dynamic> values) async {
-    final T newModel = WickUtilityTypeConverter.toType(values);
+    final T newModel = WickUtilityTypeConverter.convert(values);
     if (widget.primaryKey == null) {
       final createdModel = await widget.controller.create(context, newModel);
       if (createdModel != null) {

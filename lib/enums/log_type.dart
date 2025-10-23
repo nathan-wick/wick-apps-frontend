@@ -6,4 +6,5 @@ enum WickEnumLogType {
   incomingResponse,
   provider,
   navigation,
+  typeConversion,
 }

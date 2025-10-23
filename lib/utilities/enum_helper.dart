@@ -11,7 +11,7 @@ class WickUtilityEnumHelper {
     return getValues(type)
         .map(
           (value) => WickModelFormInputDropdownOption(
-            value: WickUtilityTypeConverter.toType(value),
+            value: WickUtilityTypeConverter.convert(value),
             label: WickUtilityStringFormatter.titleCase(value.name),
           ),
         )

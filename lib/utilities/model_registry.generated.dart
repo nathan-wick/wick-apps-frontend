@@ -133,217 +133,217 @@ class WickUtilityModelRegistry {
 
   static final Map<Type, Function(Map<String, dynamic>)> constructors = {
     WickModelTile: (attributes) => WickModelTile(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      icon: WickUtilityTypeConverter.toType<IconData>(attributes['icon']),
-      content: WickUtilityTypeConverter.toType<List<Widget>>(attributes['content']),
-      activeByDefault: WickUtilityTypeConverter.toType<bool>(attributes['activeByDefault'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
+      content: WickUtilityTypeConverter.convert<List<Widget>>(attributes['content']),
+      activeByDefault: WickUtilityTypeConverter.convert<bool>(attributes['activeByDefault'])
     ),
     WickModelPaginatedResponse: (attributes) => WickModelPaginatedResponse(
-      instances: WickUtilityTypeConverter.toType<List<dynamic>>(attributes['instances']),
-      totalInstances: WickUtilityTypeConverter.toType<int>(attributes['totalInstances'])
+      instances: WickUtilityTypeConverter.convert<List<dynamic>>(attributes['instances']),
+      totalInstances: WickUtilityTypeConverter.convert<int>(attributes['totalInstances'])
     ),
     WickModelPreferences: (attributes) => WickModelPreferences(
-      userId: WickUtilityTypeConverter.toType<int>(attributes['userId']),
-      brightness: WickUtilityTypeConverter.toType<WickEnumBrightness>(attributes['brightness']),
-      dateFormat: WickUtilityTypeConverter.toType<WickEnumDateFormat>(attributes['dateFormat']),
-      primaryColor: WickUtilityTypeConverter.toType<WickEnumColor>(attributes['primaryColor'])
+      userId: WickUtilityTypeConverter.convert<int>(attributes['userId']),
+      brightness: WickUtilityTypeConverter.convert<WickEnumBrightness>(attributes['brightness']),
+      dateFormat: WickUtilityTypeConverter.convert<WickEnumDateFormat>(attributes['dateFormat']),
+      primaryColor: WickUtilityTypeConverter.convert<WickEnumColor>(attributes['primaryColor'])
     ),
     WickModelDashboardConfiguration: (attributes) => WickModelDashboardConfiguration(
-      id: WickUtilityTypeConverter.toType<int>(attributes['id']),
-      userId: WickUtilityTypeConverter.toType<int>(attributes['userId']),
-      dashboard: WickUtilityTypeConverter.toType<String>(attributes['dashboard']),
-      configuration: WickUtilityTypeConverter.toType<String>(attributes['configuration'])
+      id: WickUtilityTypeConverter.convert<int>(attributes['id']),
+      userId: WickUtilityTypeConverter.convert<int>(attributes['userId']),
+      dashboard: WickUtilityTypeConverter.convert<String>(attributes['dashboard']),
+      configuration: WickUtilityTypeConverter.convert<String>(attributes['configuration'])
     ),
     WickModelUser: (attributes) => WickModelUser(
-      id: WickUtilityTypeConverter.toType<int>(attributes['id']),
-      email: WickUtilityTypeConverter.toType<String>(attributes['email']),
-      picture: WickUtilityTypeConverter.toType<String?>(attributes['picture']),
-      firstName: WickUtilityTypeConverter.toType<String?>(attributes['firstName']),
-      lastName: WickUtilityTypeConverter.toType<String?>(attributes['lastName']),
-      birthday: WickUtilityTypeConverter.toType<DateTime?>(attributes['birthday'])
+      id: WickUtilityTypeConverter.convert<int>(attributes['id']),
+      email: WickUtilityTypeConverter.convert<String>(attributes['email']),
+      picture: WickUtilityTypeConverter.convert<String?>(attributes['picture']),
+      firstName: WickUtilityTypeConverter.convert<String?>(attributes['firstName']),
+      lastName: WickUtilityTypeConverter.convert<String?>(attributes['lastName']),
+      birthday: WickUtilityTypeConverter.convert<DateTime?>(attributes['birthday'])
     ),
     WickModelTileOption: (attributes) => WickModelTileOption(
-      active: WickUtilityTypeConverter.toType<bool>(attributes['active']),
-      name: WickUtilityTypeConverter.toType<String>(attributes['name'])
+      active: WickUtilityTypeConverter.convert<bool>(attributes['active']),
+      name: WickUtilityTypeConverter.convert<String>(attributes['name'])
     ),
     WickModelFormInputText: (attributes) => WickModelFormInputText(
-      validations: WickUtilityTypeConverter.toType<List<WickEnumTextValidation>>(attributes['validations']),
-      keyboardType: WickUtilityTypeConverter.toType<WickEnumKeyboardType>(attributes['keyboardType']),
-      isSecret: WickUtilityTypeConverter.toType<bool>(attributes['isSecret']),
-      multipleLines: WickUtilityTypeConverter.toType<bool>(attributes['multipleLines']),
-      defaultValue: WickUtilityTypeConverter.toType<String?>(attributes['defaultValue']),
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      autoFill: WickUtilityTypeConverter.toType<bool>(attributes['autoFill']),
-      helpText: WickUtilityTypeConverter.toType<String?>(attributes['helpText'])
+      validations: WickUtilityTypeConverter.convert<List<WickEnumTextValidation>>(attributes['validations']),
+      keyboardType: WickUtilityTypeConverter.convert<WickEnumKeyboardType>(attributes['keyboardType']),
+      isSecret: WickUtilityTypeConverter.convert<bool>(attributes['isSecret']),
+      multipleLines: WickUtilityTypeConverter.convert<bool>(attributes['multipleLines']),
+      defaultValue: WickUtilityTypeConverter.convert<String?>(attributes['defaultValue']),
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      autoFill: WickUtilityTypeConverter.convert<bool>(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert<String?>(attributes['helpText'])
     ),
     WickModelFormInputImage: (attributes) => WickModelFormInputImage(
-      shape: WickUtilityTypeConverter.toType<WickEnumImageShape>(attributes['shape']),
-      maxSize: WickUtilityTypeConverter.toType<WickEnumFileSize>(attributes['maxSize']),
-      defaultValue: WickUtilityTypeConverter.toType<Uint8List?>(attributes['defaultValue']),
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      autoFill: WickUtilityTypeConverter.toType<bool>(attributes['autoFill']),
-      helpText: WickUtilityTypeConverter.toType<String?>(attributes['helpText'])
+      shape: WickUtilityTypeConverter.convert<WickEnumImageShape>(attributes['shape']),
+      maxSize: WickUtilityTypeConverter.convert<WickEnumFileSize>(attributes['maxSize']),
+      defaultValue: WickUtilityTypeConverter.convert<Uint8List?>(attributes['defaultValue']),
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      autoFill: WickUtilityTypeConverter.convert<bool>(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert<String?>(attributes['helpText'])
     ),
     WickModelFormInputDropdownOption: (attributes) => WickModelFormInputDropdownOption(
-      value: WickUtilityTypeConverter.toType<String?>(attributes['value']),
-      label: WickUtilityTypeConverter.toType<String>(attributes['label']),
-      icon: WickUtilityTypeConverter.toType<IconData?>(attributes['icon'])
+      value: WickUtilityTypeConverter.convert<String?>(attributes['value']),
+      label: WickUtilityTypeConverter.convert<String>(attributes['label']),
+      icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon'])
     ),
     WickModelFormInputCheckbox: (attributes) => WickModelFormInputCheckbox(
-      displayName: WickUtilityTypeConverter.toType<bool>(attributes['displayName']),
-      defaultValue: WickUtilityTypeConverter.toType<bool?>(attributes['defaultValue']),
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      autoFill: WickUtilityTypeConverter.toType<bool>(attributes['autoFill']),
-      helpText: WickUtilityTypeConverter.toType<String?>(attributes['helpText'])
+      displayName: WickUtilityTypeConverter.convert<bool>(attributes['displayName']),
+      defaultValue: WickUtilityTypeConverter.convert<bool?>(attributes['defaultValue']),
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      autoFill: WickUtilityTypeConverter.convert<bool>(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert<String?>(attributes['helpText'])
     ),
     WickModelFormInputDropdown: (attributes) => WickModelFormInputDropdown(
-      options: WickUtilityTypeConverter.toType<List<WickModelFormInputDropdownOption>>(attributes['options']),
-      defaultValue: WickUtilityTypeConverter.toType<String?>(attributes['defaultValue']),
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      autoFill: WickUtilityTypeConverter.toType<bool>(attributes['autoFill']),
-      helpText: WickUtilityTypeConverter.toType<String?>(attributes['helpText'])
+      options: WickUtilityTypeConverter.convert<List<WickModelFormInputDropdownOption>>(attributes['options']),
+      defaultValue: WickUtilityTypeConverter.convert<String?>(attributes['defaultValue']),
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      autoFill: WickUtilityTypeConverter.convert<bool>(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert<String?>(attributes['helpText'])
     ),
     WickModelFormInputField: (attributes) => WickModelFormInputField(
-      fieldName: WickUtilityTypeConverter.toType<String>(attributes['fieldName']),
-      defaultValue: WickUtilityTypeConverter.toType<dynamic>(attributes['defaultValue']),
-      autoFill: WickUtilityTypeConverter.toType<bool>(attributes['autoFill']),
-      helpText: WickUtilityTypeConverter.toType<String?>(attributes['helpText'])
+      fieldName: WickUtilityTypeConverter.convert<String>(attributes['fieldName']),
+      defaultValue: WickUtilityTypeConverter.convert<dynamic>(attributes['defaultValue']),
+      autoFill: WickUtilityTypeConverter.convert<bool>(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert<String?>(attributes['helpText'])
     ),
     WickModelSendVerificationEmailResponse: (attributes) => WickModelSendVerificationEmailResponse(
-      sessionId: WickUtilityTypeConverter.toType<int>(attributes['sessionId'])
+      sessionId: WickUtilityTypeConverter.convert<int>(attributes['sessionId'])
     ),
     WickModelWickProviderSession: (attributes) => WickModelWickProviderSession(
-      token: WickUtilityTypeConverter.toType<String>(attributes['token'])
+      token: WickUtilityTypeConverter.convert<String>(attributes['token'])
     ),
     WickModelWickProviderNavigation: (attributes) => WickModelWickProviderNavigation(
-      lastRoute: WickUtilityTypeConverter.toType<String>(attributes['lastRoute'])
+      lastRoute: WickUtilityTypeConverter.convert<String>(attributes['lastRoute'])
     ),
     WickModelModelInformation: (attributes) => WickModelModelInformation(
-      className: WickUtilityTypeConverter.toType<String>(attributes['className']),
-      importPath: WickUtilityTypeConverter.toType<String>(attributes['importPath']),
-      attributes: WickUtilityTypeConverter.toType<Map<String, String>>(attributes['attributes'])
+      className: WickUtilityTypeConverter.convert<String>(attributes['className']),
+      importPath: WickUtilityTypeConverter.convert<String>(attributes['importPath']),
+      attributes: WickUtilityTypeConverter.convert<Map<String, String>>(attributes['attributes'])
     ),
     WickModelSession: (attributes) => WickModelSession(
-      id: WickUtilityTypeConverter.toType<int>(attributes['id']),
-      userId: WickUtilityTypeConverter.toType<int>(attributes['userId']),
-      code: WickUtilityTypeConverter.toType<String>(attributes['code']),
-      successfulAttempts: WickUtilityTypeConverter.toType<int>(attributes['successfulAttempts']),
-      failedAttempts: WickUtilityTypeConverter.toType<int>(attributes['failedAttempts']),
-      started: WickUtilityTypeConverter.toType<DateTime>(attributes['started']),
-      expires: WickUtilityTypeConverter.toType<DateTime>(attributes['expires']),
-      device: WickUtilityTypeConverter.toType<String>(attributes['device']),
-      location: WickUtilityTypeConverter.toType<String>(attributes['location'])
+      id: WickUtilityTypeConverter.convert<int>(attributes['id']),
+      userId: WickUtilityTypeConverter.convert<int>(attributes['userId']),
+      code: WickUtilityTypeConverter.convert<String>(attributes['code']),
+      successfulAttempts: WickUtilityTypeConverter.convert<int>(attributes['successfulAttempts']),
+      failedAttempts: WickUtilityTypeConverter.convert<int>(attributes['failedAttempts']),
+      started: WickUtilityTypeConverter.convert<DateTime>(attributes['started']),
+      expires: WickUtilityTypeConverter.convert<DateTime>(attributes['expires']),
+      device: WickUtilityTypeConverter.convert<String>(attributes['device']),
+      location: WickUtilityTypeConverter.convert<String>(attributes['location'])
     ),
     WickModelNavigationOption: (attributes) => WickModelNavigationOption(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      route: WickUtilityTypeConverter.toType<String>(attributes['route']),
-      icon: WickUtilityTypeConverter.toType<IconData>(attributes['icon']),
-      destination: WickUtilityTypeConverter.toType<Widget>(attributes['destination']),
-      isMain: WickUtilityTypeConverter.toType<bool>(attributes['isMain'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      route: WickUtilityTypeConverter.convert<String>(attributes['route']),
+      icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
+      destination: WickUtilityTypeConverter.convert<Widget>(attributes['destination']),
+      isMain: WickUtilityTypeConverter.convert<bool>(attributes['isMain'])
     ),
     WickModelSignInResponse: (attributes) => WickModelSignInResponse(
-      sessionToken: WickUtilityTypeConverter.toType<String>(attributes['sessionToken'])
+      sessionToken: WickUtilityTypeConverter.convert<String>(attributes['sessionToken'])
     ),
     WickPageInitial: (attributes) => WickPageInitial(
-      homeRoute: WickUtilityTypeConverter.toType<String>(attributes['homeRoute']),
-      isAuthenticated: WickUtilityTypeConverter.toType<bool>(attributes['isAuthenticated'])
+      homeRoute: WickUtilityTypeConverter.convert<String>(attributes['homeRoute']),
+      isAuthenticated: WickUtilityTypeConverter.convert<bool>(attributes['isAuthenticated'])
     ),
     WickPageBase: (attributes) => WickPageBase(
-      title: WickUtilityTypeConverter.toType<String>(attributes['title']),
-      alignment: WickUtilityTypeConverter.toType<Alignment>(attributes['alignment']),
-      content: WickUtilityTypeConverter.toType<List<Widget>>(attributes['content']),
-      additionalActionButtons: WickUtilityTypeConverter.toType<List<Widget>>(attributes['additionalActionButtons']),
-      displayMainNavigation: WickUtilityTypeConverter.toType<bool>(attributes['displayMainNavigation']),
-      icon: WickUtilityTypeConverter.toType<IconData?>(attributes['icon']),
-      drawer: WickUtilityTypeConverter.toType<Widget?>(attributes['drawer'])
+      title: WickUtilityTypeConverter.convert<String>(attributes['title']),
+      alignment: WickUtilityTypeConverter.convert<Alignment>(attributes['alignment']),
+      content: WickUtilityTypeConverter.convert<List<Widget>>(attributes['content']),
+      additionalActionButtons: WickUtilityTypeConverter.convert<List<Widget>>(attributes['additionalActionButtons']),
+      displayMainNavigation: WickUtilityTypeConverter.convert<bool>(attributes['displayMainNavigation']),
+      icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon']),
+      drawer: WickUtilityTypeConverter.convert<Widget?>(attributes['drawer'])
     ),
     WickPageDashboardBase: (attributes) => WickPageDashboardBase(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      tiles: WickUtilityTypeConverter.toType<List<WickModelTile>>(attributes['tiles']),
-      icon: WickUtilityTypeConverter.toType<IconData?>(attributes['icon']),
-      drawer: WickUtilityTypeConverter.toType<Widget?>(attributes['drawer'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      tiles: WickUtilityTypeConverter.convert<List<WickModelTile>>(attributes['tiles']),
+      icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon']),
+      drawer: WickUtilityTypeConverter.convert<Widget?>(attributes['drawer'])
     ),
     WickPageLoading: (attributes) => WickPageLoading(
-      action: WickUtilityTypeConverter.toType<String?>(attributes['action'])
+      action: WickUtilityTypeConverter.convert<String?>(attributes['action'])
     ),
     WickWidgetApplication: (attributes) => WickWidgetApplication(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      navigationOptions: WickUtilityTypeConverter.toType<List<WickModelNavigationOption>>(attributes['navigationOptions']),
-      homeRoute: WickUtilityTypeConverter.toType<String>(attributes['homeRoute']),
-      defaultPrimaryColor: WickUtilityTypeConverter.toType<WickEnumColor>(attributes['defaultPrimaryColor'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      navigationOptions: WickUtilityTypeConverter.convert<List<WickModelNavigationOption>>(attributes['navigationOptions']),
+      homeRoute: WickUtilityTypeConverter.convert<String>(attributes['homeRoute']),
+      defaultPrimaryColor: WickUtilityTypeConverter.convert<WickEnumColor>(attributes['defaultPrimaryColor'])
     ),
     WickWidgetFormBase: (attributes) => WickWidgetFormBase(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      inputs: WickUtilityTypeConverter.toType<List<WickModelFormInputBase>>(attributes['inputs']),
-      submitButtonText: WickUtilityTypeConverter.toType<String>(attributes['submitButtonText']),
-      autoSubmit: WickUtilityTypeConverter.toType<bool>(attributes['autoSubmit']),
-      autoFocus: WickUtilityTypeConverter.toType<bool>(attributes['autoFocus']),
-      debounce: WickUtilityTypeConverter.toType<Duration>(attributes['debounce']),
-      onSubmit: WickUtilityTypeConverter.toType<Function(Map<String, dynamic>)>(attributes['onSubmit'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      inputs: WickUtilityTypeConverter.convert<List<WickModelFormInputBase>>(attributes['inputs']),
+      submitButtonText: WickUtilityTypeConverter.convert<String>(attributes['submitButtonText']),
+      autoSubmit: WickUtilityTypeConverter.convert<bool>(attributes['autoSubmit']),
+      autoFocus: WickUtilityTypeConverter.convert<bool>(attributes['autoFocus']),
+      debounce: WickUtilityTypeConverter.convert<Duration>(attributes['debounce']),
+      onSubmit: WickUtilityTypeConverter.convert<Function(Map<String, dynamic>)>(attributes['onSubmit'])
     ),
     WickWidgetFormStack: (attributes) => WickWidgetFormStack(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      inputs: WickUtilityTypeConverter.toType<List<WickModelFormInputField>>(attributes['inputs']),
-      controller: WickUtilityTypeConverter.toType<WickControllerBase<dynamic>>(attributes['controller']),
-      primaryKey: WickUtilityTypeConverter.toType<int?>(attributes['primaryKey']),
-      submitButtonText: WickUtilityTypeConverter.toType<String>(attributes['submitButtonText']),
-      autoSubmit: WickUtilityTypeConverter.toType<bool>(attributes['autoSubmit']),
-      autoFocus: WickUtilityTypeConverter.toType<bool>(attributes['autoFocus']),
-      debounce: WickUtilityTypeConverter.toType<Duration>(attributes['debounce'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      inputs: WickUtilityTypeConverter.convert<List<WickModelFormInputField>>(attributes['inputs']),
+      controller: WickUtilityTypeConverter.convert<WickControllerBase<dynamic>>(attributes['controller']),
+      primaryKey: WickUtilityTypeConverter.convert<int?>(attributes['primaryKey']),
+      submitButtonText: WickUtilityTypeConverter.convert<String>(attributes['submitButtonText']),
+      autoSubmit: WickUtilityTypeConverter.convert<bool>(attributes['autoSubmit']),
+      autoFocus: WickUtilityTypeConverter.convert<bool>(attributes['autoFocus']),
+      debounce: WickUtilityTypeConverter.convert<Duration>(attributes['debounce'])
     ),
     WickWidgetFormInputText: (attributes) => WickWidgetFormInputText(
-      input: WickUtilityTypeConverter.toType<WickModelFormInputText>(attributes['input']),
-      onChanged: WickUtilityTypeConverter.toType<Function(String?)>(attributes['onChanged']),
-      onEnterPressed: WickUtilityTypeConverter.toType<Function()>(attributes['onEnterPressed']),
-      focusNode: WickUtilityTypeConverter.toType<FocusNode?>(attributes['focusNode'])
+      input: WickUtilityTypeConverter.convert<WickModelFormInputText>(attributes['input']),
+      onChanged: WickUtilityTypeConverter.convert<Function(String?)>(attributes['onChanged']),
+      onEnterPressed: WickUtilityTypeConverter.convert<Function()>(attributes['onEnterPressed']),
+      focusNode: WickUtilityTypeConverter.convert<FocusNode?>(attributes['focusNode'])
     ),
     WickWidgetFormInputImage: (attributes) => WickWidgetFormInputImage(
-      input: WickUtilityTypeConverter.toType<WickModelFormInputImage>(attributes['input']),
-      onChanged: WickUtilityTypeConverter.toType<Function(String?)>(attributes['onChanged'])
+      input: WickUtilityTypeConverter.convert<WickModelFormInputImage>(attributes['input']),
+      onChanged: WickUtilityTypeConverter.convert<Function(String?)>(attributes['onChanged'])
     ),
     WickWidgetFormInputCheckbox: (attributes) => WickWidgetFormInputCheckbox(
-      input: WickUtilityTypeConverter.toType<WickModelFormInputCheckbox>(attributes['input']),
-      onChanged: WickUtilityTypeConverter.toType<Function(String?)>(attributes['onChanged'])
+      input: WickUtilityTypeConverter.convert<WickModelFormInputCheckbox>(attributes['input']),
+      onChanged: WickUtilityTypeConverter.convert<Function(String?)>(attributes['onChanged'])
     ),
     WickWidgetFormInputDropdown: (attributes) => WickWidgetFormInputDropdown(
-      input: WickUtilityTypeConverter.toType<WickModelFormInputDropdown>(attributes['input']),
-      onChanged: WickUtilityTypeConverter.toType<Function(String?)>(attributes['onChanged'])
+      input: WickUtilityTypeConverter.convert<WickModelFormInputDropdown>(attributes['input']),
+      onChanged: WickUtilityTypeConverter.convert<Function(String?)>(attributes['onChanged'])
     ),
     WickWidgetCard: (attributes) => WickWidgetCard(
-      icon: WickUtilityTypeConverter.toType<IconData>(attributes['icon']),
-      title: WickUtilityTypeConverter.toType<String>(attributes['title']),
-      content: WickUtilityTypeConverter.toType<List<Widget>>(attributes['content']),
-      isWide: WickUtilityTypeConverter.toType<bool>(attributes['isWide'])
+      icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
+      title: WickUtilityTypeConverter.convert<String>(attributes['title']),
+      content: WickUtilityTypeConverter.convert<List<Widget>>(attributes['content']),
+      isWide: WickUtilityTypeConverter.convert<bool>(attributes['isWide'])
     ),
     WickWidgetButton: (attributes) => WickWidgetButton(
-      onPressed: WickUtilityTypeConverter.toType<Function()>(attributes['onPressed']),
-      message: WickUtilityTypeConverter.toType<String>(attributes['message']),
-      icon: WickUtilityTypeConverter.toType<IconData?>(attributes['icon']),
-      type: WickUtilityTypeConverter.toType<WickEnumButtonType>(attributes['type']),
-      theme: WickUtilityTypeConverter.toType<WickEnumButtonTheme>(attributes['theme']),
-      isWide: WickUtilityTypeConverter.toType<bool>(attributes['isWide'])
+      onPressed: WickUtilityTypeConverter.convert<Function()>(attributes['onPressed']),
+      message: WickUtilityTypeConverter.convert<String>(attributes['message']),
+      icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon']),
+      type: WickUtilityTypeConverter.convert<WickEnumButtonType>(attributes['type']),
+      theme: WickUtilityTypeConverter.convert<WickEnumButtonTheme>(attributes['theme']),
+      isWide: WickUtilityTypeConverter.convert<bool>(attributes['isWide'])
     ),
     WickWidgetDialog: (attributes) => WickWidgetDialog(
-      icon: WickUtilityTypeConverter.toType<IconData>(attributes['icon']),
-      title: WickUtilityTypeConverter.toType<String>(attributes['title']),
-      content: WickUtilityTypeConverter.toType<List<Widget>>(attributes['content']),
-      displayActions: WickUtilityTypeConverter.toType<bool>(attributes['displayActions']),
-      okayMessage: WickUtilityTypeConverter.toType<String>(attributes['okayMessage']),
-      displayCancel: WickUtilityTypeConverter.toType<bool>(attributes['displayCancel'])
+      icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
+      title: WickUtilityTypeConverter.convert<String>(attributes['title']),
+      content: WickUtilityTypeConverter.convert<List<Widget>>(attributes['content']),
+      displayActions: WickUtilityTypeConverter.convert<bool>(attributes['displayActions']),
+      okayMessage: WickUtilityTypeConverter.convert<String>(attributes['okayMessage']),
+      displayCancel: WickUtilityTypeConverter.convert<bool>(attributes['displayCancel'])
     ),
     WickWidgetTable: (attributes) => WickWidgetTable(
-      data: WickUtilityTypeConverter.toType<List<dynamic>>(attributes['data']),
-      displayHeader: WickUtilityTypeConverter.toType<bool>(attributes['displayHeader']),
-      canReorderRows: WickUtilityTypeConverter.toType<bool>(attributes['canReorderRows']),
-      editableColumnKeys: WickUtilityTypeConverter.toType<List<String>>(attributes['editableColumnKeys'])
+      data: WickUtilityTypeConverter.convert<List<dynamic>>(attributes['data']),
+      displayHeader: WickUtilityTypeConverter.convert<bool>(attributes['displayHeader']),
+      canReorderRows: WickUtilityTypeConverter.convert<bool>(attributes['canReorderRows']),
+      editableColumnKeys: WickUtilityTypeConverter.convert<List<String>>(attributes['editableColumnKeys'])
     ),
     WickWidgetLoadingIndicator: (attributes) => WickWidgetLoadingIndicator(
-      action: WickUtilityTypeConverter.toType<String?>(attributes['action'])
+      action: WickUtilityTypeConverter.convert<String?>(attributes['action'])
     ),
     WickWidgetIconButton: (attributes) => WickWidgetIconButton(
-      name: WickUtilityTypeConverter.toType<String>(attributes['name']),
-      icon: WickUtilityTypeConverter.toType<IconData>(attributes['icon']),
-      onPressed: WickUtilityTypeConverter.toType<void Function()>(attributes['onPressed'])
+      name: WickUtilityTypeConverter.convert<String>(attributes['name']),
+      icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
+      onPressed: WickUtilityTypeConverter.convert<void Function()>(attributes['onPressed'])
     ),
   };
 

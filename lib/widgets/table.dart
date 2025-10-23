@@ -95,14 +95,14 @@ class WickWidgetTable<T> extends StatelessWidget {
               input: WickModelFormInputCheckbox(
                 name: '$rowIndex:$key',
                 displayName: false,
-                defaultValue: WickUtilityTypeConverter.toType(value),
+                defaultValue: WickUtilityTypeConverter.convert(value),
               ),
               onChanged: (String? newValue) {
                 final Map<String, dynamic> updatedValues = {
                   ...values,
-                  key: WickUtilityTypeConverter.toType(newValue),
+                  key: WickUtilityTypeConverter.convert(newValue),
                 };
-                final T updatedModel = WickUtilityTypeConverter.toType(
+                final T updatedModel = WickUtilityTypeConverter.convert(
                   updatedValues,
                 );
                 data[rowIndex] = updatedModel;
@@ -118,7 +118,7 @@ class WickWidgetTable<T> extends StatelessWidget {
                 horizontal: WickUtilityStyleConstants.paddingSize / 4,
               ),
               child: Text(
-                WickUtilityTypeConverter.toType<String>(
+                WickUtilityTypeConverter.convert<String>(
                   value,
                   dateFormat: preferences?.dateFormat,
                 ),

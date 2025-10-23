@@ -83,7 +83,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
   Future<void> _handleSignInWithEmailSubmit(
     Map<String, dynamic> formValues,
   ) async {
-    final String? email = WickUtilityTypeConverter.toType(
+    final String? email = WickUtilityTypeConverter.convert(
       formValues[_emailInputName],
     );
     if (email == null) return;
@@ -106,7 +106,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
   }
 
   Future<void> _handleVerifySubmit(Map<String, dynamic> formValues) async {
-    final String? code = WickUtilityTypeConverter.toType(
+    final String? code = WickUtilityTypeConverter.convert(
       formValues[_codeInputName],
     );
     if (code == null || _sessionId == null) return;

@@ -3,40 +3,69 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import '../enums/date_format.dart';
+import '../enums/log_type.dart';
 import 'enum_helper.dart';
 import 'input_validator.dart';
+import 'logger.dart';
 import 'model_registry.generated.dart';
 
 class WickUtilityTypeConverter {
   /// Converts a value to a specified type.
-  static T toType<T>(dynamic value, {WickEnumDateFormat? dateFormat}) {
-    if (value == null) {
-      if (null is T) return null as T;
+  static T convert<T>(
+    dynamic value, {
+    WickEnumDateFormat? dateFormat,
+    bool blockLogging = false,
+  }) {
+    T result;
+    if (value == null && null is T) {
+      result = null as T;
+    } else if (value is T) {
+      result = value;
+    } else {
+      result = switch (T) {
+        int => _toInt(value) as T,
+        double => _toDouble(value) as T,
+        bool => _toBool(value) as T,
+        String => _toString(value, dateFormat) as T,
+        DateTime => _toDateTime(value, dateFormat) as T,
+        List => _toList(value) as T,
+        Map => _toMap<T>(value) as T,
+        Enum => _toEnum<T>(value) as T,
+        Object => _toModel<T>(value) as T,
+        _ => value as T,
+      };
     }
-    if (value is T) return value;
-    return switch (T) {
-      int => _toInt(value) as T,
-      double => _toDouble(value) as T,
-      bool => _toBool(value) as T,
-      String => _toString(value, dateFormat) as T,
-      DateTime => _toDateTime(value, dateFormat) as T,
-      List => _toList(value) as T,
-      Map => _toMap<T>(value) as T,
-      Enum => _toEnum<T>(value) as T,
-      Object => _toModel<T>(value) as T,
-      _ => value as T,
-    };
+    if (!blockLogging) {
+      WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
+        'method': 'convert',
+        'inValue': value,
+        'inType': value.runtimeType.toString(),
+        'outValue': result,
+        'outType': T.toString(),
+      });
+    }
+    return result;
   }
 
   /// Converts a dynamic value to a JSON string.
-  static String toJson(dynamic value) {
-    return jsonEncode(_toJsonSafeValue(value));
+  static String toJson(dynamic value, {bool blockLogging = false}) {
+    final String json = jsonEncode(_toJsonSafeValue(value));
+    if (!blockLogging) {
+      WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
+        'method': 'toJson',
+        'inValue': value,
+        'inType': value.runtimeType.toString(),
+        'outValue': json,
+      });
+    }
+    return json;
   }
 
   /// Converts a dynamic value to a JSON-safe value.
   static Object? _toJsonSafeValue(dynamic value) {
     if (value == null) return null;
     if (value is DateTime) return value.toUtc().toIso8601String();
+    if (value is Enum) return value.name;
     if (value is List) {
       return value.map((item) => _toJsonSafeValue(item)).toList();
     }
@@ -45,22 +74,22 @@ class WickUtilityTypeConverter {
         (key, val) => MapEntry(key.toString(), _toJsonSafeValue(val)),
       );
     }
-    return toType<String>(value);
+    return convert<String>(value, blockLogging: true);
   }
 
   /// Converts a JSON string to a typed value.
   static T? fromJson<T>(String? json) {
     if (json == null || json.isEmpty) return null;
-    try {
-      final Map<String, dynamic> decoded = jsonDecode(json);
-      final constructor = WickUtilityModelRegistry.constructors[T];
-      if (constructor == null) return null;
-      final result = constructor(decoded);
-      if (result == null) return null;
-      return result as T;
-    } catch (error) {
-      return null;
-    }
+    final Map<String, dynamic> decoded = jsonDecode(json);
+    final constructor = WickUtilityModelRegistry.constructors[T];
+    final result = constructor == null ? null : constructor(decoded) as T;
+    WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
+      'method': 'fromJson',
+      'inValue': json,
+      'outValue': result,
+      'outType': T.toString(),
+    });
+    return result;
   }
 
   /// Converts value to integer.
@@ -71,7 +100,7 @@ class WickUtilityTypeConverter {
     if (value is String) return int.tryParse(value) ?? 0;
     if (value is DateTime) return value.millisecondsSinceEpoch;
     if (value is Enum) return value.index;
-    if (value is Object) return toJson(value).hashCode;
+    if (value is Object) return toJson(value, blockLogging: true).hashCode;
     if (value is List) return value.length;
     if (value is Map) return value.length;
     return 0;
@@ -85,7 +114,8 @@ class WickUtilityTypeConverter {
     if (value is String) return double.tryParse(value) ?? 0;
     if (value is DateTime) return value.millisecondsSinceEpoch.toDouble();
     if (value is Enum) return value.index.toDouble();
-    if (value is Object) return toJson(value).hashCode.toDouble();
+    if (value is Object)
+      return toJson(value, blockLogging: true).hashCode.toDouble();
     if (value is List) return value.length.toDouble();
     if (value is Map) return value.length.toDouble();
     return 0;
@@ -129,7 +159,7 @@ class WickUtilityTypeConverter {
     }
     if (value is Enum) return value.name;
     if (value is Object) {
-      final json = toJson(value);
+      final json = toJson(value, blockLogging: true);
       return json.toString();
     }
     if (value is List) {
@@ -247,31 +277,40 @@ class WickUtilityTypeConverter {
           if (typeString == 'Map<String, String>') {
             return value
                 .map(
-                  (key, val) =>
-                      MapEntry(toType<String>(key), toType<String>(val)),
+                  (key, val) => MapEntry(
+                    convert<String>(key, blockLogging: true),
+                    convert<String>(val, blockLogging: true),
+                  ),
                 )
                 .cast<String, String>();
           }
           if (typeString == 'Map<String, int>') {
             return value
                 .map(
-                  (key, val) => MapEntry(toType<String>(key), toType<int>(val)),
+                  (key, val) => MapEntry(
+                    convert<String>(key, blockLogging: true),
+                    convert<int>(val, blockLogging: true),
+                  ),
                 )
                 .cast<String, int>();
           }
           if (typeString == 'Map<String, double>') {
             return value
                 .map(
-                  (key, val) =>
-                      MapEntry(toType<String>(key), toType<double>(val)),
+                  (key, val) => MapEntry(
+                    convert<String>(key, blockLogging: true),
+                    convert<double>(val, blockLogging: true),
+                  ),
                 )
                 .cast<String, double>();
           }
           if (typeString == 'Map<String, bool>') {
             return value
                 .map(
-                  (key, val) =>
-                      MapEntry(toType<String>(key), toType<bool>(val)),
+                  (key, val) => MapEntry(
+                    convert<String>(key, blockLogging: true),
+                    convert<bool>(val, blockLogging: true),
+                  ),
                 )
                 .cast<String, bool>();
           }

@@ -157,7 +157,7 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime initialDate =
-        WickUtilityTypeConverter.toType(
+        WickUtilityTypeConverter.convert(
           _controller.text,
           dateFormat: _dateFormat,
         ) ??
@@ -171,7 +171,7 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
       confirmText: "Confirm",
     );
     if (picked != null) {
-      final String? formattedDate = WickUtilityTypeConverter.toType(
+      final String? formattedDate = WickUtilityTypeConverter.convert(
         picked,
         dateFormat: _dateFormat,
       );

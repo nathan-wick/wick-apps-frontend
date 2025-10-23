@@ -7,7 +7,7 @@ import '../enums/log_type.dart';
 
 class WickUtilityLogger {
   static void log(
-    BuildContext context,
+    BuildContext? context,
     WickEnumLogType logType,
     dynamic content,
   ) {
@@ -15,7 +15,10 @@ class WickUtilityLogger {
     final String logTypeDisplayName = WickUtilityStringFormatter.titleCase(
       logType.name,
     );
-    final String contentString = WickUtilityTypeConverter.toType(content);
+    final String contentString = WickUtilityTypeConverter.convert(
+      content,
+      blockLogging: true,
+    );
     if (kDebugMode) {
       debugPrint('$logTypeDisplayName: $contentString');
     }
