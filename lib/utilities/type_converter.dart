@@ -74,7 +74,7 @@ class WickUtilityTypeConverter {
         (key, val) => MapEntry(key.toString(), _toJsonSafeValue(val)),
       );
     }
-    return convert<String>(value, blockLogging: true);
+    return value.toString();
   }
 
   /// Converts a JSON string to a typed value.
@@ -114,8 +114,9 @@ class WickUtilityTypeConverter {
     if (value is String) return double.tryParse(value) ?? 0;
     if (value is DateTime) return value.millisecondsSinceEpoch.toDouble();
     if (value is Enum) return value.index.toDouble();
-    if (value is Object)
+    if (value is Object) {
       return toJson(value, blockLogging: true).hashCode.toDouble();
+    }
     if (value is List) return value.length.toDouble();
     if (value is Map) return value.length.toDouble();
     return 0;
