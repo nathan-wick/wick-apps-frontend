@@ -51,7 +51,7 @@ class WickWidgetTable<T> extends StatelessWidget {
   }
 
   Future<List<TableRow>> _getRows(BuildContext context) async {
-    final List<String> columnNames = WickUtilityModelHelper.getAttributesNames(
+    final Set<String>? columnNames = WickUtilityModelHelper.getAttributesNames(
       T,
     );
     List<TableRow> rows = [];
@@ -65,7 +65,7 @@ class WickWidgetTable<T> extends StatelessWidget {
         ),
         children:
             columnNames
-                .map(
+                ?.map(
                   (columnName) => Padding(
                     padding: EdgeInsets.all(
                       WickUtilityStyleConstants.paddingSize,
@@ -77,7 +77,8 @@ class WickWidgetTable<T> extends StatelessWidget {
                     ),
                   ),
                 )
-                .toList(),
+                .toList() ??
+            [],
       );
       rows.add(header);
     }

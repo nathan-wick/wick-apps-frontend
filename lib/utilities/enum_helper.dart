@@ -4,6 +4,11 @@ import '../utilities/type_converter.dart';
 import 'enum_registry.generated.dart';
 
 class WickUtilityEnumHelper {
+  /// Returns true if an enum type is registered.
+  static bool isRegistered(Type type) {
+    return WickUtilityEnumRegistry.registry.containsKey(type);
+  }
+
   /// Returns the values of an enum type as a list of dropdown options.
   static List<WickModelFormInputDropdownOption> getValuesAsDropdownOptions(
     Type type,

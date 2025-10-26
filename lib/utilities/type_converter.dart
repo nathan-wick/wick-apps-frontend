@@ -7,6 +7,7 @@ import '../enums/log_type.dart';
 import 'enum_helper.dart';
 import 'input_validator.dart';
 import 'logger.dart';
+import 'model_helper.dart';
 import 'model_registry.generated.dart';
 
 class WickUtilityTypeConverter {
@@ -21,6 +22,10 @@ class WickUtilityTypeConverter {
       result = null as T;
     } else if (value is T) {
       result = value;
+    } else if (WickUtilityModelHelper.isRegistered(T)) {
+      result = _toModel<T>(value) as T;
+    } else if (WickUtilityEnumHelper.isRegistered(T)) {
+      result = _toEnum<T>(value) as T;
     } else {
       result = switch (T) {
         int => _toInt(value) as T,
@@ -30,8 +35,6 @@ class WickUtilityTypeConverter {
         DateTime => _toDateTime(value, dateFormat) as T,
         List => _toList(value) as T,
         Map => _toMap<T>(value) as T,
-        Enum => _toEnum<T>(value) as T,
-        Object => _toModel<T>(value) as T,
         _ => value as T,
       };
     }
@@ -74,6 +77,10 @@ class WickUtilityTypeConverter {
         (key, val) => MapEntry(key.toString(), _toJsonSafeValue(val)),
       );
     }
+    if (WickUtilityModelRegistry.attributes.containsKey(value.runtimeType)) {
+      final attributes = WickUtilityModelHelper.getAttributeValues(value);
+      return attributes.map((key, val) => MapEntry(key, _toJsonSafeValue(val)));
+    }
     return value.toString();
   }
 
@@ -81,8 +88,7 @@ class WickUtilityTypeConverter {
   static T? fromJson<T>(String? json) {
     if (json == null || json.isEmpty) return null;
     final Map<String, dynamic> decoded = jsonDecode(json);
-    final constructor = WickUtilityModelRegistry.constructors[T];
-    final result = constructor == null ? null : constructor(decoded) as T;
+    final T? result = WickUtilityModelHelper.createInstance<T>(decoded);
     WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
       'method': 'fromJson',
       'inValue': json,
@@ -327,27 +333,39 @@ class WickUtilityTypeConverter {
   /// Converts value to Enum.
   static T? _toEnum<T>(dynamic value) {
     final enumValues = WickUtilityEnumHelper.getValues(T);
-    if (value is String) {
-      return enumValues.firstWhereOrNull(
-            (enumValue) => enumValue.name.toLowerCase() == value.toLowerCase(),
-          )
-          as T?;
-    }
     if (value is int) {
       if (value >= 0 && value < enumValues.length) {
         return enumValues[value] as T?;
       }
     }
+    if (value is String) {
+      final byName = enumValues.firstWhereOrNull(
+        (enumValue) => enumValue.name.toLowerCase() == value.toLowerCase(),
+      );
+      if (byName != null) return byName as T?;
+      final byValue = enumValues.firstWhereOrNull((enumValue) {
+        try {
+          final dynamic enumInstance = enumValue;
+          return enumInstance.value == value;
+        } catch (error) {
+          return false;
+        }
+      });
+      if (byValue != null) return byValue as T?;
+    }
+    if (null is T && enumValues.isEmpty) {
+      return null;
+    }
+    if (null is! T && enumValues.isNotEmpty) {
+      return enumValues.first as T;
+    }
     return null;
   }
 
-  /// Converts value to WickModelBase.
+  /// Converts value to a model.
   static T? _toModel<T>(dynamic value) {
-    final constructor = WickUtilityModelRegistry.constructors[T];
-    if (constructor == null) return null;
     if (value is Map<String, dynamic>) {
-      final result = constructor(value);
-      return result as T?;
+      return WickUtilityModelHelper.createInstance<T>(value);
     }
     if (value is String) {
       try {
