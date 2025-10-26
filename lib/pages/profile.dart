@@ -17,8 +17,15 @@ class WickPageProfile extends StatelessWidget {
           name: 'Profile',
           icon: Icons.person,
           content: [WickWidgetTileContentProfile()],
-          activeByDefault: false,
+          activeByDefault: true,
         ),
+      ],
+      availableDrawerRoutes: [
+        'account',
+        'profile',
+        'preferences',
+        'security',
+        'sign-out',
       ],
     );
   }

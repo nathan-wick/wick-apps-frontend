@@ -36,6 +36,7 @@ import 'package:wick_apps/widgets/forms/inputs/text.dart';
 import 'package:wick_apps/widgets/forms/inputs/image.dart';
 import 'package:wick_apps/widgets/forms/inputs/checkbox.dart';
 import 'package:wick_apps/widgets/forms/inputs/dropdown.dart';
+import 'package:wick_apps/widgets/navigation_drawer.dart';
 import 'package:wick_apps/widgets/card.dart';
 import 'package:wick_apps/widgets/button.dart';
 import 'package:wick_apps/widgets/dialog.dart';
@@ -83,6 +84,7 @@ import 'package:wick_apps/enums/model_attributes/widget_form_input_text.generate
 import 'package:wick_apps/enums/model_attributes/widget_form_input_image.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_form_input_checkbox.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_form_input_dropdown.generated.dart';
+import 'package:wick_apps/enums/model_attributes/widget_navigation_drawer.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_card.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_button.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_dialog.generated.dart';
@@ -123,6 +125,7 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputImage: WickEnumModelAttributeWidgetFormInputImage,
     WickWidgetFormInputCheckbox: WickEnumModelAttributeWidgetFormInputCheckbox,
     WickWidgetFormInputDropdown: WickEnumModelAttributeWidgetFormInputDropdown,
+    WickWidgetNavigationDrawer: WickEnumModelAttributeWidgetNavigationDrawer,
     WickWidgetCard: WickEnumModelAttributeWidgetCard,
     WickWidgetButton: WickEnumModelAttributeWidgetButton,
     WickWidgetDialog: WickEnumModelAttributeWidgetDialog,
@@ -255,13 +258,13 @@ class WickUtilityModelRegistry {
       additionalActionButtons: WickUtilityTypeConverter.convert<List<Widget>>(attributes['additionalActionButtons']),
       displayMainNavigation: WickUtilityTypeConverter.convert<bool>(attributes['displayMainNavigation']),
       icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon']),
-      drawer: WickUtilityTypeConverter.convert<Widget?>(attributes['drawer'])
+      availableDrawerRoutes: WickUtilityTypeConverter.convert<List<String>>(attributes['availableDrawerRoutes'])
     ),
     WickPageDashboardBase: (attributes) => WickPageDashboardBase(
       name: WickUtilityTypeConverter.convert<String>(attributes['name']),
       tiles: WickUtilityTypeConverter.convert<List<WickModelTile>>(attributes['tiles']),
       icon: WickUtilityTypeConverter.convert<IconData?>(attributes['icon']),
-      drawer: WickUtilityTypeConverter.convert<Widget?>(attributes['drawer'])
+      availableDrawerRoutes: WickUtilityTypeConverter.convert<List<String>>(attributes['availableDrawerRoutes'])
     ),
     WickPageLoading: (attributes) => WickPageLoading(
       action: WickUtilityTypeConverter.convert<String?>(attributes['action'])
@@ -308,6 +311,9 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputDropdown: (attributes) => WickWidgetFormInputDropdown(
       input: WickUtilityTypeConverter.convert<WickModelFormInputDropdown>(attributes['input']),
       onChanged: WickUtilityTypeConverter.convert<Function(String?)>(attributes['onChanged'])
+    ),
+    WickWidgetNavigationDrawer: (attributes) => WickWidgetNavigationDrawer(
+      availableRoutes: WickUtilityTypeConverter.convert<List<String>>(attributes['availableRoutes'])
     ),
     WickWidgetCard: (attributes) => WickWidgetCard(
       icon: WickUtilityTypeConverter.convert<IconData>(attributes['icon']),
@@ -472,13 +478,13 @@ class WickUtilityModelRegistry {
       'additionalActionButtons': (model) => (model as WickPageBase).additionalActionButtons,
       'displayMainNavigation': (model) => (model as WickPageBase).displayMainNavigation,
       'icon': (model) => (model as WickPageBase).icon,
-      'drawer': (model) => (model as WickPageBase).drawer
+      'availableDrawerRoutes': (model) => (model as WickPageBase).availableDrawerRoutes
     },
     WickPageDashboardBase: {
       'name': (model) => (model as WickPageDashboardBase).name,
       'tiles': (model) => (model as WickPageDashboardBase).tiles,
       'icon': (model) => (model as WickPageDashboardBase).icon,
-      'drawer': (model) => (model as WickPageDashboardBase).drawer
+      'availableDrawerRoutes': (model) => (model as WickPageDashboardBase).availableDrawerRoutes
     },
     WickPageLoading: {
       'action': (model) => (model as WickPageLoading).action
@@ -525,6 +531,9 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputDropdown: {
       'input': (model) => (model as WickWidgetFormInputDropdown).input,
       'onChanged': (model) => (model as WickWidgetFormInputDropdown).onChanged
+    },
+    WickWidgetNavigationDrawer: {
+      'availableRoutes': (model) => (model as WickWidgetNavigationDrawer).availableRoutes
     },
     WickWidgetCard: {
       'icon': (model) => (model as WickWidgetCard).icon,

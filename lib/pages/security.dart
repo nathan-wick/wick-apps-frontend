@@ -17,8 +17,15 @@ class WickPageSecurity extends StatelessWidget {
           name: 'Active Sessions',
           icon: Icons.directions_run,
           content: [WickWidgetTileContentActiveSessions()],
-          activeByDefault: false,
+          activeByDefault: true,
         ),
+      ],
+      availableDrawerRoutes: [
+        'account',
+        'profile',
+        'preferences',
+        'security',
+        'sign-out',
       ],
     );
   }

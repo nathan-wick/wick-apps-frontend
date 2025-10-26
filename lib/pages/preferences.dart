@@ -18,14 +18,21 @@ class WickPagePreferences extends StatelessWidget {
           name: 'Theme Preferences',
           icon: Icons.format_paint,
           content: [WickWidgetTileContentThemePreferences()],
-          activeByDefault: false,
+          activeByDefault: true,
         ),
         WickModelTile(
           name: 'Time Preferences',
           icon: Icons.timer,
           content: [WickWidgetTileContentTimePreferences()],
-          activeByDefault: false,
+          activeByDefault: true,
         ),
+      ],
+      availableDrawerRoutes: [
+        'account',
+        'profile',
+        'preferences',
+        'security',
+        'sign-out',
       ],
     );
   }

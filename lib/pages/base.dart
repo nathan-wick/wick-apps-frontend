@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/navigation.dart';
 import '../utilities/style_constants.dart';
 import '../widgets/icon_button.dart';
 import '../widgets/navigation_bar.dart';
+import '../widgets/navigation_drawer.dart';
 
 class WickPageBase extends StatelessWidget {
   final String title;
@@ -13,7 +12,7 @@ class WickPageBase extends StatelessWidget {
   final List<Widget> additionalActionButtons;
   final bool displayMainNavigation;
   final IconData? icon;
-  final Widget? drawer;
+  final List<String> availableDrawerRoutes;
 
   const WickPageBase({
     super.key,
@@ -23,16 +22,14 @@ class WickPageBase extends StatelessWidget {
     this.alignment = Alignment.topCenter,
     this.displayMainNavigation = true,
     this.icon,
-    this.drawer,
+    this.availableDrawerRoutes = const [],
   });
 
   @override
   Widget build(BuildContext context) {
-    final WickProviderNavigation navigationProvider =
-        Provider.of<WickProviderNavigation>(context, listen: false);
     final List<Widget> finalActionButtons = [
       ...additionalActionButtons,
-      if (drawer != null)
+      if (availableDrawerRoutes.isNotEmpty)
         Builder(
           builder:
               (context) => WickWidgetIconButton(
@@ -47,26 +44,16 @@ class WickPageBase extends StatelessWidget {
         preferredSize: const Size.fromHeight(
           WickUtilityStyleConstants.barHeight,
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(
-              WickUtilityStyleConstants.boarderRadius,
-            ),
-            bottomRight: Radius.circular(
-              WickUtilityStyleConstants.boarderRadius,
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
           ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Theme.of(context).primaryColor,
-            title: Text(
-              title,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-            ),
-            actions: finalActionButtons,
-          ),
+          actions: finalActionButtons,
         ),
       ),
       body: SafeArea(
@@ -96,7 +83,12 @@ class WickPageBase extends StatelessWidget {
           ],
         ),
       ),
-      endDrawer: drawer,
+      endDrawer:
+          availableDrawerRoutes.isEmpty
+              ? null
+              : WickWidgetNavigationDrawer(
+                availableRoutes: availableDrawerRoutes,
+              ),
     );
   }
 }

@@ -6,5 +6,5 @@ enum WickEnumModelAttributePageDashboardBase {
   name,
   tiles,
   icon,
-  drawer;
+  availableDrawerRoutes;
 }

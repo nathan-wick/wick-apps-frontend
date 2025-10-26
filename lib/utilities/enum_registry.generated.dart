@@ -20,6 +20,7 @@ import 'package:wick_apps/enums/model_attributes/paginated_response.generated.da
 import 'package:wick_apps/enums/model_attributes/page_dashboard_base.generated.dart';
 import 'package:wick_apps/enums/model_attributes/session.generated.dart';
 import 'package:wick_apps/enums/model_attributes/page_loading.generated.dart';
+import 'package:wick_apps/enums/model_attributes/widget_navigation_drawer.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_button.generated.dart';
 import 'package:wick_apps/enums/model_attributes/form_input_field.generated.dart';
 import 'package:wick_apps/enums/model_attributes/widget_dialog.generated.dart';
@@ -75,6 +76,7 @@ class WickUtilityEnumRegistry {
     WickEnumModelAttributePageDashboardBase: WickEnumModelAttributePageDashboardBase.values,
     WickEnumModelAttributeSession: WickEnumModelAttributeSession.values,
     WickEnumModelAttributePageLoading: WickEnumModelAttributePageLoading.values,
+    WickEnumModelAttributeWidgetNavigationDrawer: WickEnumModelAttributeWidgetNavigationDrawer.values,
     WickEnumModelAttributeWidgetButton: WickEnumModelAttributeWidgetButton.values,
     WickEnumModelAttributeFormInputField: WickEnumModelAttributeFormInputField.values,
     WickEnumModelAttributeWidgetDialog: WickEnumModelAttributeWidgetDialog.values,

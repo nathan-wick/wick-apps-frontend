@@ -9,5 +9,5 @@ enum WickEnumModelAttributePageBase {
   additionalActionButtons,
   displayMainNavigation,
   icon,
-  drawer;
+  availableDrawerRoutes;
 }

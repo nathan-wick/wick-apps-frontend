@@ -48,6 +48,13 @@ class WickPageAccount extends StatelessWidget {
           activeByDefault: false,
         ),
       ],
+      availableDrawerRoutes: [
+        'account',
+        'profile',
+        'preferences',
+        'security',
+        'sign-out',
+      ],
     );
   }
 }

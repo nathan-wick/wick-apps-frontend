@@ -16,16 +16,14 @@ class WickPageDashboardBase extends StatefulWidget {
   final String name;
   final List<WickModelTile> tiles;
   final IconData? icon;
-
-  // TODO Only use wick drawer. Do the same for page base.
-  final Widget? drawer;
+  final List<String> availableDrawerRoutes;
 
   const WickPageDashboardBase({
     super.key,
     required this.name,
     required this.tiles,
     this.icon,
-    this.drawer,
+    this.availableDrawerRoutes = const [],
   });
 
   @override
@@ -55,7 +53,7 @@ class _WickPageDashboardBaseState extends State<WickPageDashboardBase> {
         return WickPageBase(
           title: widget.name,
           icon: widget.icon,
-          drawer: widget.drawer,
+          availableDrawerRoutes: widget.availableDrawerRoutes,
           content: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
