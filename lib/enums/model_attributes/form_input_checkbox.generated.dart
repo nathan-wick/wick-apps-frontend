@@ -4,5 +4,8 @@
 /// Attributes and their types for WickModelFormInputCheckbox.
 enum WickEnumModelAttributeFormInputCheckbox {
   displayName,
-  defaultValue;
+  defaultValue,
+  name,
+  autoFill,
+  helpText;
 }

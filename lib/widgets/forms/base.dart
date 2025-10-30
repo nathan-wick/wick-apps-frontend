@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../enums/button_type.dart';
+import '../../enums/log_type.dart';
 import '../../models/form_inputs/base.dart';
 import '../../models/form_inputs/checkbox.dart';
 import '../../models/form_inputs/dropdown.dart';
 import '../../models/form_inputs/image.dart';
 import '../../models/form_inputs/text.dart';
 import '../../utilities/local_storage.dart';
+import '../../utilities/logger.dart';
 import '../../utilities/string_formatter.dart';
 import '../../utilities/style_constants.dart';
 import '../../utilities/type_converter.dart';
@@ -90,6 +92,10 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
   Future<List<Widget>> _buildFormContent() async {
     List<Widget> content = [];
     bool firstInputAssigned = false;
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': 'buildFormContent',
+      'inputs': widget.inputs,
+    });
     for (WickModelFormInputBase input in widget.inputs) {
       final String inputKey = WickUtilityStringFormatter.toSnakeCase(
         input.name,
@@ -193,6 +199,10 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
   }
 
   void _submitForm() {
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': 'submitForm',
+      'values': formValues,
+    });
     if (widget.autoSubmit) {
       if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
       _debounceTimer = Timer(widget.debounce, () {

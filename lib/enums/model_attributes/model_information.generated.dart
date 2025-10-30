@@ -2,8 +2,12 @@
 // Generate this file by running `dart run :generate`
 
 /// Attributes and their types for WickModelModelInformation.
-enum WickEnumModelAttributeInformation {
-  className,
+enum WickEnumModelAttributeModelInformation {
+  modelName,
   importPath,
-  attributes;
+  attributes,
+  isAbstract,
+  parentModelName,
+  attributeTypeDependencyImportPaths,
+  constructorParameters;
 }

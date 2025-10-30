@@ -7,5 +7,8 @@ enum WickEnumModelAttributeFormInputText {
   keyboardType,
   isSecret,
   multipleLines,
-  defaultValue;
+  defaultValue,
+  name,
+  autoFill,
+  helpText;
 }

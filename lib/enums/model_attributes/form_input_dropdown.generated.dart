@@ -4,5 +4,8 @@
 /// Attributes and their types for WickModelFormInputDropdown.
 enum WickEnumModelAttributeFormInputDropdown {
   options,
-  defaultValue;
+  defaultValue,
+  name,
+  autoFill,
+  helpText;
 }

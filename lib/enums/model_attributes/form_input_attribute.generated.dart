@@ -1,10 +1,9 @@
 // THIS FILE IS AUTO-GENERATED - DO NOT EDIT MANUALLY
 // Generate this file by running `dart run :generate`
 
-/// Attributes and their types for WickModelFormInputImage.
-enum WickEnumModelAttributeFormInputImage {
-  shape,
-  maxSize,
+/// Attributes and their types for WickModelFormInputAttribute.
+enum WickEnumModelAttributeFormInputAttribute {
+  attributeName,
   defaultValue,
   name,
   autoFill,

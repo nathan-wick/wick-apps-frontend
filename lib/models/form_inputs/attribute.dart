@@ -1,18 +1,18 @@
 import '../../utilities/string_formatter.dart';
 import 'base.dart';
 
-class WickModelFormInputField extends WickModelFormInputBase {
-  final String fieldName;
+class WickModelFormInputAttribute extends WickModelFormInputBase {
+  final String attributeName;
   final dynamic defaultValue;
 
-  WickModelFormInputField({
-    required this.fieldName,
+  WickModelFormInputAttribute({
+    required this.attributeName,
     this.defaultValue,
     super.autoFill,
     super.helpText,
   }) : super(
          name: WickUtilityStringFormatter.titleCase(
-           WickUtilityStringFormatter.replaceSpaces(fieldName, ' '),
+           WickUtilityStringFormatter.replaceSpaces(attributeName, ' '),
          ),
        );
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wick_apps/controllers/user.dart';
-import 'package:wick_apps/models/form_inputs/field.dart';
+import 'package:wick_apps/models/form_inputs/attribute.dart';
 import 'package:wick_apps/providers/preferences.dart';
 import 'package:wick_apps/widgets/forms/stack.dart';
 
+import '../../enums/model_attributes/preferences.generated.dart';
 import '../../models/preferences.dart';
 import '../loading_indicator.dart';
 
@@ -20,7 +21,11 @@ class WickWidgetTileContentTimePreferences extends StatelessWidget {
     }
     return WickWidgetFormStack(
       name: 'Time Preferences',
-      inputs: [WickModelFormInputField(fieldName: 'dateFormat')],
+      inputs: [
+        WickModelFormInputAttribute(
+          attributeName: WickEnumModelAttributePreferences.dateFormat.name,
+        ),
+      ],
       controller: WickControllerUser(),
       primaryKey: preferences.userId,
       autoSubmit: true,

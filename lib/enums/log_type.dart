@@ -7,4 +7,5 @@ enum WickEnumLogType {
   provider,
   navigation,
   typeConversion,
+  form,
 }

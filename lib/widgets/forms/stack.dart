@@ -4,21 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:wick_apps/controllers/base.dart';
 
 import '../../enums/keyboard_type.dart';
+import '../../enums/log_type.dart';
+import '../../models/form_inputs/attribute.dart';
 import '../../models/form_inputs/base.dart';
 import '../../models/form_inputs/checkbox.dart';
 import '../../models/form_inputs/dropdown.dart';
-import '../../models/form_inputs/field.dart';
 import '../../models/form_inputs/text.dart';
 import '../../utilities/enum_helper.dart';
+import '../../utilities/logger.dart';
 import '../../utilities/model_helper.dart';
 import '../../utilities/type_converter.dart';
+import '../loading_indicator.dart';
 import 'base.dart';
 
 // TODO Only get and save used attributes
 
 class WickWidgetFormStack<T> extends StatefulWidget {
   final String name;
-  final List<WickModelFormInputField> inputs;
+  final List<WickModelFormInputAttribute> inputs;
   final WickControllerBase<T> controller;
   final int? primaryKey;
   final String submitButtonText;
@@ -47,106 +50,105 @@ class WickWidgetFormStack<T> extends StatefulWidget {
 }
 
 class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
-  T? _savedState;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WickWidgetFormBase(
-      name: widget.name,
-      inputs: _getInputs(),
-      submitButtonText: widget.submitButtonText,
-      autoSubmit: widget.autoSubmit,
-      autoFocus: widget.autoFocus,
-      debounce: widget.debounce,
-      onSubmit: _onSubmit,
-      onCancel: widget.onCancel,
+    return FutureBuilder<T?>(
+      future: _loadSavedState(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return WickWidgetFormBase(
+            name: widget.name,
+            inputs: _getInputs(snapshot.data),
+            submitButtonText: widget.submitButtonText,
+            autoSubmit: widget.autoSubmit,
+            autoFocus: widget.autoFocus,
+            debounce: widget.debounce,
+            onSubmit: _onSubmit,
+            onCancel: widget.onCancel,
+          );
+        } else {
+          return const WickWidgetLoadingIndicator();
+        }
+      },
     );
   }
 
-  Future<void> _loadSavedState() async {
-    final savedState = await widget.controller.getByPrimaryKey(
-      context,
-      widget.primaryKey,
-    );
-    if (savedState == null) return;
-    setState(() {
-      _savedState = savedState;
-    });
+  Future<T?> _loadSavedState() async {
+    return await widget.controller.getByPrimaryKey(context, widget.primaryKey);
   }
 
-  List<WickModelFormInputBase> _getInputs() {
+  List<WickModelFormInputBase> _getInputs(T? savedState) {
     List<WickModelFormInputBase> inputs = [];
-    if (_savedState == null) return inputs;
-    for (WickModelFormInputField input in widget.inputs) {
-      final dynamic fieldValue = WickUtilityModelHelper.getAttributeValue(
-        _savedState,
-        input.fieldName,
+    for (WickModelFormInputAttribute input in widget.inputs) {
+      final dynamic attributeValue = WickUtilityModelHelper.getAttributeValue(
+        savedState,
+        input.attributeName,
       );
-      if (fieldValue is Uint8List) {
-        // TODO Add an image input
-        continue;
-      }
-      final String fieldValueString = WickUtilityTypeConverter.convert(
-        fieldValue,
+      final dynamic defaultValue = attributeValue ?? input.defaultValue;
+      final Type attributeType = WickUtilityModelHelper.getAttributeType<T>(
+        input.attributeName,
       );
-      if (fieldValue is String) {
+      debugPrint(attributeType.toString()); // TODO Delete
+      if (attributeType == String) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: input.defaultValue ?? fieldValueString,
+            defaultValue: defaultValue,
             helpText: input.helpText,
           ),
         );
-      } else if (fieldValue is int || fieldValue is double) {
+      } else if (attributeType == int || attributeType == double) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: input.defaultValue ?? fieldValueString,
+            defaultValue: WickUtilityTypeConverter.convert(input.defaultValue),
             helpText: input.helpText,
             keyboardType: WickEnumKeyboardType.number,
           ),
         );
-      } else if (fieldValue is DateTime) {
+      } else if (attributeType == DateTime) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: input.defaultValue ?? fieldValueString,
+            defaultValue: WickUtilityTypeConverter.convert(defaultValue),
             helpText: input.helpText,
             keyboardType: WickEnumKeyboardType.date,
           ),
         );
-      } else if (fieldValue is bool) {
+      } else if (attributeType == bool) {
         inputs.add(
           WickModelFormInputCheckbox(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: input.defaultValue ?? fieldValueString,
+            defaultValue: defaultValue,
             helpText: input.helpText,
           ),
         );
-      } else if (fieldValue is Enum) {
+      } else if (attributeType == Enum) {
         inputs.add(
           WickModelFormInputDropdown(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: input.defaultValue ?? fieldValueString,
+            defaultValue: WickUtilityTypeConverter.convert(defaultValue),
             helpText: input.helpText,
             options: WickUtilityEnumHelper.getValuesAsDropdownOptions(
-              fieldValue.runtimeType,
+              attributeType,
             ),
           ),
         );
+      } else if (attributeType == Uint8List) {
+        // TODO Add an image input
       }
     }
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': 'getInputs',
+      'savedState': savedState,
+      'attributesToCreateInputsFor': widget.inputs,
+      'createdInputs': inputs,
+    });
     return inputs;
   }
 
@@ -154,23 +156,13 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
     final T newModel = WickUtilityTypeConverter.convert(values);
     if (widget.primaryKey == null) {
       final createdModel = await widget.controller.create(context, newModel);
-      if (createdModel != null) {
-        setState(() {
-          _savedState = createdModel;
-        });
-        if (widget.afterSubmit != null) {
-          await widget.afterSubmit!(createdModel);
-        }
+      if (createdModel != null && widget.afterSubmit != null) {
+        await widget.afterSubmit!(createdModel);
       }
     } else {
       final updatedModel = await widget.controller.edit(context, newModel);
-      if (updatedModel != null) {
-        setState(() {
-          _savedState = updatedModel;
-        });
-        if (widget.afterSubmit != null) {
-          await widget.afterSubmit!(updatedModel);
-        }
+      if (updatedModel != null && widget.afterSubmit != null) {
+        await widget.afterSubmit!(updatedModel);
       }
     }
   }

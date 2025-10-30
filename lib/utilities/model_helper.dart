@@ -21,6 +21,12 @@ class WickUtilityModelHelper {
     return getter(object);
   }
 
+  /// Returns the type of an object's attribute given the attribute name
+  static Type getAttributeType<T>(String attributeName) {
+    final T? defaultObject = createInstance<T>({});
+    return getAttributeValue(defaultObject, attributeName).runtimeType;
+  }
+
   /// Returns the values of an object's attributes
   static Map<String, dynamic> getAttributeValues(Object? object) {
     if (object == null) return {};

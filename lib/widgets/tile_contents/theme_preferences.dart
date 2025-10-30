@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wick_apps/controllers/user.dart';
-import 'package:wick_apps/models/form_inputs/field.dart';
+import 'package:wick_apps/enums/model_attributes/preferences.generated.dart';
+import 'package:wick_apps/models/form_inputs/attribute.dart';
 import 'package:wick_apps/providers/preferences.dart';
 import 'package:wick_apps/widgets/forms/stack.dart';
 
@@ -21,8 +22,12 @@ class WickWidgetTileContentThemePreferences extends StatelessWidget {
     return WickWidgetFormStack(
       name: 'Theme Preferences',
       inputs: [
-        WickModelFormInputField(fieldName: 'brightness'),
-        WickModelFormInputField(fieldName: 'primaryColor'),
+        WickModelFormInputAttribute(
+          attributeName: WickEnumModelAttributePreferences.brightness.name,
+        ),
+        WickModelFormInputAttribute(
+          attributeName: WickEnumModelAttributePreferences.primaryColor.name,
+        ),
       ],
       controller: WickControllerUser(),
       primaryKey: preferences.userId,
