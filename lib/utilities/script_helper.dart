@@ -15,7 +15,12 @@ class WickUtilityScriptHelper {
 
   /// Removes nullable markers and generic type parameters.
   static String extractBaseType(String type) {
-    return type.replaceAll('?', '').replaceAll(RegExp(r'<.*>'), '').trim();
+    return type
+        .replaceAll('?', '')
+        .replaceAll(RegExp(r'<.*>'), '')
+        .replaceAll(RegExp(r'\(.*\)'), '')
+        .replaceAll(RegExp(r'.* '), '')
+        .trim();
   }
 
   /// Returns true if the type is Not a primitive or common Flutter/Dart type.
@@ -167,7 +172,8 @@ class WickUtilityScriptHelper {
                 }
               }
             }
-            if (attributes.isNotEmpty) {
+            if (attributes.isNotEmpty &&
+                className != "WickUtilityScriptHelper") {
               models.add(
                 WickModelModelInformation(
                   modelName: className,
@@ -237,24 +243,55 @@ class WickUtilityScriptHelper {
             StringBuffer(),
           );
       enumOutput.writeln();
+      enumOutput.writeln("import 'package:flutter/foundation.dart';");
+      enumOutput.writeln("import 'package:flutter/material.dart';");
+      enumOutput.writeln(
+        "import 'package:wick_apps/enums/model_attributes/base.dart';",
+      );
+      final Set<String> customTypeImports = {};
+      for (final attributeType in model.attributes.values) {
+        final String baseType = extractBaseType(attributeType);
+        if (isCustomType(baseType)) {
+          final String? typeImport = findImportForType(
+            baseType,
+            Directory('lib'),
+          );
+          if (typeImport != null) {
+            customTypeImports.add("import 'package:wick_apps/$typeImport';");
+          }
+        }
+      }
+      for (final import in customTypeImports) {
+        enumOutput.writeln(import);
+      }
+      enumOutput.writeln();
       enumOutput.writeln(
         '/// Attributes and their types for ${model.modelName}.',
       );
-      enumOutput.writeln('enum $enumName {');
-      final attributeKeys = model.attributes.keys.toList();
+      enumOutput.writeln(
+        'enum $enumName implements WickEnumModelAttributeBase {',
+      );
+      final attributeEntries = model.attributes.entries.toList();
       for (
-        int attributeKeysIndex = 0;
-        attributeKeysIndex < attributeKeys.length;
-        attributeKeysIndex++
+        int attributeIndex = 0;
+        attributeIndex < attributeEntries.length;
+        attributeIndex++
       ) {
-        final attributeName = attributeKeys[attributeKeysIndex];
-        enumOutput.write('  $attributeName');
-        if (attributeKeysIndex < attributeKeys.length - 1) {
+        final attributeEntry = attributeEntries[attributeIndex];
+        enumOutput.write(
+          '  ${attributeEntry.key}(${extractBaseType(attributeEntry.value)})',
+        );
+        if (attributeIndex < attributeEntries.length - 1) {
           enumOutput.writeln(',');
         } else {
           enumOutput.writeln(';');
         }
       }
+      enumOutput.writeln();
+      enumOutput.writeln('  const $enumName(this.attributeType);');
+      enumOutput.writeln();
+      enumOutput.writeln('  @override');
+      enumOutput.writeln('  final Type attributeType;');
       enumOutput.writeln('}');
       final enumFile = File(enumFilePath);
       enumFile.createSync(recursive: true);

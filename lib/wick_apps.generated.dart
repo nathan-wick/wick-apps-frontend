@@ -19,6 +19,7 @@ export 'enums/file_sizes.dart';
 export 'enums/image_shapes.dart';
 export 'enums/keyboard_type.dart';
 export 'enums/log_type.dart';
+export 'enums/model_attributes/base.dart';
 export 'enums/model_attributes/dashboard_configuration.generated.dart';
 export 'enums/model_attributes/form_input_attribute.generated.dart';
 export 'enums/model_attributes/form_input_base.generated.dart';

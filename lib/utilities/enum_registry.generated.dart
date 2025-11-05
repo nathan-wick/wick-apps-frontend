@@ -3,44 +3,6 @@
 
 import 'package:wick_apps/enums/button_type.dart';
 import 'package:wick_apps/enums/image_shapes.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_base.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_dropdown.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_input_text.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_image.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_checkbox.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_loading_indicator.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_attribute.generated.dart';
-import 'package:wick_apps/enums/model_attributes/send_verification_email_response.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_icon_button.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_stack.generated.dart';
-import 'package:wick_apps/enums/model_attributes/user.generated.dart';
-import 'package:wick_apps/enums/model_attributes/navigation_option.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_dropdown_option.generated.dart';
-import 'package:wick_apps/enums/model_attributes/dashboard_configuration.generated.dart';
-import 'package:wick_apps/enums/model_attributes/paginated_response.generated.dart';
-import 'package:wick_apps/enums/model_attributes/page_dashboard_base.generated.dart';
-import 'package:wick_apps/enums/model_attributes/session.generated.dart';
-import 'package:wick_apps/enums/model_attributes/page_loading.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_navigation_drawer.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_button.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_dialog.generated.dart';
-import 'package:wick_apps/enums/model_attributes/sign_in_response.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_input_image.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_base.generated.dart';
-import 'package:wick_apps/enums/model_attributes/tile.generated.dart';
-import 'package:wick_apps/enums/model_attributes/tile_option.generated.dart';
-import 'package:wick_apps/enums/model_attributes/provider_navigation.generated.dart';
-import 'package:wick_apps/enums/model_attributes/provider_session.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_card.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_application.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_table.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_input_dropdown.generated.dart';
-import 'package:wick_apps/enums/model_attributes/widget_form_input_checkbox.generated.dart';
-import 'package:wick_apps/enums/model_attributes/page_base.generated.dart';
-import 'package:wick_apps/enums/model_attributes/page_initial.generated.dart';
-import 'package:wick_apps/enums/model_attributes/preferences.generated.dart';
-import 'package:wick_apps/enums/model_attributes/model_information.generated.dart';
-import 'package:wick_apps/enums/model_attributes/form_input_text.generated.dart';
 import 'package:wick_apps/enums/brightness.dart';
 import 'package:wick_apps/enums/date_format.dart';
 import 'package:wick_apps/enums/request_method.dart';
@@ -59,44 +21,6 @@ class WickUtilityEnumRegistry {
   static final Map<Type, List<Enum>> registry = {
     WickEnumButtonType: WickEnumButtonType.values,
     WickEnumImageShape: WickEnumImageShape.values,
-    WickEnumModelAttributeFormInputBase: WickEnumModelAttributeFormInputBase.values,
-    WickEnumModelAttributeFormInputDropdown: WickEnumModelAttributeFormInputDropdown.values,
-    WickEnumModelAttributeWidgetFormInputText: WickEnumModelAttributeWidgetFormInputText.values,
-    WickEnumModelAttributeFormInputImage: WickEnumModelAttributeFormInputImage.values,
-    WickEnumModelAttributeFormInputCheckbox: WickEnumModelAttributeFormInputCheckbox.values,
-    WickEnumModelAttributeWidgetLoadingIndicator: WickEnumModelAttributeWidgetLoadingIndicator.values,
-    WickEnumModelAttributeFormInputAttribute: WickEnumModelAttributeFormInputAttribute.values,
-    WickEnumModelAttributeSendVerificationEmailResponse: WickEnumModelAttributeSendVerificationEmailResponse.values,
-    WickEnumModelAttributeWidgetIconButton: WickEnumModelAttributeWidgetIconButton.values,
-    WickEnumModelAttributeWidgetFormStack: WickEnumModelAttributeWidgetFormStack.values,
-    WickEnumModelAttributeUser: WickEnumModelAttributeUser.values,
-    WickEnumModelAttributeNavigationOption: WickEnumModelAttributeNavigationOption.values,
-    WickEnumModelAttributeFormInputDropdownOption: WickEnumModelAttributeFormInputDropdownOption.values,
-    WickEnumModelAttributeDashboardConfiguration: WickEnumModelAttributeDashboardConfiguration.values,
-    WickEnumModelAttributePaginatedResponse: WickEnumModelAttributePaginatedResponse.values,
-    WickEnumModelAttributePageDashboardBase: WickEnumModelAttributePageDashboardBase.values,
-    WickEnumModelAttributeSession: WickEnumModelAttributeSession.values,
-    WickEnumModelAttributePageLoading: WickEnumModelAttributePageLoading.values,
-    WickEnumModelAttributeWidgetNavigationDrawer: WickEnumModelAttributeWidgetNavigationDrawer.values,
-    WickEnumModelAttributeWidgetButton: WickEnumModelAttributeWidgetButton.values,
-    WickEnumModelAttributeWidgetDialog: WickEnumModelAttributeWidgetDialog.values,
-    WickEnumModelAttributeSignInResponse: WickEnumModelAttributeSignInResponse.values,
-    WickEnumModelAttributeWidgetFormInputImage: WickEnumModelAttributeWidgetFormInputImage.values,
-    WickEnumModelAttributeWidgetFormBase: WickEnumModelAttributeWidgetFormBase.values,
-    WickEnumModelAttributeTile: WickEnumModelAttributeTile.values,
-    WickEnumModelAttributeTileOption: WickEnumModelAttributeTileOption.values,
-    WickEnumModelAttributeProviderNavigation: WickEnumModelAttributeProviderNavigation.values,
-    WickEnumModelAttributeProviderSession: WickEnumModelAttributeProviderSession.values,
-    WickEnumModelAttributeWidgetCard: WickEnumModelAttributeWidgetCard.values,
-    WickEnumModelAttributeWidgetApplication: WickEnumModelAttributeWidgetApplication.values,
-    WickEnumModelAttributeWidgetTable: WickEnumModelAttributeWidgetTable.values,
-    WickEnumModelAttributeWidgetFormInputDropdown: WickEnumModelAttributeWidgetFormInputDropdown.values,
-    WickEnumModelAttributeWidgetFormInputCheckbox: WickEnumModelAttributeWidgetFormInputCheckbox.values,
-    WickEnumModelAttributePageBase: WickEnumModelAttributePageBase.values,
-    WickEnumModelAttributePageInitial: WickEnumModelAttributePageInitial.values,
-    WickEnumModelAttributePreferences: WickEnumModelAttributePreferences.values,
-    WickEnumModelAttributeModelInformation: WickEnumModelAttributeModelInformation.values,
-    WickEnumModelAttributeFormInputText: WickEnumModelAttributeFormInputText.values,
     WickEnumBrightness: WickEnumBrightness.values,
     WickEnumDateFormat: WickEnumDateFormat.values,
     WickEnumRequestMethod: WickEnumRequestMethod.values,
