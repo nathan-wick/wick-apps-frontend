@@ -23,10 +23,10 @@ class WickWidgetTileContentThemePreferences extends StatelessWidget {
       name: 'Theme Preferences',
       inputs: [
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributePreferences.brightness.name,
+          attribute: WickEnumModelAttributePreferences.brightness,
         ),
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributePreferences.primaryColor.name,
+          attribute: WickEnumModelAttributePreferences.primaryColor,
         ),
       ],
       controller: WickControllerUser(),

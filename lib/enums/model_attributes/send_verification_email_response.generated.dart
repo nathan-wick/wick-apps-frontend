@@ -13,4 +13,7 @@ enum WickEnumModelAttributeSendVerificationEmailResponse implements WickEnumMode
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

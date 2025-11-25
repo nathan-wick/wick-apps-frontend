@@ -34,4 +34,19 @@ class WickUtilityStringFormatter {
         })
         .join(' ');
   }
+
+  /// Formats a string value to camelCase.
+  /// For example, 'My FavoriteString' becomes 'myFavoriteString'.
+  static String toCamelCase(String value) {
+    final words = replaceSpaces(value, ' ').split(' ');
+    if (words.isEmpty) return value;
+    return words.first.toLowerCase() +
+        words
+            .skip(1)
+            .map((word) {
+              if (word.isEmpty) return word;
+              return word[0].toUpperCase() + word.substring(1).toLowerCase();
+            })
+            .join('');
+  }
 }

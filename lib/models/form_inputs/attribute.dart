@@ -1,18 +1,22 @@
+import '../../enums/model_attributes/base.dart';
 import '../../utilities/string_formatter.dart';
 import 'base.dart';
 
 class WickModelFormInputAttribute extends WickModelFormInputBase {
-  final String attributeName;
+  final WickEnumModelAttributeBase attribute;
   final dynamic defaultValue;
 
   WickModelFormInputAttribute({
-    required this.attributeName,
+    required this.attribute,
     this.defaultValue,
     super.autoFill,
     super.helpText,
   }) : super(
          name: WickUtilityStringFormatter.titleCase(
-           WickUtilityStringFormatter.replaceSpaces(attributeName, ' '),
+           WickUtilityStringFormatter.replaceSpaces(
+             attribute.attributeName,
+             ' ',
+           ),
          ),
        );
 }

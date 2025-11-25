@@ -15,4 +15,7 @@ enum WickEnumModelAttributeWidgetIconButton implements WickEnumModelAttributeBas
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

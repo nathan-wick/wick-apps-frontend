@@ -13,4 +13,7 @@ enum WickEnumModelAttributeWidgetNavigationDrawer implements WickEnumModelAttrib
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

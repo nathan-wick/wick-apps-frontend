@@ -23,7 +23,7 @@ class WickWidgetTileContentTimePreferences extends StatelessWidget {
       name: 'Time Preferences',
       inputs: [
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributePreferences.dateFormat.name,
+          attribute: WickEnumModelAttributePreferences.dateFormat,
         ),
       ],
       controller: WickControllerUser(),

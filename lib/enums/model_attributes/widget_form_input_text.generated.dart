@@ -17,4 +17,7 @@ enum WickEnumModelAttributeWidgetFormInputText implements WickEnumModelAttribute
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

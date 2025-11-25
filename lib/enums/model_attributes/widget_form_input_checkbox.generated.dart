@@ -15,4 +15,7 @@ enum WickEnumModelAttributeWidgetFormInputCheckbox implements WickEnumModelAttri
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

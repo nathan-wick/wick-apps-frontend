@@ -14,4 +14,7 @@ enum WickEnumModelAttributePaginatedResponse implements WickEnumModelAttributeBa
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

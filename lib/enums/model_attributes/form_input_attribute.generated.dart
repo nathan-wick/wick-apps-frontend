@@ -4,10 +4,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wick_apps/enums/model_attributes/base.dart';
+import 'package:wick_apps/enums/model_attributes/base.dart';
 
 /// Attributes and their types for WickModelFormInputAttribute.
 enum WickEnumModelAttributeFormInputAttribute implements WickEnumModelAttributeBase {
-  attributeName(String),
+  attribute(WickEnumModelAttributeBase),
   defaultValue(dynamic),
   name(String),
   autoFill(bool),
@@ -17,4 +18,7 @@ enum WickEnumModelAttributeFormInputAttribute implements WickEnumModelAttributeB
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

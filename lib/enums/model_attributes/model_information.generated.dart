@@ -19,4 +19,7 @@ enum WickEnumModelAttributeModelInformation implements WickEnumModelAttributeBas
 
   @override
   final Type attributeType;
+
+  @override
+  String get attributeName => this.name;
 }

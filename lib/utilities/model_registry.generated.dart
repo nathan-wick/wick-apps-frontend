@@ -194,7 +194,7 @@ class WickUtilityModelRegistry {
       helpText: WickUtilityTypeConverter.convert(attributes['helpText'])
     ),
     WickModelFormInputAttribute: (attributes) => WickModelFormInputAttribute(
-      attributeName: WickUtilityTypeConverter.convert(attributes['attributeName']),
+      attribute: WickUtilityTypeConverter.convert(attributes['attribute']),
       defaultValue: WickUtilityTypeConverter.convert(attributes['defaultValue']),
       autoFill: WickUtilityTypeConverter.convert(attributes['autoFill']),
       helpText: WickUtilityTypeConverter.convert(attributes['helpText'])
@@ -417,7 +417,7 @@ class WickUtilityModelRegistry {
       'helpText': (model) => model.helpText
     },
     WickModelFormInputAttribute: {
-      'attributeName': (model) => model.attributeName,
+      'attribute': (model) => model.attribute,
       'defaultValue': (model) => model.defaultValue,
       'name': (model) => model.name,
       'autoFill': (model) => model.autoFill,

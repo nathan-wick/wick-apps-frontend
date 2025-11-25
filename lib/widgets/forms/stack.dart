@@ -82,14 +82,10 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
     for (WickModelFormInputAttribute input in widget.inputs) {
       final dynamic attributeValue = WickUtilityModelHelper.getAttributeValue(
         savedState,
-        input.attributeName,
+        input.attribute.attributeName,
       );
       final dynamic defaultValue = attributeValue ?? input.defaultValue;
-      final Type attributeType = WickUtilityModelHelper.getAttributeType<T>(
-        input.attributeName,
-      );
-      debugPrint(attributeType.toString()); // TODO Delete
-      if (attributeType == String) {
+      if (input.attribute.attributeType == String) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
@@ -98,7 +94,8 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
             helpText: input.helpText,
           ),
         );
-      } else if (attributeType == int || attributeType == double) {
+      } else if (input.attribute.attributeType == int ||
+          input.attribute.attributeType == double) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
@@ -108,7 +105,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
             keyboardType: WickEnumKeyboardType.number,
           ),
         );
-      } else if (attributeType == DateTime) {
+      } else if (input.attribute.attributeType == DateTime) {
         inputs.add(
           WickModelFormInputText(
             name: input.name,
@@ -118,7 +115,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
             keyboardType: WickEnumKeyboardType.date,
           ),
         );
-      } else if (attributeType == bool) {
+      } else if (input.attribute.attributeType == bool) {
         inputs.add(
           WickModelFormInputCheckbox(
             name: input.name,
@@ -127,7 +124,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
             helpText: input.helpText,
           ),
         );
-      } else if (attributeType == Enum) {
+      } else if (input.attribute.attributeType == Enum) {
         inputs.add(
           WickModelFormInputDropdown(
             name: input.name,
@@ -135,11 +132,11 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
             defaultValue: WickUtilityTypeConverter.convert(defaultValue),
             helpText: input.helpText,
             options: WickUtilityEnumHelper.getValuesAsDropdownOptions(
-              attributeType,
+              input.attribute.attributeType,
             ),
           ),
         );
-      } else if (attributeType == Uint8List) {
+      } else if (input.attribute.attributeType == Uint8List) {
         // TODO Add an image input
       }
     }
@@ -153,7 +150,10 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
   }
 
   void _onSubmit(Map<String, dynamic> values) async {
+    debugPrint("MEOW");
+    debugPrint(values.toString());
     final T newModel = WickUtilityTypeConverter.convert(values);
+    // TODO Accurately do the primary key. Erroring now. Maybe update values before model creation
     if (widget.primaryKey == null) {
       final createdModel = await widget.controller.create(context, newModel);
       if (createdModel != null && widget.afterSubmit != null) {

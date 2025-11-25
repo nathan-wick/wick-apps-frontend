@@ -22,16 +22,16 @@ class WickWidgetTileContentProfile extends StatelessWidget {
       name: 'Profile',
       inputs: [
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributeUser.picture.name,
+          attribute: WickEnumModelAttributeUser.picture,
         ),
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributeUser.firstName.name,
+          attribute: WickEnumModelAttributeUser.firstName,
         ),
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributeUser.lastName.name,
+          attribute: WickEnumModelAttributeUser.lastName,
         ),
         WickModelFormInputAttribute(
-          attributeName: WickEnumModelAttributeUser.birthday.name,
+          attribute: WickEnumModelAttributeUser.birthday,
         ),
       ],
       controller: WickControllerUser(),

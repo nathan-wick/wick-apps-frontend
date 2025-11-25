@@ -292,6 +292,9 @@ class WickUtilityScriptHelper {
       enumOutput.writeln();
       enumOutput.writeln('  @override');
       enumOutput.writeln('  final Type attributeType;');
+      enumOutput.writeln();
+      enumOutput.writeln('  @override');
+      enumOutput.writeln('  String get attributeName => this.name;');
       enumOutput.writeln('}');
       final enumFile = File(enumFilePath);
       enumFile.createSync(recursive: true);
