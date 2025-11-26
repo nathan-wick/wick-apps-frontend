@@ -53,4 +53,9 @@ class WickUtilityModelHelper {
         );
     return constructor(filteredAttributes) as T;
   }
+
+  /// Returns the primary key attribute name for a model.
+  static String? findPrimaryKeyAttribute<T>() {
+    return WickUtilityModelRegistry.primaryKeyAttributes[T];
+  }
 }

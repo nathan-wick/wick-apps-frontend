@@ -100,16 +100,13 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
       final String inputKey = WickUtilityStringFormatter.toSnakeCase(
         input.name,
       );
-      final String modelKey = WickUtilityStringFormatter.toCamelCase(
-        input.name,
-      );
       final String localStorageKey =
           "form_${WickUtilityStringFormatter.toSnakeCase(widget.name)}_input_$inputKey";
       onChanged(String? value) {
         if (value == null || value.isEmpty) {
-          formValues.remove(modelKey);
+          formValues.remove(input.name);
         } else {
-          formValues[modelKey] = value;
+          formValues[input.name] = value;
         }
         if (input.autoFill) {
           WickUtilityLocalStorage().setStringValue(localStorageKey, value);
@@ -197,10 +194,7 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
     );
     final T? value = defaultValue ?? locallySavedValue;
     if (defaultValue != null) {
-      final String modelKey = WickUtilityStringFormatter.toCamelCase(
-        widget.name,
-      );
-      formValues[modelKey] = value;
+      formValues[input.name] = value;
     }
   }
 

@@ -399,11 +399,38 @@ class WickUtilityScriptHelper {
       output.writeln('    },');
     }
     output.writeln('  };');
+    output.writeln();
+    output.writeln(
+      '  static final Map<Type, String?> primaryKeyAttributes = {',
+    );
+    for (final WickModelModelInformation model in models) {
+      final primaryKeyField = findPrimaryKeyAttributeInModel(model);
+      output.writeln(
+        '    ${model.modelName}: ${primaryKeyField != null ? "'$primaryKeyField'" : 'null'},',
+      );
+    }
+    output.writeln('  };');
     output.writeln('}');
-    // TODO Use relative path
     const outputFileLocation = 'lib/utilities/model_registry.generated.dart';
     final outputFile = File(outputFileLocation);
     outputFile.createSync(recursive: true);
     outputFile.writeAsStringSync(output.toString());
+  }
+
+  static String? findPrimaryKeyAttributeInModel(
+    WickModelModelInformation model,
+  ) {
+    final file = File('lib/${model.importPath}');
+    if (!file.existsSync()) return null;
+    final fileContent = file.readAsStringSync();
+    final RegExp primaryKeyPattern = RegExp(
+      r'@WickModelAnnotationPrimaryKey\(\)\s+final\s+[\w<>?,\s]+\s+(\w+);',
+      multiLine: true,
+    );
+    final RegExpMatch? match = primaryKeyPattern.firstMatch(fileContent);
+    if (match != null) {
+      return match.group(1);
+    }
+    return null;
   }
 }

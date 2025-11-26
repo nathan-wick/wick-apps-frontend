@@ -8,7 +8,6 @@ import '../enums/text_validation.dart';
 import '../models/form_inputs/text.dart';
 import '../providers/navigation.dart';
 import '../providers/session.dart';
-import '../utilities/string_formatter.dart';
 import '../utilities/type_converter.dart';
 import 'forms/base.dart';
 import 'loading_indicator.dart';
@@ -85,7 +84,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
     Map<String, dynamic> formValues,
   ) async {
     final String? email = WickUtilityTypeConverter.convert(
-      formValues[WickUtilityStringFormatter.toCamelCase(_emailInputName)],
+      formValues[_emailInputName],
     );
     if (email == null) return;
     _setLoading(true, 'Sending verification email');
@@ -108,7 +107,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
 
   Future<void> _handleVerifySubmit(Map<String, dynamic> formValues) async {
     final String? code = WickUtilityTypeConverter.convert(
-      formValues[WickUtilityStringFormatter.toCamelCase(_codeInputName)],
+      formValues[_codeInputName],
     );
     if (code == null || _sessionId == null) return;
     _setLoading(true, 'Verifying');

@@ -13,6 +13,7 @@ import '../../models/form_inputs/text.dart';
 import '../../utilities/enum_helper.dart';
 import '../../utilities/logger.dart';
 import '../../utilities/model_helper.dart';
+import '../../utilities/string_formatter.dart';
 import '../../utilities/type_converter.dart';
 import '../loading_indicator.dart';
 import 'base.dart';
@@ -150,20 +151,23 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
   }
 
   void _onSubmit(Map<String, dynamic> values) async {
-    debugPrint("MEOW");
-    debugPrint(values.toString());
-    final T newModel = WickUtilityTypeConverter.convert(values);
-    // TODO Accurately do the primary key. Erroring now. Maybe update values before model creation
-    if (widget.primaryKey == null) {
-      final createdModel = await widget.controller.create(context, newModel);
-      if (createdModel != null && widget.afterSubmit != null) {
-        await widget.afterSubmit!(createdModel);
-      }
-    } else {
-      final updatedModel = await widget.controller.edit(context, newModel);
-      if (updatedModel != null && widget.afterSubmit != null) {
-        await widget.afterSubmit!(updatedModel);
-      }
+    values = values.map(
+      (key, value) =>
+          MapEntry(WickUtilityStringFormatter.toCamelCase(key), value),
+    );
+    final String? primaryKeyAttribute =
+        WickUtilityModelHelper.findPrimaryKeyAttribute<T>();
+    if (widget.primaryKey != null && primaryKeyAttribute != null) {
+      values[primaryKeyAttribute] = widget.primaryKey;
+    }
+    final T typedValues = WickUtilityTypeConverter.convert(values);
+    // TODO If editing, pass in attributes changed. Backend will need updated too.
+    final T? newInstance =
+        values[primaryKeyAttribute] == null
+            ? await widget.controller.create(context, typedValues)
+            : await widget.controller.edit(context, typedValues);
+    if (newInstance != null && widget.afterSubmit != null) {
+      await widget.afterSubmit!(newInstance);
     }
   }
 }
