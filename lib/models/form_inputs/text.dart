@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../../enums/keyboard_type.dart';
 import '../../../enums/text_validation.dart';
 import 'base.dart';
@@ -8,6 +10,7 @@ class WickModelFormInputText extends WickModelFormInputBase {
   final bool isSecret;
   final bool multipleLines;
   final String? defaultValue;
+  final Widget? suffix;
 
   WickModelFormInputText({
     required super.name,
@@ -18,5 +21,6 @@ class WickModelFormInputText extends WickModelFormInputBase {
     this.keyboardType = WickEnumKeyboardType.text,
     this.isSecret = false,
     this.multipleLines = false,
+    this.suffix,
   });
 }

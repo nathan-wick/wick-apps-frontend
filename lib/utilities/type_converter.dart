@@ -67,6 +67,7 @@ class WickUtilityTypeConverter {
   /// Converts a dynamic value to a JSON-safe value.
   static Object? _toJsonSafeValue(dynamic value) {
     if (value == null) return null;
+    if (value is num || value is bool || value is String) return value;
     if (value is DateTime) return value.toUtc().toIso8601String();
     if (value is Enum) return value.name;
     if (value is List) {
@@ -212,6 +213,7 @@ class WickUtilityTypeConverter {
       return DateTime.fromMillisecondsSinceEpoch(value.toInt());
     }
     if (value is String) {
+      // TODO Fix date conversion
       if (dateFormat != null) {
         return _parseDateTime(value, dateFormat);
       }

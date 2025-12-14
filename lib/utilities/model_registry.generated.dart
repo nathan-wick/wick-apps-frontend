@@ -26,6 +26,8 @@ import 'package:wick_apps/models/form_inputs/checkbox.dart';
 import 'package:wick_apps/enums/model_attributes/form_input_checkbox.generated.dart';
 import 'package:wick_apps/models/form_inputs/dropdown.dart';
 import 'package:wick_apps/enums/model_attributes/form_input_dropdown.generated.dart';
+import 'package:wick_apps/models/form_inputs/date.dart';
+import 'package:wick_apps/enums/model_attributes/form_input_date.generated.dart';
 import 'package:wick_apps/models/form_inputs/attribute.dart';
 import 'package:wick_apps/enums/model_attributes/form_input_attribute.generated.dart';
 import 'package:wick_apps/models/send_verification_email_response.dart';
@@ -64,6 +66,8 @@ import 'package:wick_apps/widgets/forms/inputs/checkbox.dart';
 import 'package:wick_apps/enums/model_attributes/widget_form_input_checkbox.generated.dart';
 import 'package:wick_apps/widgets/forms/inputs/dropdown.dart';
 import 'package:wick_apps/enums/model_attributes/widget_form_input_dropdown.generated.dart';
+import 'package:wick_apps/widgets/forms/inputs/date.dart';
+import 'package:wick_apps/enums/model_attributes/widget_form_input_date.generated.dart';
 import 'package:wick_apps/widgets/navigation_drawer.dart';
 import 'package:wick_apps/enums/model_attributes/widget_navigation_drawer.generated.dart';
 import 'package:wick_apps/widgets/card.dart';
@@ -93,6 +97,7 @@ class WickUtilityModelRegistry {
     WickModelFormInputDropdownOption: WickEnumModelAttributeFormInputDropdownOption,
     WickModelFormInputCheckbox: WickEnumModelAttributeFormInputCheckbox,
     WickModelFormInputDropdown: WickEnumModelAttributeFormInputDropdown,
+    WickModelFormInputDate: WickEnumModelAttributeFormInputDate,
     WickModelFormInputAttribute: WickEnumModelAttributeFormInputAttribute,
     WickModelSendVerificationEmailResponse: WickEnumModelAttributeSendVerificationEmailResponse,
     WickModelWickProviderSession: WickEnumModelAttributeProviderSession,
@@ -112,6 +117,7 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputImage: WickEnumModelAttributeWidgetFormInputImage,
     WickWidgetFormInputCheckbox: WickEnumModelAttributeWidgetFormInputCheckbox,
     WickWidgetFormInputDropdown: WickEnumModelAttributeWidgetFormInputDropdown,
+    WickWidgetFormInputDate: WickEnumModelAttributeWidgetFormInputDate,
     WickWidgetNavigationDrawer: WickEnumModelAttributeWidgetNavigationDrawer,
     WickWidgetCard: WickEnumModelAttributeWidgetCard,
     WickWidgetButton: WickEnumModelAttributeWidgetButton,
@@ -162,6 +168,7 @@ class WickUtilityModelRegistry {
       isSecret: WickUtilityTypeConverter.convert(attributes['isSecret']),
       multipleLines: WickUtilityTypeConverter.convert(attributes['multipleLines']),
       defaultValue: WickUtilityTypeConverter.convert(attributes['defaultValue']),
+      suffix: WickUtilityTypeConverter.convert(attributes['suffix']),
       name: WickUtilityTypeConverter.convert(attributes['name']),
       autoFill: WickUtilityTypeConverter.convert(attributes['autoFill']),
       helpText: WickUtilityTypeConverter.convert(attributes['helpText'])
@@ -188,6 +195,12 @@ class WickUtilityModelRegistry {
     ),
     WickModelFormInputDropdown: (attributes) => WickModelFormInputDropdown(
       options: WickUtilityTypeConverter.convert(attributes['options']),
+      defaultValue: WickUtilityTypeConverter.convert(attributes['defaultValue']),
+      name: WickUtilityTypeConverter.convert(attributes['name']),
+      autoFill: WickUtilityTypeConverter.convert(attributes['autoFill']),
+      helpText: WickUtilityTypeConverter.convert(attributes['helpText'])
+    ),
+    WickModelFormInputDate: (attributes) => WickModelFormInputDate(
       defaultValue: WickUtilityTypeConverter.convert(attributes['defaultValue']),
       name: WickUtilityTypeConverter.convert(attributes['name']),
       autoFill: WickUtilityTypeConverter.convert(attributes['autoFill']),
@@ -289,7 +302,8 @@ class WickUtilityModelRegistry {
       input: WickUtilityTypeConverter.convert(attributes['input']),
       onChanged: WickUtilityTypeConverter.convert(attributes['onChanged']),
       onEnterPressed: WickUtilityTypeConverter.convert(attributes['onEnterPressed']),
-      focusNode: WickUtilityTypeConverter.convert(attributes['focusNode'])
+      focusNode: WickUtilityTypeConverter.convert(attributes['focusNode']),
+      controller: WickUtilityTypeConverter.convert(attributes['controller'])
     ),
     WickWidgetFormInputImage: (attributes) => WickWidgetFormInputImage(
       input: WickUtilityTypeConverter.convert(attributes['input']),
@@ -302,6 +316,12 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputDropdown: (attributes) => WickWidgetFormInputDropdown(
       input: WickUtilityTypeConverter.convert(attributes['input']),
       onChanged: WickUtilityTypeConverter.convert(attributes['onChanged'])
+    ),
+    WickWidgetFormInputDate: (attributes) => WickWidgetFormInputDate(
+      input: WickUtilityTypeConverter.convert(attributes['input']),
+      onChanged: WickUtilityTypeConverter.convert(attributes['onChanged']),
+      onEnterPressed: WickUtilityTypeConverter.convert(attributes['onEnterPressed']),
+      focusNode: WickUtilityTypeConverter.convert(attributes['focusNode'])
     ),
     WickWidgetNavigationDrawer: (attributes) => WickWidgetNavigationDrawer(
       availableRoutes: WickUtilityTypeConverter.convert(attributes['availableRoutes'])
@@ -385,6 +405,7 @@ class WickUtilityModelRegistry {
       'isSecret': (model) => model.isSecret,
       'multipleLines': (model) => model.multipleLines,
       'defaultValue': (model) => model.defaultValue,
+      'suffix': (model) => model.suffix,
       'name': (model) => model.name,
       'autoFill': (model) => model.autoFill,
       'helpText': (model) => model.helpText
@@ -411,6 +432,12 @@ class WickUtilityModelRegistry {
     },
     WickModelFormInputDropdown: {
       'options': (model) => model.options,
+      'defaultValue': (model) => model.defaultValue,
+      'name': (model) => model.name,
+      'autoFill': (model) => model.autoFill,
+      'helpText': (model) => model.helpText
+    },
+    WickModelFormInputDate: {
       'defaultValue': (model) => model.defaultValue,
       'name': (model) => model.name,
       'autoFill': (model) => model.autoFill,
@@ -513,7 +540,9 @@ class WickUtilityModelRegistry {
       'input': (model) => model.input,
       'onChanged': (model) => model.onChanged,
       'onEnterPressed': (model) => model.onEnterPressed,
-      'focusNode': (model) => model.focusNode
+      'focusNode': (model) => model.focusNode,
+      'controller': (model) => model.controller,
+      '_controller': (model) => model._controller
     },
     WickWidgetFormInputImage: {
       'input': (model) => model.input,
@@ -526,6 +555,12 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputDropdown: {
       'input': (model) => model.input,
       'onChanged': (model) => model.onChanged
+    },
+    WickWidgetFormInputDate: {
+      'input': (model) => model.input,
+      'onChanged': (model) => model.onChanged,
+      'onEnterPressed': (model) => model.onEnterPressed,
+      'focusNode': (model) => model.focusNode
     },
     WickWidgetNavigationDrawer: {
       'availableRoutes': (model) => model.availableRoutes
@@ -581,6 +616,7 @@ class WickUtilityModelRegistry {
     WickModelFormInputDropdownOption: null,
     WickModelFormInputCheckbox: null,
     WickModelFormInputDropdown: null,
+    WickModelFormInputDate: null,
     WickModelFormInputAttribute: null,
     WickModelSendVerificationEmailResponse: null,
     WickModelWickProviderSession: null,
@@ -600,6 +636,7 @@ class WickUtilityModelRegistry {
     WickWidgetFormInputImage: null,
     WickWidgetFormInputCheckbox: null,
     WickWidgetFormInputDropdown: null,
+    WickWidgetFormInputDate: null,
     WickWidgetNavigationDrawer: null,
     WickWidgetCard: null,
     WickWidgetButton: null,

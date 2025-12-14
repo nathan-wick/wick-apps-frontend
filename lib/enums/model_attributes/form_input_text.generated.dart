@@ -13,6 +13,7 @@ enum WickEnumModelAttributeFormInputText implements WickEnumModelAttributeBase {
   isSecret(bool),
   multipleLines(bool),
   defaultValue(String),
+  suffix(Widget),
   name(String),
   autoFill(bool),
   helpText(String);

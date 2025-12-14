@@ -6,6 +6,7 @@ import '../../enums/button_type.dart';
 import '../../enums/log_type.dart';
 import '../../models/form_inputs/base.dart';
 import '../../models/form_inputs/checkbox.dart';
+import '../../models/form_inputs/date.dart';
 import '../../models/form_inputs/dropdown.dart';
 import '../../models/form_inputs/image.dart';
 import '../../models/form_inputs/text.dart';
@@ -17,6 +18,7 @@ import '../../utilities/type_converter.dart';
 import '../button.dart';
 import '../loading_indicator.dart';
 import 'inputs/checkbox.dart';
+import 'inputs/date.dart';
 import 'inputs/dropdown.dart';
 import 'inputs/image.dart';
 import 'inputs/text.dart';
@@ -120,6 +122,28 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
         _setDefaultValue(localStorageKey, input, input.defaultValue);
         content.add(
           WickWidgetFormInputText(
+            input: input,
+            onChanged: onChanged,
+            onEnterPressed: () {
+              if (input == widget.inputs.last) {
+                _submitForm();
+              }
+            },
+            focusNode:
+                widget.autoFocus && !firstInputAssigned
+                    ? firstInputFocusNode
+                    : null,
+          ),
+        );
+        if (!firstInputAssigned) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            firstInputFocusNode.requestFocus();
+          });
+        }
+      } else if (input is WickModelFormInputDate) {
+        _setDefaultValue(localStorageKey, input, input.defaultValue);
+        content.add(
+          WickWidgetFormInputDate(
             input: input,
             onChanged: onChanged,
             onEnterPressed: () {

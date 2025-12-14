@@ -11,7 +11,9 @@ enum WickEnumModelAttributeWidgetFormInputText implements WickEnumModelAttribute
   input(WickModelFormInputText),
   onChanged(Function),
   onEnterPressed(Function),
-  focusNode(FocusNode);
+  focusNode(FocusNode),
+  controller(TextEditingController),
+  _controller(TextEditingController);
 
   const WickEnumModelAttributeWidgetFormInputText(this.attributeType);
 

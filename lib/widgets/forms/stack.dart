@@ -8,6 +8,7 @@ import '../../enums/log_type.dart';
 import '../../models/form_inputs/attribute.dart';
 import '../../models/form_inputs/base.dart';
 import '../../models/form_inputs/checkbox.dart';
+import '../../models/form_inputs/date.dart';
 import '../../models/form_inputs/dropdown.dart';
 import '../../models/form_inputs/text.dart';
 import '../../utilities/enum_helper.dart';
@@ -17,8 +18,6 @@ import '../../utilities/string_formatter.dart';
 import '../../utilities/type_converter.dart';
 import '../loading_indicator.dart';
 import 'base.dart';
-
-// TODO Only get and save used attributes
 
 class WickWidgetFormStack<T> extends StatefulWidget {
   final String name;
@@ -108,12 +107,11 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
         );
       } else if (input.attribute.attributeType == DateTime) {
         inputs.add(
-          WickModelFormInputText(
+          WickModelFormInputDate(
             name: input.name,
             autoFill: input.autoFill,
             defaultValue: WickUtilityTypeConverter.convert(defaultValue),
             helpText: input.helpText,
-            keyboardType: WickEnumKeyboardType.date,
           ),
         );
       } else if (input.attribute.attributeType == bool) {
@@ -155,19 +153,50 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
       (key, value) =>
           MapEntry(WickUtilityStringFormatter.toCamelCase(key), value),
     );
-    final String? primaryKeyAttribute =
-        WickUtilityModelHelper.findPrimaryKeyAttribute<T>();
-    if (widget.primaryKey != null && primaryKeyAttribute != null) {
-      values[primaryKeyAttribute] = widget.primaryKey;
+    T? newInstance;
+    if (widget.primaryKey == null) {
+      newInstance = await _createInstance(values);
+    } else {
+      final T? savedInstance = await _loadSavedState();
+      newInstance =
+          savedInstance == null
+              ? await _createInstance(values)
+              : await _updateInstance(savedInstance, values);
     }
-    final T typedValues = WickUtilityTypeConverter.convert(values);
-    // TODO If editing, pass in attributes changed. Backend will need updated too.
-    final T? newInstance =
-        values[primaryKeyAttribute] == null
-            ? await widget.controller.create(context, typedValues)
-            : await widget.controller.edit(context, typedValues);
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': '_onSubmit',
+      'newInstance': newInstance,
+    });
     if (newInstance != null && widget.afterSubmit != null) {
       await widget.afterSubmit!(newInstance);
     }
+  }
+
+  Future<T?> _createInstance(Map<String, dynamic> values) async {
+    // TODO Fix date conversion
+    final T createdInstance = WickUtilityTypeConverter.convert(values);
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': '_createInstance',
+      'createdInstance': createdInstance,
+    });
+    return await widget.controller.create(context, createdInstance);
+  }
+
+  Future<T?> _updateInstance(
+    T savedInstance,
+    Map<String, dynamic> values,
+  ) async {
+    final Map<String, dynamic> savedInstanceMap =
+        WickUtilityModelHelper.getAttributeValues(savedInstance);
+    savedInstanceMap.addAll(values);
+    // TODO Fix date conversion
+    final T updatedInstance = WickUtilityTypeConverter.convert(
+      savedInstanceMap,
+    );
+    WickUtilityLogger.log(context, WickEnumLogType.form, {
+      'method': '_updateInstance',
+      'updatedInstance': updatedInstance,
+    });
+    return await widget.controller.edit(context, updatedInstance);
   }
 }
