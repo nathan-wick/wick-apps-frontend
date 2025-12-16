@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wick_apps/controllers/user.dart';
 import 'package:wick_apps/enums/model_attributes/preferences.generated.dart';
 import 'package:wick_apps/models/form_inputs/attribute.dart';
 import 'package:wick_apps/providers/preferences.dart';
 import 'package:wick_apps/widgets/forms/stack.dart';
 
+import '../../controllers/preferences.dart';
 import '../../models/preferences.dart';
 import '../loading_indicator.dart';
 
@@ -29,7 +29,7 @@ class WickWidgetTileContentThemePreferences extends StatelessWidget {
           attribute: WickEnumModelAttributePreferences.primaryColor,
         ),
       ],
-      controller: WickControllerUser(),
+      controller: WickControllerPreferences(),
       primaryKey: preferences.userId,
       autoSubmit: true,
       autoFocus: false,

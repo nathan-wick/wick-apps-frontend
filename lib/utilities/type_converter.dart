@@ -26,17 +26,22 @@ class WickUtilityTypeConverter {
       result = _toModel<T>(value) as T;
     } else if (WickUtilityEnumHelper.isRegistered(T)) {
       result = _toEnum<T>(value) as T;
+    } else if (T == int || T == _typeOf<int?>()) {
+      result = _toInt(value) as T;
+    } else if (T == double || T == _typeOf<double?>()) {
+      result = _toDouble(value) as T;
+    } else if (T == bool || T == _typeOf<bool?>()) {
+      result = _toBool(value) as T;
+    } else if (T == String || T == _typeOf<String?>()) {
+      result = _toString(value, dateFormat) as T;
+    } else if (T == DateTime || T == _typeOf<DateTime?>()) {
+      result = _toDateTime(value, dateFormat) as T;
+    } else if (T == List || T == _typeOf<List?>()) {
+      result = _toList(value) as T;
+    } else if (T.toString().startsWith('Map')) {
+      result = _toMap<T>(value) as T;
     } else {
-      result = switch (T) {
-        int => _toInt(value) as T,
-        double => _toDouble(value) as T,
-        bool => _toBool(value) as T,
-        String => _toString(value, dateFormat) as T,
-        DateTime => _toDateTime(value, dateFormat) as T,
-        List => _toList(value) as T,
-        Map => _toMap<T>(value) as T,
-        _ => value as T,
-      };
+      result = value as T;
     }
     if (!blockLogging) {
       WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
@@ -49,6 +54,9 @@ class WickUtilityTypeConverter {
     }
     return result;
   }
+
+  /// Helper to get a Type object for checking nullability (e.g. DateTime?)
+  static Type _typeOf<T>() => T;
 
   /// Converts a dynamic value to a JSON string.
   static String toJson(dynamic value, {bool blockLogging = false}) {
@@ -88,15 +96,19 @@ class WickUtilityTypeConverter {
   /// Converts a JSON string to a typed value.
   static T? fromJson<T>(String? json) {
     if (json == null || json.isEmpty) return null;
-    final Map<String, dynamic> decoded = jsonDecode(json);
-    final T? result = WickUtilityModelHelper.createInstance<T>(decoded);
-    WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
-      'method': 'fromJson',
-      'inValue': json,
-      'outValue': result,
-      'outType': T.toString(),
-    });
-    return result;
+    try {
+      final Map<String, dynamic> decoded = jsonDecode(json);
+      final T? result = WickUtilityModelHelper.createInstance<T>(decoded);
+      WickUtilityLogger.log(null, WickEnumLogType.typeConversion, {
+        'method': 'fromJson',
+        'inValue': json,
+        'outValue': result,
+        'outType': T.toString(),
+      });
+      return result;
+    } catch (error) {
+      return null;
+    }
   }
 
   /// Converts value to integer.
@@ -213,23 +225,28 @@ class WickUtilityTypeConverter {
       return DateTime.fromMillisecondsSinceEpoch(value.toInt());
     }
     if (value is String) {
-      // TODO Fix date conversion
-      if (dateFormat != null) {
-        return _parseDateTime(value, dateFormat);
+      DateTime? dateTime;
+      try {
+        dateTime = DateTime.tryParse(value);
+      } catch (error) {
+        // Fall through
       }
-      final isoDate = DateTime.tryParse(value);
-      if (isoDate != null) return isoDate;
+      if (dateFormat != null) {
+        dateTime = _parseWickDateTime(value, dateFormat);
+      }
+      if (dateTime != null) return dateTime;
     }
     return DateTime.now();
   }
 
   /// Parses a date string according to the specified format.
-  static DateTime _parseDateTime(String value, WickEnumDateFormat dateFormat) {
-    if (WickUtilityInputValidator.date(value, dateFormat) == null) {
-      return DateTime.now();
-    }
+  static DateTime? _parseWickDateTime(
+    String value,
+    WickEnumDateFormat dateFormat,
+  ) {
+    if (WickUtilityInputValidator.date(value, dateFormat) != null) return null;
     final valueParts = value.split('/');
-    if (valueParts.length != 3) return DateTime.now();
+    if (valueParts.length != 3) return null;
     try {
       int year, month, day;
       switch (dateFormat) {
@@ -251,7 +268,7 @@ class WickUtilityTypeConverter {
       }
       return DateTime(year, month, day);
     } catch (error) {
-      return DateTime.now();
+      return null;
     }
   }
 
@@ -373,7 +390,7 @@ class WickUtilityTypeConverter {
       try {
         final trimmed = value.trim();
         if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-          return null;
+          return fromJson<T>(trimmed);
         }
       } catch (error) {
         return null;

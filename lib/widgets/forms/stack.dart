@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wick_apps/controllers/base.dart';
 
+import '../../enums/date_format.dart';
 import '../../enums/keyboard_type.dart';
 import '../../enums/log_type.dart';
 import '../../models/form_inputs/attribute.dart';
@@ -11,6 +13,8 @@ import '../../models/form_inputs/checkbox.dart';
 import '../../models/form_inputs/date.dart';
 import '../../models/form_inputs/dropdown.dart';
 import '../../models/form_inputs/text.dart';
+import '../../models/preferences.dart';
+import '../../providers/preferences.dart';
 import '../../utilities/enum_helper.dart';
 import '../../utilities/logger.dart';
 import '../../utilities/model_helper.dart';
@@ -50,6 +54,14 @@ class WickWidgetFormStack<T> extends StatefulWidget {
 }
 
 class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
+  WickEnumDateFormat? _dateFormat = WickEnumDateFormat.yearMonthDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _getWickEnumDateFormat();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<T?>(
@@ -73,6 +85,19 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
     );
   }
 
+  Future<void> _getWickEnumDateFormat() async {
+    final WickModelPreferences? preferences =
+        await Provider.of<WickProviderPreferences>(
+          context,
+          listen: false,
+        ).getValue(context);
+    if (preferences?.dateFormat != null) {
+      setState(() {
+        _dateFormat = preferences?.dateFormat;
+      });
+    }
+  }
+
   Future<T?> _loadSavedState() async {
     return await widget.controller.getByPrimaryKey(context, widget.primaryKey);
   }
@@ -90,17 +115,24 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
           WickModelFormInputText(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: defaultValue,
+            defaultValue: WickUtilityTypeConverter.convert(
+              defaultValue,
+              dateFormat: _dateFormat,
+            ),
             helpText: input.helpText,
           ),
         );
       } else if (input.attribute.attributeType == int ||
           input.attribute.attributeType == double) {
         inputs.add(
+          // TODO Create a number input wrapper and use that instead
           WickModelFormInputText(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: WickUtilityTypeConverter.convert(input.defaultValue),
+            defaultValue: WickUtilityTypeConverter.convert(
+              defaultValue,
+              dateFormat: _dateFormat,
+            ),
             helpText: input.helpText,
             keyboardType: WickEnumKeyboardType.number,
           ),
@@ -110,7 +142,10 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
           WickModelFormInputDate(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: WickUtilityTypeConverter.convert(defaultValue),
+            defaultValue: WickUtilityTypeConverter.convert(
+              defaultValue,
+              dateFormat: _dateFormat,
+            ),
             helpText: input.helpText,
           ),
         );
@@ -119,16 +154,24 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
           WickModelFormInputCheckbox(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: defaultValue,
+            defaultValue: WickUtilityTypeConverter.convert(
+              defaultValue,
+              dateFormat: _dateFormat,
+            ),
             helpText: input.helpText,
           ),
         );
-      } else if (input.attribute.attributeType == Enum) {
+      } else if (WickUtilityEnumHelper.isRegistered(
+        input.attribute.attributeType,
+      )) {
         inputs.add(
           WickModelFormInputDropdown(
             name: input.name,
             autoFill: input.autoFill,
-            defaultValue: WickUtilityTypeConverter.convert(defaultValue),
+            defaultValue: WickUtilityTypeConverter.convert(
+              defaultValue,
+              dateFormat: _dateFormat,
+            ),
             helpText: input.helpText,
             options: WickUtilityEnumHelper.getValuesAsDropdownOptions(
               input.attribute.attributeType,
@@ -173,8 +216,10 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
   }
 
   Future<T?> _createInstance(Map<String, dynamic> values) async {
-    // TODO Fix date conversion
-    final T createdInstance = WickUtilityTypeConverter.convert(values);
+    final T createdInstance = WickUtilityTypeConverter.convert(
+      values,
+      dateFormat: _dateFormat,
+    );
     WickUtilityLogger.log(context, WickEnumLogType.form, {
       'method': '_createInstance',
       'createdInstance': createdInstance,
@@ -189,9 +234,9 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
     final Map<String, dynamic> savedInstanceMap =
         WickUtilityModelHelper.getAttributeValues(savedInstance);
     savedInstanceMap.addAll(values);
-    // TODO Fix date conversion
     final T updatedInstance = WickUtilityTypeConverter.convert(
       savedInstanceMap,
+      dateFormat: _dateFormat,
     );
     WickUtilityLogger.log(context, WickEnumLogType.form, {
       'method': '_updateInstance',

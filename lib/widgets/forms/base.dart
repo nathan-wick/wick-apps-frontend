@@ -104,14 +104,18 @@ class _WickWidgetFormBaseState extends State<WickWidgetFormBase> {
       );
       final String localStorageKey =
           "form_${WickUtilityStringFormatter.toSnakeCase(widget.name)}_input_$inputKey";
-      onChanged(String? value) {
-        if (value == null || value.isEmpty) {
+      onChanged(dynamic value) {
+        if (value == null || (value.runtimeType == String && value.isEmpty)) {
           formValues.remove(input.name);
         } else {
           formValues[input.name] = value;
         }
         if (input.autoFill) {
-          WickUtilityLocalStorage().setStringValue(localStorageKey, value);
+          final String stringValue = WickUtilityTypeConverter.convert(value);
+          WickUtilityLocalStorage().setStringValue(
+            localStorageKey,
+            stringValue,
+          );
         }
         if (widget.autoSubmit) {
           _submitForm();

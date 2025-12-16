@@ -11,6 +11,7 @@ import '../enums/log_type.dart';
 import '../enums/notification_type.dart';
 import '../enums/request_method.dart';
 import '../enums/response_status.dart';
+import '../models/error.dart';
 import '../providers/session.dart';
 import 'notification_handler.dart';
 
@@ -100,22 +101,20 @@ class WickUtilityRequestHandler {
       );
       return WickUtilityTypeConverter.fromJson<T>(response.body);
     } else {
-      // TODO Create a error model with a message field, then use that here
-      handleErrorResponse(context, response.body);
+      final WickModelError? error =
+          WickUtilityTypeConverter.fromJson<WickModelError>(response.body);
+      handleErrorResponse(context, error?.message);
       return null;
     }
   }
 
   /// Handles an error response.
-  static void handleErrorResponse(
-    BuildContext context, [
-    String message = 'An unexpected error occurred.',
-  ]) {
+  static void handleErrorResponse(BuildContext context, [String? message]) {
     WickUtilityLogger.log(context, WickEnumLogType.incomingResponse, message);
     WickUtilityNotificationHandler.displayNotification(
       context,
       WickEnumNotificationType.error,
-      message,
+      message ?? 'An unexpected error occurred.',
     );
   }
 }

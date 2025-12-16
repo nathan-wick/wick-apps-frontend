@@ -9,6 +9,7 @@ import '../../../models/preferences.dart';
 import '../../../providers/preferences.dart';
 import '../../../utilities/input_validator.dart';
 import '../../../utilities/regular_expression.dart';
+import '../../loading_indicator.dart';
 
 class WickWidgetFormInputText extends StatefulWidget {
   final WickModelFormInputText input;
@@ -32,17 +33,17 @@ class WickWidgetFormInputText extends StatefulWidget {
 }
 
 class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
+  static const WickEnumDateFormat _defaultDateFormat =
+      WickEnumDateFormat.yearMonthDay;
   late final TextEditingController _controller;
   String _previousValue = '';
-  WickEnumDateFormat _dateFormat = WickEnumDateFormat.yearMonthDay;
+  WickEnumDateFormat _dateFormat = _defaultDateFormat;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController();
-    _controller.text = widget.input.defaultValue ?? '';
-    _previousValue = _controller.text;
-    _getWickEnumDateFormat();
+    _initialize();
   }
 
   @override
@@ -55,6 +56,9 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      return const WickWidgetLoadingIndicator();
+    }
     String? helpText = widget.input.helpText;
     return TextFormField(
       controller: _controller,
@@ -133,19 +137,21 @@ class _WickWidgetFormInputTextState extends State<WickWidgetFormInputText> {
     );
   }
 
-  Future<void> _getWickEnumDateFormat() async {
+  Future<void> _initialize() async {
     final WickModelPreferences? preferences =
         await Provider.of<WickProviderPreferences>(
           context,
           listen: false,
         ).getValue(context);
-    if (preferences?.dateFormat != null) {
-      final WickEnumDateFormat? preferredWickEnumDateFormat =
-          preferences?.dateFormat;
-      setState(() {
-        _dateFormat =
-            preferredWickEnumDateFormat ?? WickEnumDateFormat.yearMonthDay;
-      });
-    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _dateFormat = preferences?.dateFormat ?? _defaultDateFormat;
+      _controller = widget.controller ?? TextEditingController();
+      _controller.text = widget.input.defaultValue ?? '';
+      _previousValue = _controller.text;
+      _isInitialized = true;
+    });
   }
 }

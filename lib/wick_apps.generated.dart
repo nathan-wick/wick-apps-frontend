@@ -21,6 +21,7 @@ export 'enums/keyboard_type.dart';
 export 'enums/log_type.dart';
 export 'enums/model_attributes/base.dart';
 export 'enums/model_attributes/dashboard_configuration.generated.dart';
+export 'enums/model_attributes/error.generated.dart';
 export 'enums/model_attributes/form_input_attribute.generated.dart';
 export 'enums/model_attributes/form_input_base.generated.dart';
 export 'enums/model_attributes/form_input_checkbox.generated.dart';
@@ -68,6 +69,7 @@ export 'enums/text_validation.dart';
 // Models
 export 'models/annotations/primary_key.dart';
 export 'models/dashboard_configuration.dart';
+export 'models/error.dart';
 export 'models/form_inputs/attribute.dart';
 export 'models/form_inputs/base.dart';
 export 'models/form_inputs/checkbox.dart';

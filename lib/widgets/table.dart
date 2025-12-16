@@ -98,10 +98,10 @@ class WickWidgetTable<T> extends StatelessWidget {
                 displayName: false,
                 defaultValue: WickUtilityTypeConverter.convert(value),
               ),
-              onChanged: (String? newValue) {
+              onChanged: (bool? newValue) {
                 final Map<String, dynamic> updatedValues = {
                   ...values,
-                  key: WickUtilityTypeConverter.convert(newValue),
+                  key: newValue,
                 };
                 final T updatedModel = WickUtilityTypeConverter.convert(
                   updatedValues,

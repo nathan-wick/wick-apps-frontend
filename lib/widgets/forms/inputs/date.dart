@@ -9,11 +9,13 @@ import '../../../models/form_inputs/date.dart';
 import '../../../models/form_inputs/text.dart';
 import '../../../models/preferences.dart';
 import '../../../providers/preferences.dart';
+import '../../../utilities/input_validator.dart';
 import '../../../utilities/type_converter.dart';
+import '../../loading_indicator.dart';
 
 class WickWidgetFormInputDate extends StatefulWidget {
   final WickModelFormInputDate input;
-  final Function(String?) onChanged;
+  final Function(DateTime?) onChanged;
   final Function() onEnterPressed;
   final FocusNode? focusNode;
 
@@ -31,19 +33,16 @@ class WickWidgetFormInputDate extends StatefulWidget {
 }
 
 class _WickWidgetFormInputDateState extends State<WickWidgetFormInputDate> {
+  static const WickEnumDateFormat _defaultDateFormat =
+      WickEnumDateFormat.yearMonthDay;
   final TextEditingController _controller = TextEditingController();
-  WickEnumDateFormat _dateFormat = WickEnumDateFormat.yearMonthDay;
+  WickEnumDateFormat _dateFormat = _defaultDateFormat;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _getWickEnumDateFormat();
-    _controller.text =
-        WickUtilityTypeConverter.convert(
-          widget.input.defaultValue,
-          dateFormat: _dateFormat,
-        ) ??
-        '';
+    _initialize();
   }
 
   @override
@@ -54,6 +53,9 @@ class _WickWidgetFormInputDateState extends State<WickWidgetFormInputDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      return const WickWidgetLoadingIndicator();
+    }
     String helpText =
         widget.input.helpText ?? "Date format is ${_dateFormat.value}.";
     WickModelFormInputText textInput = WickModelFormInputText(
@@ -73,27 +75,48 @@ class _WickWidgetFormInputDateState extends State<WickWidgetFormInputDate> {
     );
     return WickWidgetFormInputText(
       input: textInput,
-      onChanged: widget.onChanged,
+      onChanged: (String? stringValue) {
+        if (stringValue == null || stringValue.isEmpty) {
+          widget.onChanged(null);
+          return;
+        }
+        final bool stringValueIsValidDate =
+            WickUtilityInputValidator.date(stringValue, _dateFormat) == null;
+        if (!stringValueIsValidDate) {
+          widget.onChanged(null);
+          return;
+        }
+        final DateTime dateValue = WickUtilityTypeConverter.convert(
+          stringValue,
+          dateFormat: _dateFormat,
+        );
+        widget.onChanged(dateValue);
+      },
       onEnterPressed: widget.onEnterPressed,
       focusNode: widget.focusNode,
       controller: _controller,
     );
   }
 
-  Future<void> _getWickEnumDateFormat() async {
+  Future<void> _initialize() async {
     final WickModelPreferences? preferences =
         await Provider.of<WickProviderPreferences>(
           context,
           listen: false,
         ).getValue(context);
-    if (preferences?.dateFormat != null) {
-      final WickEnumDateFormat? preferredWickEnumDateFormat =
-          preferences?.dateFormat;
-      setState(() {
-        _dateFormat =
-            preferredWickEnumDateFormat ?? WickEnumDateFormat.yearMonthDay;
-      });
-    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _dateFormat = preferences?.dateFormat ?? _defaultDateFormat;
+      _controller.text =
+          WickUtilityTypeConverter.convert(
+            widget.input.defaultValue,
+            dateFormat: _dateFormat,
+          ) ??
+          '';
+      _isInitialized = true;
+    });
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -119,7 +142,7 @@ class _WickWidgetFormInputDateState extends State<WickWidgetFormInputDate> {
       setState(() {
         _controller.text = formattedDate ?? '';
       });
-      widget.onChanged(formattedDate);
+      widget.onChanged(pickedDate);
     }
   }
 }

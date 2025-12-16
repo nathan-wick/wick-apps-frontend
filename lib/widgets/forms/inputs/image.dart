@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ import '../../dialog.dart';
 
 class WickWidgetFormInputImage extends StatefulWidget {
   final WickModelFormInputImage input;
-  final Function(String?) onChanged;
+  final Function(Uint8List?) onChanged;
 
   const WickWidgetFormInputImage({
     super.key,
@@ -69,7 +68,7 @@ class _WickWidgetFormInputImageState extends State<WickWidgetFormInputImage> {
           processingText = null;
           image = pickedImage;
         });
-        widget.onChanged(base64Encode(pickedImage));
+        widget.onChanged(pickedImage);
       }
     }
 

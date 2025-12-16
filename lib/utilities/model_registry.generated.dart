@@ -36,6 +36,8 @@ import 'package:wick_apps/models/session_provider.dart';
 import 'package:wick_apps/enums/model_attributes/provider_session.generated.dart';
 import 'package:wick_apps/models/navigation_provider.dart';
 import 'package:wick_apps/enums/model_attributes/provider_navigation.generated.dart';
+import 'package:wick_apps/models/error.dart';
+import 'package:wick_apps/enums/model_attributes/error.generated.dart';
 import 'package:wick_apps/models/model_information.dart';
 import 'package:wick_apps/enums/model_attributes/model_information.generated.dart';
 import 'package:wick_apps/models/session.dart';
@@ -102,6 +104,7 @@ class WickUtilityModelRegistry {
     WickModelSendVerificationEmailResponse: WickEnumModelAttributeSendVerificationEmailResponse,
     WickModelWickProviderSession: WickEnumModelAttributeProviderSession,
     WickModelWickProviderNavigation: WickEnumModelAttributeProviderNavigation,
+    WickModelError: WickEnumModelAttributeError,
     WickModelModelInformation: WickEnumModelAttributeModelInformation,
     WickModelSession: WickEnumModelAttributeSession,
     WickModelNavigationOption: WickEnumModelAttributeNavigationOption,
@@ -220,6 +223,10 @@ class WickUtilityModelRegistry {
     ),
     WickModelWickProviderNavigation: (attributes) => WickModelWickProviderNavigation(
       lastRoute: WickUtilityTypeConverter.convert(attributes['lastRoute'])
+    ),
+    WickModelError: (attributes) => WickModelError(
+      code: WickUtilityTypeConverter.convert(attributes['code']),
+      message: WickUtilityTypeConverter.convert(attributes['message'])
     ),
     WickModelModelInformation: (attributes) => WickModelModelInformation(
       modelName: WickUtilityTypeConverter.convert(attributes['modelName']),
@@ -459,6 +466,10 @@ class WickUtilityModelRegistry {
     WickModelWickProviderNavigation: {
       'lastRoute': (model) => model.lastRoute
     },
+    WickModelError: {
+      'code': (model) => model.code,
+      'message': (model) => model.message
+    },
     WickModelModelInformation: {
       'modelName': (model) => model.modelName,
       'importPath': (model) => model.importPath,
@@ -621,6 +632,7 @@ class WickUtilityModelRegistry {
     WickModelSendVerificationEmailResponse: null,
     WickModelWickProviderSession: null,
     WickModelWickProviderNavigation: null,
+    WickModelError: null,
     WickModelModelInformation: null,
     WickModelSession: 'id',
     WickModelNavigationOption: null,

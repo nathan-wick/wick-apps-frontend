@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../models/form_inputs/checkbox.dart';
 import '../../../utilities/style_constants.dart';
-import '../../../utilities/type_converter.dart';
 
 class WickWidgetFormInputCheckbox extends StatefulWidget {
   final WickModelFormInputCheckbox input;
-  final Function(String?) onChanged;
+  final Function(bool?) onChanged;
 
   const WickWidgetFormInputCheckbox({
     super.key,
@@ -38,7 +37,7 @@ class _WickWidgetFormInputCheckboxState
           setState(() {
             value = newValue;
           });
-          widget.onChanged(WickUtilityTypeConverter.convert(newValue));
+          widget.onChanged(newValue);
         }
       },
     );
