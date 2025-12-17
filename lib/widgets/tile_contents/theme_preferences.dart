@@ -15,7 +15,7 @@ class WickWidgetTileContentThemePreferences extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final WickModelPreferences? preferences =
-        Provider.of<WickProviderPreferences>(context).value;
+        Provider.of<WickProviderPreferences>(context, listen: false).value;
     if (preferences == null) {
       return const WickWidgetLoadingIndicator();
     }
@@ -33,6 +33,12 @@ class WickWidgetTileContentThemePreferences extends StatelessWidget {
       primaryKey: preferences.userId,
       autoSubmit: true,
       autoFocus: false,
+      afterSubmit: (WickModelPreferences preferences) async {
+        await Provider.of<WickProviderPreferences>(
+          context,
+          listen: false,
+        ).setValue(context, preferences);
+      },
     );
   }
 }

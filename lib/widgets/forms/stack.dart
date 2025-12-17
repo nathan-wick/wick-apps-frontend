@@ -7,6 +7,7 @@ import 'package:wick_apps/controllers/base.dart';
 import '../../enums/date_format.dart';
 import '../../enums/keyboard_type.dart';
 import '../../enums/log_type.dart';
+import '../../enums/text_validation.dart';
 import '../../models/form_inputs/attribute.dart';
 import '../../models/form_inputs/base.dart';
 import '../../models/form_inputs/checkbox.dart';
@@ -111,6 +112,13 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
       );
       final dynamic defaultValue = attributeValue ?? input.defaultValue;
       if (input.attribute.attributeType == String) {
+        final List<WickEnumTextValidation> validations = [];
+        if (input.name.toLowerCase().contains('email')) {
+          validations.add(WickEnumTextValidation.email);
+        }
+        if (input.name.toLowerCase().contains('name')) {
+          validations.add(WickEnumTextValidation.name);
+        }
         inputs.add(
           WickModelFormInputText(
             name: input.name,
@@ -120,6 +128,7 @@ class _WickWidgetFormStackState<T> extends State<WickWidgetFormStack<T>> {
               dateFormat: _dateFormat,
             ),
             helpText: input.helpText,
+            validations: validations,
           ),
         );
       } else if (input.attribute.attributeType == int ||

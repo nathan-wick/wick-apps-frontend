@@ -55,7 +55,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
           keyboardType: WickEnumKeyboardType.email,
           name: _emailInputName,
           helpText:
-              'Enter your email to sign in. We’ll send a quick verification email and nothing else.',
+              'Enter your email to sign in. We’ll send a quick verification email.',
         ),
       ],
       submitButtonText: 'Continue',
@@ -71,7 +71,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
           validations: [WickEnumTextValidation.required],
           keyboardType: WickEnumKeyboardType.number,
           name: _codeInputName,
-          helpText: 'Enter the code sent to $_email',
+          helpText: 'Enter the code sent to $_email.',
         ),
       ],
       submitButtonText: 'Continue',
@@ -87,7 +87,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
       formValues[_emailInputName],
     );
     if (email == null) return;
-    _setLoading(true, 'Sending verification email');
+    _setLoading(true, 'Sending verification email.');
     final sessionId = await WickControllerSession().sendVerificationEmail(
       context,
       email,
@@ -110,7 +110,7 @@ class _WickWidgetAuthenticationState extends State<WickWidgetAuthentication> {
       formValues[_codeInputName],
     );
     if (code == null || _sessionId == null) return;
-    _setLoading(true, 'Verifying');
+    _setLoading(true, 'Verifying.');
     final bool signedIn = await Provider.of<WickProviderSession>(
       context,
       listen: false,

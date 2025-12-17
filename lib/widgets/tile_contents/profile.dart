@@ -14,7 +14,8 @@ class WickWidgetTileContentProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WickModelUser? user = Provider.of<WickProviderUser>(context).value;
+    final WickModelUser? user =
+        Provider.of<WickProviderUser>(context, listen: false).value;
     if (user == null) {
       return const WickWidgetLoadingIndicator();
     }
@@ -38,6 +39,12 @@ class WickWidgetTileContentProfile extends StatelessWidget {
       primaryKey: user.id,
       autoSubmit: true,
       autoFocus: false,
+      afterSubmit: (WickModelUser user) async {
+        await Provider.of<WickProviderUser>(
+          context,
+          listen: false,
+        ).setValue(context, user);
+      },
     );
   }
 }
